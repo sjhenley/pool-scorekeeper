@@ -23,5 +23,11 @@ export const style = StyleSheet.create({
   },
   textCenter: {
     textAlign: 'center'
+  },
+  buttonPrimary: {
+    backgroundColor: COLORS.primary,
+    color: COLORS.black,
+    minWidth: 200,
+    fontSize: 36
   }
 });

@@ -11,6 +11,9 @@ function RootStack() {
   return (
     <Stack.Navigator>
       <Stack.Screen name="Home" component={Screens.Home} options={{ headerShown: false }}/>
+      <Stack.Screen name="New Game" component={Screens.NewGame} />
+      <Stack.Screen name="Players" component={Screens.PlayerList} />
+      <Stack.Screen name="History" component={Screens.History} />
     </Stack.Navigator>
   );
 }
