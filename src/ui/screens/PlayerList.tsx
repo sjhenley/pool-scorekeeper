@@ -1,10 +1,7 @@
 import React from 'react';
-import { StyleSheet, Alert, FlatList } from 'react-native';
-import { BorderRadiuses, Colors, ListItem, Text, Button, Dialog, View } from 'react-native-ui-lib';
+import { StyleSheet, Text, View, FlatList } from 'react-native';
 import Player from '../../models/player';
-
-const plusIcon = require('@assets/icons/add.png');
-let isNewPlayerDialogVisible = false;
+import { Dialog, FAB, ListItem, Input } from '@rneui/themed';
 
 const players = [
   new Player('John', 8, 9),
@@ -29,26 +26,13 @@ const players = [
 
 function renderRow(player: Player) {
   return (
-    <View>
-      <ListItem
-        activeBackgroundColor={Colors.grey60}
-        activeOpacity={0.3}
-        height={77.5}
-        onPress={() => Alert.alert(`pressed on ${player.name}`)}
-      >
-        <ListItem.Part middle column containerStyle={[styles.border, {paddingRight: 17}]}>
-          <ListItem.Part containerStyle={{marginBottom: 3}}>
-            <Text grey10 text70 style={{flex: 1, marginRight: 10}} numberOfLines={1}>
-              {player.name}
-            </Text>
-            <Text grey10 text70 style={{marginTop: 2}}>
-              {player.skill8}
-            </Text>
-          </ListItem.Part>
-        </ListItem.Part>
-      </ListItem>
-    </View>
-  );
+    <ListItem>
+      <ListItem.Content>
+        <ListItem.Title>{player.name}</ListItem.Title>
+        <ListItem.Subtitle>{player.skill8} 8ball, {player.skill9} 9ball</ListItem.Subtitle>
+      </ListItem.Content>
+    </ListItem>
+  )
 }
 
 export function PlayerList() {
@@ -57,58 +41,51 @@ export function PlayerList() {
   const renderDialog = (setIsDialogVisible: React.Dispatch<React.SetStateAction<boolean>>) => {
     return (
       <Dialog
-        top={true}
-        visible={isDialogVisible}
-        onDismiss={() => setIsDialogVisible(false)}
-        containerStyle={styles.dialog}
+        isVisible={isDialogVisible}
+        onBackdropPress={() => setIsDialogVisible(false)}
       >
-        <Text primary>Dialog2</Text>
+        <Dialog.Title title='New Player'>
+          <Text>Dialog Text</Text>
+        </Dialog.Title>
+        <Input
+          label='Name'
+          placeholder='Name'
+        ></Input>
       </Dialog>
     );
   };
 
-  return (
-    <View flex padding-12>
-      
-      {/* <FlatList 
+  const renderPlayerList = () => {
+    return (
+      <FlatList
         data={players}
-        renderItem={({item}) => renderRow(item)}
-      /> */}
-      <Button round iconSource={plusIcon} style={styles.newPlayer} onPress={() => setIsDialogVisible(true)}/>
-      
-      {renderDialog(setIsDialogVisible)}
+        renderItem={({ item }) => renderRow(item)}
+        keyExtractor={(item, index) => index.toString()}
+      />
+    );
+  }
 
-    </View>
+  return (
+      <View>
+        <FAB
+          visible
+          size="large"
+          style={styles.fab}
+          icon={{ name: 'add', color: 'white' }}
+          color="green"
+          onPress={() => setIsDialogVisible(true)}
+        />
+        {renderPlayerList()}
+        {renderDialog(setIsDialogVisible)}
+      </View>
   );
 }
 
 const styles = StyleSheet.create({
-  image: {
-    width: 54,
-    height: 54,
-    borderRadius: BorderRadiuses.br20,
-    marginHorizontal: 14
-  },
-  border: {
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderColor: Colors.grey70
-  },
-  newPlayer: {
+  fab: {
     position: 'absolute',
-    bottom: 30,
-    right: 30,
-    backgroundColor: 'lightgreen',
-    width: 75,
-    height: 75
-  },
-  dialog: {
-    backgroundColor: 'blue',
-    marginBottom: 20,
-    borderRadius: 12,
-    position: 'absolute',
-    top: 100,
-    right: 0,
-    width: 500,
-    height: 500
-  },
+    bottom: 20,
+    right: 20,
+    zIndex: 100
+  }
 });

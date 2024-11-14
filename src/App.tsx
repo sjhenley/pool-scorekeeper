@@ -1,9 +1,8 @@
 import React from 'react';
-import { Typography, Colors, ButtonSize } from 'react-native-ui-lib';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as Screens from './ui/screens';
-import { COLORS, TYPOGRAPHY } from './styles';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const Stack = createStackNavigator();
 
@@ -20,11 +19,10 @@ function RootStack() {
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <RootStack />
-    </NavigationContainer>
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <RootStack />
+      </NavigationContainer>
+    </SafeAreaProvider>
   );
 }
-
-Colors.loadColors(COLORS);
-Typography.loadTypographies(TYPOGRAPHY);
