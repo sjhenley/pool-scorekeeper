@@ -6,4 +6,12 @@ export default class Player {
     public skill8: SkillLevel,
     public skill9: SkillLevel
   ) {}
+
+  public toJSON(): object {
+    return {
+      name: this.name,
+      skill8: this.skill8,
+      skill9: this.skill9
+    }
+  }
 }
