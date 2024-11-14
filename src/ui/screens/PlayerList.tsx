@@ -1,6 +1,6 @@
 import React from 'react';
-import { StyleSheet, View, Alert, FlatList} from 'react-native';
-import {BorderRadiuses, Colors, ListItem, Text, Button, Dialog} from 'react-native-ui-lib';
+import { StyleSheet, Alert, FlatList } from 'react-native';
+import { BorderRadiuses, Colors, ListItem, Text, Button, Dialog, View } from 'react-native-ui-lib';
 import Player from '../../models/player';
 
 const plusIcon = require('@assets/icons/add.png');
@@ -28,7 +28,6 @@ const players = [
 ]
 
 function renderRow(player: Player) {
-
   return (
     <View>
       <ListItem
@@ -48,31 +47,37 @@ function renderRow(player: Player) {
           </ListItem.Part>
         </ListItem.Part>
       </ListItem>
-
-
     </View>
   );
 }
 
-function onAddPlayer() {
-  isNewPlayerDialogVisible = true;
-}
-
 export function PlayerList() {
+  const [isDialogVisible, setIsDialogVisible] = React.useState(false);
+
+  const renderDialog = (setIsDialogVisible: React.Dispatch<React.SetStateAction<boolean>>) => {
+    return (
+      <Dialog
+        top={true}
+        visible={isDialogVisible}
+        onDismiss={() => setIsDialogVisible(false)}
+        containerStyle={styles.dialog}
+      >
+        <Text primary>Dialog2</Text>
+      </Dialog>
+    );
+  };
+
   return (
-    <View>
-      <FlatList 
+    <View flex padding-12>
+      
+      {/* <FlatList 
         data={players}
         renderItem={({item}) => renderRow(item)}
-      />
-      <Button round iconSource={plusIcon} style={styles.newPlayer} onPress={onAddPlayer}/>
-      <Dialog
-        visible={true}
-      >
-        <View>
-          <Text>Dialog</Text>
-        </View>
-      </Dialog>
+      /> */}
+      <Button round iconSource={plusIcon} style={styles.newPlayer} onPress={() => setIsDialogVisible(true)}/>
+      
+      {renderDialog(setIsDialogVisible)}
+
     </View>
   );
 }
@@ -95,5 +100,15 @@ const styles = StyleSheet.create({
     backgroundColor: 'lightgreen',
     width: 75,
     height: 75
-  }
+  },
+  dialog: {
+    backgroundColor: 'blue',
+    marginBottom: 20,
+    borderRadius: 12,
+    position: 'absolute',
+    top: 100,
+    right: 0,
+    width: 500,
+    height: 500
+  },
 });
