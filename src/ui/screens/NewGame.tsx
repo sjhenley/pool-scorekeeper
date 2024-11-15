@@ -4,8 +4,14 @@ import { Text, Tab, TabView, Button } from '@rneui/themed'
 import Player from '@app/models/player';
 import { loadPlayerList } from '@app/util/storage.util';
 import { Picker } from '@react-native-picker/picker';
+import { NavigationProp } from '@react-navigation/native';
 
-export function NewGame() {
+
+interface NewGameProps {
+  navigation: NavigationProp<any>;
+}
+
+export function NewGame({ navigation }: NewGameProps) {
   const [tabIndex, setTabIndex] = React.useState(0);
 
   const [playerList, setPlayerList] = React.useState<Player[]>([]);
@@ -67,6 +73,14 @@ export function NewGame() {
     )
   }
 
+  function startGame() {
+    navigation.navigate('Game', {
+      player1,
+      player2,
+      isEightBall: isEightBall()
+    });
+  }
+
   return (
     <>
       <Tab
@@ -93,7 +107,7 @@ export function NewGame() {
         </TabView.Item>
       </TabView>
 
-      <Button title={'Start Game'} containerStyle={styles.buttonContainer}  />
+      <Button title={'Start Game'} containerStyle={styles.buttonContainer} onPress={startGame} />
     </>
   );
 }

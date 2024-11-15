@@ -3,8 +3,20 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as Screens from './ui/screens';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import Player from './models/player';
 
-const Stack = createStackNavigator();
+export type RootStackParamList = {
+  Home: undefined,
+  "New Game": undefined,
+  Players: undefined,
+  History: undefined,
+  Game: {
+    player1: Player,
+    player2: Player,
+    isEightBall: boolean
+  } 
+}
+const Stack = createStackNavigator<RootStackParamList>();
 
 function RootStack() {
   return (
@@ -13,6 +25,7 @@ function RootStack() {
       <Stack.Screen name="New Game" component={Screens.NewGame} />
       <Stack.Screen name="Players" component={Screens.PlayerList} />
       <Stack.Screen name="History" component={Screens.History} />
+      <Stack.Screen name="Game" component={Screens.Game} />
     </Stack.Navigator>
   );
 }
