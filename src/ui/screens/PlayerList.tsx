@@ -1,8 +1,8 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
 import Player, { SkillLevel } from '../../models/player';
 import { Dialog, FAB, ListItem, Input } from '@rneui/themed';
-import {Picker} from '@react-native-picker/picker';
+import { Picker } from '@react-native-picker/picker';
 import { loadPlayerList, savePlayerList } from '@app/util/storage.util';
 import { Pressable } from 'react-native-gesture-handler';
 
@@ -71,23 +71,6 @@ export function PlayerList() {
     setIsDialogVisible(false);
   }
 
-  const renderDialogActions = () => {
-    if (isUpdatePlayer) {
-      return (
-        <Dialog.Actions>
-          <Dialog.Button title="Update" onPress={() => updatePlayer(playerName, skill8, skill9)}/>
-          <Dialog.Button title="Delete" titleStyle={{color: 'red'}} onPress={() => deletePlayer(playerName)}/>
-        </Dialog.Actions>
-      );
-    } else {
-      return (
-        <Dialog.Actions>
-          <Dialog.Button title="Add" onPress={() => addPlayer(playerName, skill8, skill9)}/>
-        </Dialog.Actions>
-      );
-    }
-  }
-
   const renderDialog = () => {
     const nameInput = React.useRef(0 as any);
     
@@ -116,6 +99,24 @@ export function PlayerList() {
         addPlayer(name, skill8, skill9);
       }
     }
+
+    const renderDialogActions = () => {
+      if (isUpdatePlayer) {
+        return (
+          <Dialog.Actions>
+            <Dialog.Button title="Update" onPress={() => updatePlayer(playerName, skill8, skill9)}/>
+            <Dialog.Button title="Delete" titleStyle={{color: 'red'}} onPress={() => deletePlayer(playerName)}/>
+          </Dialog.Actions>
+        );
+      } else {
+        return (
+          <Dialog.Actions>
+            <Dialog.Button title="Add" onPress={() => submit(playerName, skill8, skill9)}/>
+          </Dialog.Actions>
+        );
+      }
+    };
+
     return (
       <Dialog
         isVisible={isDialogVisible}
@@ -154,7 +155,6 @@ export function PlayerList() {
             {pickerItems}
           </Picker>
         </View>
-        
         {renderDialogActions()}
       </Dialog>
     );
@@ -185,18 +185,18 @@ export function PlayerList() {
   }
 
   return (
-      <View style={{height: '100%'}}>
-        <FAB
-          visible
-          size="large"
-          style={styles.fab}
-          icon={{ name: 'add', color: 'white' }}
-          color="green"
-          onPress={() => openDialog()}
-        />
-        {renderPlayerList()}
-        {renderDialog()}
-      </View>
+    <View style={{height: '100%'}}>
+      <FAB
+        visible
+        size="large"
+        style={styles.fab}
+        icon={{ name: 'add', color: 'white' }}
+        color="green"
+        onPress={() => openDialog()}
+      />
+      {renderPlayerList()}
+      {renderDialog()}
+    </View>
   );
 }
 
