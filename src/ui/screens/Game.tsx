@@ -10,6 +10,18 @@ import { BallStatus, NineBallState, PlayerTurn } from '@app/models/ball-status.e
 type GameRouteProp = RouteProp<RootStackParamList, 'Game'>;
 type GameNavigationProp = NavigationProp<RootStackParamList, 'Game'>;
 
+const ballIcons = [
+  require('@assets/balls/1.png'),
+  require('@assets/balls/2.png'),
+  require('@assets/balls/3.png'),
+  require('@assets/balls/4.png'),
+  require('@assets/balls/5.png'),
+  require('@assets/balls/6.png'),
+  require('@assets/balls/7.png'),
+  require('@assets/balls/8.png'),
+  require('@assets/balls/9.png')
+];
+
 interface GameProps {
   route: GameRouteProp;
   navigation: GameNavigationProp
@@ -155,20 +167,8 @@ export function Game({ route, navigation }: GameProps) {
   };
 
   const renderBallTracker = (ballState: BallStatus[]) => {
-    const ballIcons = [
-      require('@assets/balls/1.png'),
-      require('@assets/balls/2.png'),
-      require('@assets/balls/3.png'),
-      require('@assets/balls/4.png'),
-      require('@assets/balls/5.png'),
-      require('@assets/balls/6.png'),
-      require('@assets/balls/7.png'),
-      require('@assets/balls/8.png'),
-      require('@assets/balls/9.png')
-    ];
-
     return ballIcons.map((img, index) => {
-      const displayBall = ballState[index + 1] !== BallStatus.PREV_SCORED;
+      const displayBall = ballState[index + 1] !== BallStatus.PREV_SCORED && ballState[index + 1] !== BallStatus.PREV_DEAD;
       const displayScoredIndicator = ballState[index + 1] === BallStatus.SCORED;
       const displayDeadIndicator = ballState[index + 1] === BallStatus.DEAD;
       let ball, indicator;
@@ -189,6 +189,19 @@ export function Game({ route, navigation }: GameProps) {
           {indicator}
         </Pressable>
       );
+    });
+  };
+
+  const renderDeadBallTracker = (ballState: BallStatus[]) => {
+    return ballIcons.map((img, index) => {
+      if (ballState[index + 1] === BallStatus.DEAD || ballState[index + 1] === BallStatus.PREV_DEAD) {
+        return (
+          <View style={styles.deadBallIconGroup}>
+            <Image source={img} style={styles.deadBallIcon} />
+            <Image source={require('@assets/icons/remove.png')} style={styles.deadBallIndicator} />
+          </View>
+        )
+      }
     });
   };
 
@@ -219,10 +232,15 @@ export function Game({ route, navigation }: GameProps) {
         } else {
           // Continue same rack
           const newBallState = nineBallState.map((state) => {
-            if (state !== BallStatus.FREE) {
-              return BallStatus.PREV_SCORED;
-            } else {
-              return BallStatus.FREE;
+            switch (state) {
+              case BallStatus.FREE:
+              case BallStatus.PREV_SCORED:
+                case BallStatus.PREV_DEAD:
+                return state;
+              case BallStatus.DEAD:
+                return BallStatus.PREV_DEAD;
+              default:
+                return BallStatus.PREV_SCORED;
             }
           });
           setNineBallState(newBallState);
@@ -382,7 +400,12 @@ export function Game({ route, navigation }: GameProps) {
   if (!isEightBall) {
     balls = (
       <View style={styles.ballContainer}>
-        {renderBallTracker(nineBallState)}
+        <View style={styles.deadBallContainer}>
+          {renderDeadBallTracker(nineBallState)}
+        </View>
+        <View style={styles.ballScoringContainer}>
+          {renderBallTracker(nineBallState)}
+        </View>
       </View>
     );
   }
@@ -439,7 +462,7 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: 'lightgrey'
   },
-  ballContainer: {
+  ballScoringContainer: {
     backgroundColor: 'lightgrey',
     flexShrink: 1,
     display: 'flex',
@@ -448,6 +471,34 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: 10,
     padding: 10
+  },
+  ballContainer: {
+    flexShrink: 1
+  },
+  deadBallContainer: {
+    flexShrink: 1,
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 10,
+    padding: 10,
+    justifyContent: 'flex-end'
+  },
+  deadBallIconGroup: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 30,
+    height: 30
+  },
+  deadBallIcon: {
+    width: 30,
+    height: 30,
+    opacity: 0.6
+  },
+  deadBallIndicator: {
+    width: 15,
+    height: 15,
+    position: 'absolute',
+    opacity: 0.8
   },
   ballIconGroup: {
     justifyContent: 'center',

@@ -2,7 +2,8 @@ export enum BallStatus {
   FREE,
   SCORED,
   DEAD,
-  PREV_SCORED
+  PREV_SCORED,
+  PREV_DEAD
 }
 
 export enum PlayerTurn {
