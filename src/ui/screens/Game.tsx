@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, Button } from '@rneui/themed';
+import { Text, Button, CheckBox, Dialog } from '@rneui/themed';
 import { Alert, View, StyleSheet, Pressable, Image } from 'react-native';
 import { NavigationProp, RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '@app/App';
@@ -25,9 +25,12 @@ export function Game({ route, navigation }: GameProps) {
   const [gamePlayer1, setGamePlayer1] = React.useState<GamePlayer>({...player1, score: 0});
   const [gamePlayer2, setGamePlayer2] = React.useState<GamePlayer>({...player2, score: 0});
   const [isPlayerOneTurn, setIsPlayerOneTurn] = React.useState<boolean>(true);
+  const [shooterWins, setShooterWins] = React.useState<boolean>(true); // 8 ball to track undo match over
   const [matchTurnCount, setMatchTurnCount] = React.useState<number>(0);
   const [rackTurnCount, setRackTurnCount] = React.useState<number>(0);
   const [previousGameTurnCount, setPreviousGameTurnCount] = React.useState<number>(0);
+  const [isEightBallDialogVisible, setIsEightBallDialogVisible] = React.useState<boolean>(false);
+  const [eightBallDialogState, setEightBallDialogState] = React.useState<number>(0);
 
   const [nineBallState, setNineBallState] = React.useState<BallStatus[]>([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
   const [nineBallRackHistory, setNineBallRackHistory] = React.useState<NineBallState[]>([]);
@@ -48,12 +51,19 @@ export function Game({ route, navigation }: GameProps) {
     }
   }
 
+  const undoGameOver = (playerOneWins: boolean) => {
+    if (isEightBall) {
+      removePoints(playerOneWins, 1);
+      setIsPlayerOneTurn(isPlayerOneTurn && shooterWins);
+    }
+  }
+
   const gameOver = (winnerName: string) => {
     Alert.alert(
       'Game Over',
       `${winnerName} wins!`,
       [
-        { text: 'Undo', style: 'cancel', onPress: () => {} },
+        { text: 'Undo', style: 'cancel', onPress: () => undoGameOver(winnerName === gamePlayer1.name)},
         { text: 'OK', onPress: () => navigation.navigate('Home') }
       ]
     );
@@ -282,13 +292,6 @@ export function Game({ route, navigation }: GameProps) {
       }
     };
 
-    const onEightBallGameOver = () => {
-      addPoints(isPlayerOneTurn, 1);
-      
-      setPreviousGameTurnCount(rackTurnCount);
-      setRackTurnCount(0);
-    }
-
     const onEightBallUndoGameOver = () => {
       removePoints(isPlayerOneTurn, 1);
       setMatchTurnCount(matchTurnCount - 1);
@@ -312,7 +315,7 @@ export function Game({ route, navigation }: GameProps) {
     let nextTurnLabel = playerName + '\'s Turn Over';
 
     if (isEightBall) {
-      gameOverBtn = <Button title='End Game' onPress={onEightBallGameOver} style={styles.buttonPrimary} />
+      gameOverBtn = <Button title='End Game' onPress={() => setIsEightBallDialogVisible(true)} style={styles.buttonPrimary} />
     } else if (winner) {
       nextTurnLabel = `${winner} wins!`;
     } else if (nineBallState[9] === BallStatus.SCORED) {
@@ -327,6 +330,53 @@ export function Game({ route, navigation }: GameProps) {
       </>
     )
   }
+
+  const onEightBallGameOver = (shooterWinsRack: boolean) => {
+    setShooterWins(shooterWinsRack);
+    const playerOneWins = isPlayerOneTurn === shooterWinsRack;
+    addPoints(playerOneWins, 1);
+    setIsPlayerOneTurn(playerOneWins);
+    setPreviousGameTurnCount(rackTurnCount);
+    setRackTurnCount(0);
+  }
+
+  const onCloseDialog = () => {
+    setEightBallDialogState(0);
+    setIsEightBallDialogVisible(false);
+  }
+
+  const renderEightBallRackOverDialog = () => {
+    const curPlayer = isPlayerOneTurn ? gamePlayer1 : gamePlayer2;
+    return (
+      <Dialog
+        isVisible={isEightBallDialogVisible}
+        onBackdropPress={onCloseDialog}
+      >
+        <Dialog.Title title={'Rack Over'} />
+        <Text>How did {curPlayer.name} make the 8 ball?</Text>
+        <View style={styles.eightBallDialogForm}>
+          <CheckBox
+            checked={eightBallDialogState === 0}
+            onPress={() => setEightBallDialogState(0)}
+            checkedIcon='dot-circle-o'
+            uncheckedIcon='circle-o'
+            title='Made the 8 ball'
+          />
+          <CheckBox
+            checked={eightBallDialogState === 1}
+            onPress={() => setEightBallDialogState(1)}
+            checkedIcon='dot-circle-o'
+            uncheckedIcon='circle-o'
+            title='Made the 8 ball early'
+          />
+        </View>
+        <Dialog.Actions>
+         <Button title='Confirm' onPress={() => { onEightBallGameOver(eightBallDialogState === 0); onCloseDialog(); }} style={styles.buttonPrimary} />
+         <Button title='Cancel' onPress={onCloseDialog} style={styles.buttonSecondary} />
+        </Dialog.Actions>
+      </Dialog>
+    );
+  };
 
   let balls;
   if (!isEightBall) {
@@ -352,6 +402,7 @@ export function Game({ route, navigation }: GameProps) {
       <View style={styles.buttonContainer}>
         {renderTurnActions()}
       </View>
+      {renderEightBallRackOverDialog()}
     </View>
   );
 }
@@ -431,5 +482,8 @@ const styles = StyleSheet.create({
   },
   buttonSecondary: {
 
+  },
+  eightBallDialogForm: {
+    
   }
 });
