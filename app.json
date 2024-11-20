@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "apa-scoring-app",
-    "slug": "apa-scoring-app",
-    "version": "1.0.0",
+    "name": "Pool Scorekeeper",
+    "slug": "pool-scorekeeper",
+    "version": "0.0.1-alpha",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -20,7 +20,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.sjhenley.apascoringapp"
+      "package": "com.sjhenley.poolscorekeeper"
     },
     "web": {
       "favicon": "./assets/favicon.png"

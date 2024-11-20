@@ -1,6 +1,6 @@
 {
-  "name": "apa-scoring-app",
-  "version": "1.0.0",
+  "name": "pool-scorekeeper",
+  "version": "0.0.1-alpha",
   "main": "src/index.ts",
   "type": "module",
   "scripts": {
