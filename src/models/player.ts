@@ -12,6 +12,6 @@ export default class Player {
       name: this.name,
       skill8: this.skill8,
       skill9: this.skill9
-    }
+    };
   }
 }

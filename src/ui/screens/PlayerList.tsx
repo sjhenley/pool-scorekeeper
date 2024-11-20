@@ -72,8 +72,8 @@ export function PlayerList() {
   }
 
   const renderDialog = () => {
-    const nameInput = React.useRef(0 as any);
-    
+    const nameInput = React.useRef(0);
+
     const pickerItems = [];
     for (let i = 1; i <= 9; i++) {
       pickerItems.push(<Picker.Item key={i} label={i.toString()} value={i} />);
@@ -105,7 +105,7 @@ export function PlayerList() {
         return (
           <Dialog.Actions>
             <Dialog.Button title="Update" onPress={() => updatePlayer(playerName, skill8, skill9)}/>
-            <Dialog.Button title="Delete" titleStyle={{color: 'red'}} onPress={() => deletePlayer(playerName)}/>
+            <Dialog.Button title="Delete" titleStyle={{ color: 'red' }} onPress={() => deletePlayer(playerName)}/>
           </Dialog.Actions>
         );
       } else {
@@ -170,7 +170,7 @@ export function PlayerList() {
           </ListItem.Content>
         </ListItem>
       </Pressable>
-    )
+    );
   }
 
   const renderPlayerList = () => {
@@ -182,10 +182,10 @@ export function PlayerList() {
         keyExtractor={(item, index) => index.toString()}
       />
     );
-  }
+  };
 
   return (
-    <View style={{height: '100%'}}>
+    <View style={{ height: '100%' }}>
       <FAB
         visible
         size="large"
@@ -210,14 +210,14 @@ const styles = StyleSheet.create({
   pickerRow: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   pickerLabel: {
     flexGrow: 1,
     fontWeight: 'bold'
   },
   picker: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   error: {
     color: 'red'

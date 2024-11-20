@@ -20,10 +20,10 @@ interface GamePlayer extends Omit<Player, 'toJSON'> {
 }
 
 export function Game({ route, navigation }: GameProps) {
-  const {player1, player2, isEightBall} = route.params;
+  const { player1, player2, isEightBall } = route.params;
 
-  const [gamePlayer1, setGamePlayer1] = React.useState<GamePlayer>({...player1, score: 0});
-  const [gamePlayer2, setGamePlayer2] = React.useState<GamePlayer>({...player2, score: 0});
+  const [gamePlayer1, setGamePlayer1] = React.useState<GamePlayer>({ ...player1, score: 0 });
+  const [gamePlayer2, setGamePlayer2] = React.useState<GamePlayer>({ ...player2, score: 0 });
   const [isPlayerOneTurn, setIsPlayerOneTurn] = React.useState<boolean>(true);
   const [shooterWins, setShooterWins] = React.useState<boolean>(true); // 8 ball to track undo match over
   const [matchTurnCount, setMatchTurnCount] = React.useState<number>(0);
@@ -37,33 +37,33 @@ export function Game({ route, navigation }: GameProps) {
 
   const addPoints = (isPlayerOne: boolean, points: number) => {
     if (isPlayerOne) {
-      setGamePlayer1({...gamePlayer1, score: gamePlayer1.score + points});
+      setGamePlayer1({ ...gamePlayer1, score: gamePlayer1.score + points });
     } else {
-      setGamePlayer2({...gamePlayer2, score: gamePlayer2.score + points});
+      setGamePlayer2({ ...gamePlayer2, score: gamePlayer2.score + points });
     }
-  }
+  };
 
   const removePoints = (isPlayerOne: boolean, points: number) => {
     if (isPlayerOne) {
-      setGamePlayer1({...gamePlayer1, score: gamePlayer1.score - points});
+      setGamePlayer1({ ...gamePlayer1, score: gamePlayer1.score - points });
     } else {
-      setGamePlayer2({...gamePlayer2, score: gamePlayer2.score - points});
+      setGamePlayer2({ ...gamePlayer2, score: gamePlayer2.score - points });
     }
-  }
+  };
 
   const undoGameOver = (playerOneWins: boolean) => {
     if (isEightBall) {
       removePoints(playerOneWins, 1);
       setIsPlayerOneTurn(isPlayerOneTurn && shooterWins);
     }
-  }
+  };
 
   const gameOver = (winnerName: string) => {
     Alert.alert(
       'Game Over',
       `${winnerName} wins!`,
       [
-        { text: 'Undo', style: 'cancel', onPress: () => undoGameOver(winnerName === gamePlayer1.name)},
+        { text: 'Undo', style: 'cancel', onPress: () => undoGameOver(winnerName === gamePlayer1.name) },
         { text: 'OK', onPress: () => navigation.navigate('Home') }
       ]
     );
@@ -78,12 +78,12 @@ export function Game({ route, navigation }: GameProps) {
     }
     if (gamePlayer1.score >= getScoreGoal(playerOneSkill, playerTwoSkill, isEightBall)) {
       return gamePlayer1.name;
-    } else if (gamePlayer2.score >=  getScoreGoal(playerTwoSkill, playerOneSkill, isEightBall)) {
+    } else if (gamePlayer2.score >= getScoreGoal(playerTwoSkill, playerOneSkill, isEightBall)) {
       return gamePlayer2.name;
     } else {
       return null;
     }
-  }
+  };
   const winner = isGameOver();
 
   React.useEffect(() => {
@@ -103,7 +103,7 @@ export function Game({ route, navigation }: GameProps) {
           'Incomplete game will be discarded',
           [
             { text: 'Cancel', style: 'cancel', onPress: () => {} },
-            { text: 'Continue', style: 'destructive', onPress: () => navigation.dispatch(e.data.action) },
+            { text: 'Continue', style: 'destructive', onPress: () => navigation.dispatch(e.data.action) }
           ]
         );
       });
@@ -164,8 +164,8 @@ export function Game({ route, navigation }: GameProps) {
       require('@assets/balls/6.png'),
       require('@assets/balls/7.png'),
       require('@assets/balls/8.png'),
-      require('@assets/balls/9.png'),
-    ]
+      require('@assets/balls/9.png')
+    ];
 
     return ballIcons.map((img, index) => {
       const displayBall = ballState[index + 1] !== BallStatus.PREV_SCORED;
@@ -188,9 +188,9 @@ export function Game({ route, navigation }: GameProps) {
           {ball}
           {indicator}
         </Pressable>
-      )
+      );
     });
-  }
+  };
 
   const renderTurnActions = () => {
     const onNextTurnClick = () => {
@@ -208,7 +208,7 @@ export function Game({ route, navigation }: GameProps) {
           matchTurn: matchTurnCount,
           playerOneScore: gamePlayer1.score,
           playerTwoScore: gamePlayer2.score
-        }
+        };
         console.log('SAVE STATE ', JSON.stringify(rackState, null, 2));
         setNineBallRackHistory([...nineBallRackHistory, rackState]);
         if (nineBallState[9] === BallStatus.SCORED) {
@@ -224,15 +224,15 @@ export function Game({ route, navigation }: GameProps) {
             } else {
               return BallStatus.FREE;
             }
-          })
+          });
           setNineBallState(newBallState);
           setIsPlayerOneTurn(!isPlayerOneTurn);
           setMatchTurnCount(matchTurnCount + 1);
           setRackTurnCount(rackTurnCount + 1);
         }
       }
-    }
-    
+    };
+
     const promptClearBalls = () => {
       return new Promise<boolean>((resolve) => {
         Alert.alert(
@@ -247,8 +247,8 @@ export function Game({ route, navigation }: GameProps) {
           }
         );
       });
-      
-    }
+
+    };
 
     const onBackClick = async () => {
       if (matchTurnCount === 0) {
@@ -271,13 +271,13 @@ export function Game({ route, navigation }: GameProps) {
 
           const newPlayerOne = {
             ...gamePlayer1,
-            score: lastState.playerOneScore,
+            score: lastState.playerOneScore
           };
           setGamePlayer1(newPlayerOne);
 
           const newPlayerTwo= {
             ...gamePlayer2,
-            score: lastState.playerTwoScore,
+            score: lastState.playerTwoScore
           };
           setGamePlayer2(newPlayerTwo);
         }
@@ -296,7 +296,7 @@ export function Game({ route, navigation }: GameProps) {
       removePoints(isPlayerOneTurn, 1);
       setMatchTurnCount(matchTurnCount - 1);
       setRackTurnCount(previousGameTurnCount);
-    }
+    };
 
     const playerName = isPlayerOneTurn ? gamePlayer1.name : gamePlayer2.name;
     const opponentName = isPlayerOneTurn ? gamePlayer2.name : gamePlayer1.name;
@@ -315,12 +315,12 @@ export function Game({ route, navigation }: GameProps) {
     let nextTurnLabel = playerName + '\'s Turn Over';
 
     if (isEightBall) {
-      gameOverBtn = <Button title='End Game' onPress={() => setIsEightBallDialogVisible(true)} style={styles.buttonPrimary} />
+      gameOverBtn = <Button title='End Game' onPress={() => setIsEightBallDialogVisible(true)} style={styles.buttonPrimary} />;
     } else if (winner) {
       nextTurnLabel = `${winner} wins!`;
     } else if (nineBallState[9] === BallStatus.SCORED) {
       nextTurnLabel = 'Start New Rack';
-    } 
+    }
 
     return (
       <>
@@ -328,8 +328,8 @@ export function Game({ route, navigation }: GameProps) {
         {gameOverBtn}
         <Button title={backButtonTitle} onPress={onBackClick} style={styles.buttonSecondary} />
       </>
-    )
-  }
+    );
+  };
 
   const onEightBallGameOver = (shooterWinsRack: boolean) => {
     setShooterWins(shooterWinsRack);
@@ -338,12 +338,12 @@ export function Game({ route, navigation }: GameProps) {
     setIsPlayerOneTurn(playerOneWins);
     setPreviousGameTurnCount(rackTurnCount);
     setRackTurnCount(0);
-  }
+  };
 
   const onCloseDialog = () => {
     setEightBallDialogState(0);
     setIsEightBallDialogVisible(false);
-  }
+  };
 
   const renderEightBallRackOverDialog = () => {
     const curPlayer = isPlayerOneTurn ? gamePlayer1 : gamePlayer2;
@@ -371,8 +371,8 @@ export function Game({ route, navigation }: GameProps) {
           />
         </View>
         <Dialog.Actions>
-         <Button title='Confirm' onPress={() => { onEightBallGameOver(eightBallDialogState === 0); onCloseDialog(); }} style={styles.buttonPrimary} />
-         <Button title='Cancel' onPress={onCloseDialog} style={styles.buttonSecondary} />
+          <Button title='Confirm' onPress={() => { onEightBallGameOver(eightBallDialogState === 0); onCloseDialog(); }} style={styles.buttonPrimary} />
+          <Button title='Cancel' onPress={onCloseDialog} style={styles.buttonSecondary} />
         </Dialog.Actions>
       </Dialog>
     );
@@ -421,7 +421,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     gap: 3,
-    backgroundColor: 'black',
+    backgroundColor: 'black'
   },
   playerBox: {
     flex: 1,
@@ -433,11 +433,11 @@ const styles = StyleSheet.create({
     width: '100%',
     display: 'flex',
     padding: 10,
-    flexGrow: 1 
+    flexGrow: 1
   },
   inningCounter: {
     width: '100%',
-    backgroundColor: 'lightgrey',
+    backgroundColor: 'lightgrey'
   },
   ballContainer: {
     backgroundColor: 'lightgrey',
@@ -484,6 +484,6 @@ const styles = StyleSheet.create({
 
   },
   eightBallDialogForm: {
-    
+
   }
 });

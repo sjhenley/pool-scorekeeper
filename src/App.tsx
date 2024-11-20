@@ -7,14 +7,14 @@ import Player from './models/player';
 
 export type RootStackParamList = {
   Home: undefined,
-  "New Game": undefined,
+  'New Game': undefined,
   Players: undefined,
   History: undefined,
   Game: {
     player1: Player,
     player2: Player,
     isEightBall: boolean
-  } 
+  }
 }
 const Stack = createStackNavigator<RootStackParamList>();
 

@@ -10,6 +10,6 @@ export function getBallList(): BallStatus[] {
     BallStatus.FREE,
     BallStatus.FREE,
     BallStatus.FREE,
-    BallStatus.FREE,
-  ]
+    BallStatus.FREE
+  ];
 }

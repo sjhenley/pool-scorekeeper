@@ -1,14 +1,14 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Text, Tab, TabView, Button } from '@rneui/themed'
+import { Text, Tab, TabView, Button } from '@rneui/themed';
 import Player from '@app/models/player';
 import { loadPlayerList } from '@app/util/storage.util';
 import { Picker } from '@react-native-picker/picker';
-import { NavigationProp } from '@react-navigation/native';
+import { NavigationProp, ParamListBase } from '@react-navigation/native';
 
 
 interface NewGameProps {
-  navigation: NavigationProp<any>;
+  navigation: NavigationProp<ParamListBase>;
 }
 
 export function NewGame({ navigation }: NewGameProps) {
@@ -70,7 +70,7 @@ export function NewGame({ navigation }: NewGameProps) {
           </Picker>
         </View>
       </>
-    )
+    );
   }
 
   function startGame() {
@@ -98,11 +98,11 @@ export function NewGame({ navigation }: NewGameProps) {
         />
       </Tab>
 
-      <TabView containerStyle={{width: '100%'}} value={tabIndex} onChange={setTabIndex} animationType='spring'>
-        <TabView.Item style={{width: '100%'}}>
+      <TabView containerStyle={{ width: '100%' }} value={tabIndex} onChange={setTabIndex} animationType='spring'>
+        <TabView.Item style={{ width: '100%' }}>
           {renderPlayerList()}
         </TabView.Item>
-        <TabView.Item style={{width: '100%'}}>
+        <TabView.Item style={{ width: '100%' }}>
           {renderPlayerList()}
         </TabView.Item>
       </TabView>
@@ -120,18 +120,18 @@ const styles = StyleSheet.create({
   pickerRow: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   pickerLabel: {
     flexGrow: 1,
     fontWeight: 'bold'
   },
   picker: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   buttonContainer: {
     display: 'flex',
     marginHorizontal: 50,
-    marginVertical: 10,
+    marginVertical: 10
   }
 });

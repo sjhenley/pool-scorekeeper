@@ -2,11 +2,11 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Button, Text } from '@rneui/themed';
 import { style } from '../../styles';
-import { NavigationProp } from '@react-navigation/native';
+import { NavigationProp, ParamListBase } from '@react-navigation/native';
 const packageJson = require('../../../package.json');
 
 interface HomeProps {
-  navigation: NavigationProp<any>;
+  navigation: NavigationProp<ParamListBase>;
 }
 
 export function Home({ navigation }: HomeProps) {
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     width: 200,
     marginHorizontal: 50,
-    marginVertical: 10,
+    marginVertical: 10
   },
   body: {
     flexGrow: 1,

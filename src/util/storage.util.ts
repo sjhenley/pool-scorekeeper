@@ -13,5 +13,5 @@ export async function loadPlayerList(): Promise<Player[]> {
   if (!list) {
     return [];
   }
-  return JSON.parse(list).map((player: any) => new Player(player.name, player.skill8, player.skill9));
+  return JSON.parse(list).map((player: Player) => new Player(player.name, player.skill8, player.skill9));
 }
