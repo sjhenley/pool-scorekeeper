@@ -5,6 +5,7 @@ import { Dialog, FAB, ListItem, Input } from '@rneui/themed';
 import { Picker } from '@react-native-picker/picker';
 import { loadPlayerList, savePlayerList } from '@app/util/storage.util';
 import { Pressable } from 'react-native-gesture-handler';
+import { formatTitleString } from '@app/util/string.util';
 
 function loadPlayers(callback: React.Dispatch<React.SetStateAction<Player[]>>) {
   loadPlayerList().then((players) => {
@@ -24,7 +25,7 @@ export function PlayerList() {
   const [skill9, setSkill9] = React.useState<SkillLevel>(3);
 
   function addPlayer(name: string, skill8: SkillLevel, skill9: SkillLevel) {
-    const newPlayer = new Player(name, skill8, skill9);
+    const newPlayer = new Player(formatTitleString(name), skill8, skill9);
     setPlayerList([...playerList, newPlayer]);
     savePlayerList([...playerList, newPlayer]);
     closeDialog();
