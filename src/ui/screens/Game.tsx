@@ -60,21 +60,28 @@ export function Game({ route, navigation }: GameProps) {
   };
 
   const isGameOver = (): string | null => {
-    if (gamePlayer1.score === getScoreGoal(gamePlayer1.skill8, gamePlayer2.skill8, isEightBall)) {
+    let playerOneSkill = gamePlayer1.skill8;
+    let playerTwoSkill = gamePlayer2.skill8;
+    if (!isEightBall) {
+      playerOneSkill = gamePlayer1.skill9;
+      playerTwoSkill = gamePlayer2.skill9;
+    }
+    if (gamePlayer1.score >= getScoreGoal(playerOneSkill, playerTwoSkill, isEightBall)) {
       return gamePlayer1.name;
-    } else if (gamePlayer2.score === getScoreGoal(gamePlayer2.skill8, gamePlayer1.skill8, isEightBall)) {
+    } else if (gamePlayer2.score >=  getScoreGoal(playerTwoSkill, playerOneSkill, isEightBall)) {
       return gamePlayer2.name;
     } else {
       return null;
     }
   }
+  const winner = isGameOver();
 
   React.useEffect(() => {
-    let winner = isGameOver();
-      if (winner) {
-        gameOver(winner);
-        return;
-      }
+    const winner = isGameOver();
+    if (winner && isEightBall) {
+      gameOver(winner);
+      return;
+    }
   }, [gamePlayer1, gamePlayer2]);
 
   React.useEffect(
@@ -181,6 +188,8 @@ export function Game({ route, navigation }: GameProps) {
         setIsPlayerOneTurn(!isPlayerOneTurn);
         setMatchTurnCount(matchTurnCount + 1);
         setRackTurnCount(rackTurnCount + 1);
+      } else if (winner) {
+        gameOver(winner);
       } else {
         const rackState = {
           balls: [...nineBallState],
@@ -304,9 +313,11 @@ export function Game({ route, navigation }: GameProps) {
 
     if (isEightBall) {
       gameOverBtn = <Button title='End Game' onPress={onEightBallGameOver} style={styles.buttonPrimary} />
+    } else if (winner) {
+      nextTurnLabel = `${winner} wins!`;
     } else if (nineBallState[9] === BallStatus.SCORED) {
       nextTurnLabel = 'Start New Rack';
-    }
+    } 
 
     return (
       <>
