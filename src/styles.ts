@@ -45,11 +45,6 @@ export const useGlobalStyles = makeStyles((theme) => ({
   buttonError: {
     backgroundColor: theme.colors.error
   },
-  buttonPrimaryText: {
-    color: theme.colors.background,
-    fontSize: 32,
-    fontWeight: 'bold'
-  },
   buttonLarge: {
     minWidth: 350,
     height: 70,

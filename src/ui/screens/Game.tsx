@@ -346,7 +346,7 @@ export function Game({ route, navigation }: GameProps) {
     let nextTurnLabel = playerName + '\'s Turn Over';
 
     if (isEightBall) {
-      gameOverBtn = <Button title='End Game' buttonStyle={globalStyle.buttonLarge} titleStyle={globalStyle.buttonPrimaryText} onPress={() => setIsEightBallDialogVisible(true)} />;
+      gameOverBtn = <Button title='End Game' buttonStyle={globalStyle.buttonLarge} titleStyle={[globalStyle.textLarge, globalStyle.background]} onPress={() => setIsEightBallDialogVisible(true)} />;
     } else if (winner) {
       nextTurnLabel = `${winner} wins!`;
     } else if (nineBallState[9] === BallStatus.SCORED) {
@@ -355,9 +355,9 @@ export function Game({ route, navigation }: GameProps) {
 
     return (
       <>
-        <Button title={nextTurnLabel} buttonStyle={globalStyle.buttonLarge} titleStyle={globalStyle.buttonPrimaryText} onPress={onNextTurnClick} />
+        <Button title={nextTurnLabel} buttonStyle={globalStyle.buttonLarge} titleStyle={[globalStyle.textLarge, globalStyle.background]} onPress={onNextTurnClick} />
         {gameOverBtn}
-        <Button title={backButtonTitle} buttonStyle={globalStyle.buttonLarge} titleStyle={globalStyle.buttonPrimaryText}  onPress={onBackClick} />
+        <Button color='error' title={backButtonTitle} buttonStyle={globalStyle.buttonLarge} titleStyle={[globalStyle.textLarge, globalStyle.primary]}  onPress={onBackClick} />
       </>
     );
   };

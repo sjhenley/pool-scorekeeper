@@ -116,7 +116,7 @@ export function NewGame({ navigation }: NewGameProps) {
       <Button
         title={'Start Game'}
         buttonStyle={globalStyle.buttonLarge}
-        titleStyle={globalStyle.buttonPrimaryText}
+        titleStyle={[globalStyle.textLarge, globalStyle.background]}
         containerStyle={styles.buttonContainer}
         onPress={startGame}
       />

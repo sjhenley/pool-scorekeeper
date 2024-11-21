@@ -28,9 +28,9 @@ export function Home({ navigation }: HomeProps) {
       </View>
       <View style={styles.body}>
         <Text style={styles.title}>Scorekeeper</Text>
-        <Button title={'Start Game'} buttonStyle={globalStyle.buttonLarge} titleStyle={globalStyle.buttonPrimaryText} onPress={() => navigation.navigate('New Game')} />
-        <Button title={'Players'} buttonStyle={globalStyle.buttonLarge} titleStyle={globalStyle.buttonPrimaryText} onPress={() => navigation.navigate('Players')} />
-        <Button title={'Game History'} buttonStyle={globalStyle.buttonLarge} titleStyle={globalStyle.buttonPrimaryText} onPress={() => navigation.navigate('History')} />
+        <Button title={'Start Game'} buttonStyle={globalStyle.buttonLarge} titleStyle={[globalStyle.textLarge, globalStyle.background]} onPress={() => navigation.navigate('New Game')} />
+        <Button title={'Players'} buttonStyle={globalStyle.buttonLarge} titleStyle={[globalStyle.textLarge, globalStyle.background]} onPress={() => navigation.navigate('Players')} />
+        <Button title={'Game History'} buttonStyle={globalStyle.buttonLarge} titleStyle={[globalStyle.textLarge, globalStyle.background]} onPress={() => navigation.navigate('History')} />
       </View>
       <View style={styles.footer}>
         <Text style={globalStyle.textCenter}>Version v{packageJson.version}</Text>
