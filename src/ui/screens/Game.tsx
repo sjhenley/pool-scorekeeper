@@ -136,7 +136,7 @@ export function Game({ route, navigation }: GameProps) {
     const scoreGoal = getScoreGoal(skill, opponentSkill, isEightBall);
     const isPlayerTurn = isPlayerOneTurn === (player === gamePlayer1);
     return (
-      <View style={[styles.playerBox, {backgroundColor: isPlayerTurn ? theme.colors.grey1 : theme.colors.grey0}]}>
+      <View style={[styles.playerBox, {backgroundColor: isPlayerTurn ? theme.colors.grey1 : theme.colors.primary}]}>
         <Text style={[globalStyle.background, globalStyle.textLarge]}>{player.name}</Text>
         <Text style={[globalStyle.background, globalStyle.textMedium]}>{player.score} / {scoreGoal} points</Text>
       </View>
