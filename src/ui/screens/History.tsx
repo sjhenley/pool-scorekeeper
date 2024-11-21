@@ -1,12 +1,13 @@
 import React from 'react';
 import { View } from 'react-native';
 import { Text } from '@rneui/themed';
-import { style } from '../../styles';
+import { useGlobalStyles } from '../../styles';
 
 export function History() {
+  const globalStyle = useGlobalStyles();
   return (
-    <View style={style.container}>
-      <Text h1 style={style.textCenter}>History</Text>
+    <View style={globalStyle.container}>
+      <Text h1 style={globalStyle.textCenter}>History</Text>
     </View>
   );
 }

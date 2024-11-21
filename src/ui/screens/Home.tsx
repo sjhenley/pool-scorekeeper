@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Button, Text } from '@rneui/themed';
-import { style } from '../../styles';
+import { useGlobalStyles } from '../../styles';
 import { NavigationProp, ParamListBase } from '@react-navigation/native';
 const packageJson = require('../../../package.json');
 
@@ -10,34 +10,35 @@ interface HomeProps {
 }
 
 export function Home({ navigation }: HomeProps) {
+  const globalStyle = useGlobalStyles();
+
   return (
-    <View style={style.container}>
+    <View style={globalStyle.container}>
       <View style={styles.body}>
-        <Text h1 style={style.textCenter}>Scorekeeper</Text>
-        <Button title={'Start Game'} containerStyle={styles.buttonContainer} onPress={() => navigation.navigate('New Game')} />
-        <Button title={'Players'} containerStyle={styles.buttonContainer} onPress={() => navigation.navigate('Players')} />
-        <Button title={'Game History'} containerStyle={styles.buttonContainer} onPress={() => navigation.navigate('History')} />
+        <Text style={styles.title}>Scorekeeper</Text>
+        <Button title={'Start Game'} buttonStyle={globalStyle.buttonLarge} titleStyle={globalStyle.buttonPrimaryText} onPress={() => navigation.navigate('New Game')} />
+        <Button title={'Players'} buttonStyle={globalStyle.buttonLarge} titleStyle={globalStyle.buttonPrimaryText} onPress={() => navigation.navigate('Players')} />
+        <Button title={'Game History'} buttonStyle={globalStyle.buttonLarge} titleStyle={globalStyle.buttonPrimaryText} onPress={() => navigation.navigate('History')} />
       </View>
       <View style={styles.footer}>
-        <Text style={style.textCenter}>Version v{packageJson.version}</Text>
+        <Text style={globalStyle.textCenter}>Version v{packageJson.version}</Text>
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  buttonContainer: {
-    width: 200,
-    marginHorizontal: 50,
-    marginVertical: 10
-  },
   body: {
     flexGrow: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    gap: 10
   },
   footer: {
     flexShrink: 1,
     padding: 10
+  },
+  title: {
+    fontSize: 48
   }
 });

@@ -1,11 +1,20 @@
-import { StyleSheet } from 'react-native';
+import { makeStyles } from '@rneui/themed';
 
 export const COLORS = {
-  primary: '#1AF0C1',
-  secondary: '#E0561F',
-  tertiary: '#BBC9C6',
-  black: '#1A1A1A',
-  white: '#FFFFFF'
+  light: {
+    primary: '#4b4f7b',
+    secondary: '#3C5562',
+    background: '#F4F4FB',
+    black: '#1A1A1A',
+    white: '#FFFFFF'
+  },
+  dark: {
+    primary: '#F4F4FB',
+    secondary: '#3C5562',
+    background: '#4b4f7b',
+    black: '#1A1A1A',
+    white: '#FFFFFF'
+  }
 };
 
 export const TYPOGRAPHY = {
@@ -14,10 +23,10 @@ export const TYPOGRAPHY = {
   body: { fontSize: 18, fontWeight: '400' }
 };
 
-export const style = StyleSheet.create({
+export const useGlobalStyles = makeStyles((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: theme.colors.background,
     alignItems: 'center',
     justifyContent: 'center'
   },
@@ -25,9 +34,16 @@ export const style = StyleSheet.create({
     textAlign: 'center'
   },
   buttonPrimary: {
-    backgroundColor: COLORS.primary,
-    color: COLORS.black,
     minWidth: 200,
-    fontSize: 36
+    fontSize: 36,
+  },
+  buttonPrimaryText: {
+    color: theme.colors.background,
+    fontSize: 32,
+    fontWeight: 'bold'
+  },
+  buttonLarge: {
+    minWidth: 350,
+    height: 70,
   }
-});
+}));

@@ -4,6 +4,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import * as Screens from './ui/screens';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Player from './models/player';
+import { ThemeProvider, createTheme } from '@rneui/themed';
+import { COLORS } from './styles';
 
 export type RootStackParamList = {
   Home: undefined,
@@ -31,11 +33,32 @@ function RootStack() {
 }
 
 export default function App() {
+  const theme = createTheme({
+    lightColors: {
+      primary: COLORS.light.primary,
+      secondary: COLORS.light.secondary,
+      background: COLORS.light.background,
+    },
+    darkColors: {
+      primary: COLORS.dark.primary,
+      secondary: COLORS.dark.secondary,
+      background: COLORS.dark.background,
+    },
+    components: {
+      Button: {
+        raised: true,
+      }
+    },
+    mode: 'dark'
+  });
+
   return (
     <SafeAreaProvider>
-      <NavigationContainer>
-        <RootStack />
-      </NavigationContainer>
+      <ThemeProvider theme={theme}>
+        <NavigationContainer>
+          <RootStack />
+        </NavigationContainer>
+      </ThemeProvider>
     </SafeAreaProvider>
   );
 }
