@@ -39,7 +39,7 @@ function RootStack() {
       <Stack.Screen name="New Game" component={Screens.NewGame} />
       <Stack.Screen name="Players" component={Screens.PlayerList} />
       <Stack.Screen name="History" component={Screens.History} />
-      <Stack.Screen name="Game" component={Screens.Game} />
+      <Stack.Screen name="Game" component={Screens.Game} options={{ headerShown: false }}/>
     </Stack.Navigator>
   );
 }

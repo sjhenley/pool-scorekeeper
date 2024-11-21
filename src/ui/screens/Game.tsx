@@ -1,11 +1,12 @@
 import React from 'react';
-import { Text, Button, CheckBox, Dialog } from '@rneui/themed';
+import { Text, Button, CheckBox, Dialog, useTheme } from '@rneui/themed';
 import { Alert, View, StyleSheet, Pressable, Image } from 'react-native';
 import { NavigationProp, RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '@app/App';
 import Player from '@app/models/player';
 import { getScoreGoal } from '@app/util/score.util';
 import { BallStatus, NineBallState, PlayerTurn } from '@app/models/ball-status.enum';
+import { useGlobalStyles } from '@app/styles';
 
 type GameRouteProp = RouteProp<RootStackParamList, 'Game'>;
 type GameNavigationProp = NavigationProp<RootStackParamList, 'Game'>;
@@ -32,6 +33,9 @@ interface GamePlayer extends Omit<Player, 'toJSON'> {
 }
 
 export function Game({ route, navigation }: GameProps) {
+  const globalStyle = useGlobalStyles();
+  const theme = useTheme().theme;
+
   const { player1, player2, isEightBall } = route.params;
 
   const [gamePlayer1, setGamePlayer1] = React.useState<GamePlayer>({ ...player1, score: 0 });
@@ -130,10 +134,11 @@ export function Game({ route, navigation }: GameProps) {
     const skill = isEightBall ? player.skill8 : player.skill9;
     const opponentSkill = isEightBall ? opponent.skill8 : opponent.skill9;
     const scoreGoal = getScoreGoal(skill, opponentSkill, isEightBall);
+    const isPlayerTurn = isPlayerOneTurn === (player === gamePlayer1);
     return (
-      <View style={styles.playerBox}>
-        <Text h2>{player.name}</Text>
-        <Text h3>{player.score} / {scoreGoal} points</Text>
+      <View style={[styles.playerBox, {backgroundColor: isPlayerTurn ? theme.colors.grey1 : theme.colors.grey0}]}>
+        <Text style={[globalStyle.background, globalStyle.textLarge]}>{player.name}</Text>
+        <Text style={[globalStyle.background, globalStyle.textMedium]}>{player.score} / {scoreGoal} points</Text>
       </View>
     );
   };
@@ -341,7 +346,7 @@ export function Game({ route, navigation }: GameProps) {
     let nextTurnLabel = playerName + '\'s Turn Over';
 
     if (isEightBall) {
-      gameOverBtn = <Button title='End Game' onPress={() => setIsEightBallDialogVisible(true)} style={styles.buttonPrimary} />;
+      gameOverBtn = <Button title='End Game' buttonStyle={globalStyle.buttonLarge} titleStyle={globalStyle.buttonPrimaryText} onPress={() => setIsEightBallDialogVisible(true)} />;
     } else if (winner) {
       nextTurnLabel = `${winner} wins!`;
     } else if (nineBallState[9] === BallStatus.SCORED) {
@@ -350,9 +355,9 @@ export function Game({ route, navigation }: GameProps) {
 
     return (
       <>
-        <Button title={nextTurnLabel} onPress={onNextTurnClick} style={styles.buttonPrimary} />
+        <Button title={nextTurnLabel} buttonStyle={globalStyle.buttonLarge} titleStyle={globalStyle.buttonPrimaryText} onPress={onNextTurnClick} />
         {gameOverBtn}
-        <Button title={backButtonTitle} onPress={onBackClick} style={styles.buttonSecondary} />
+        <Button title={backButtonTitle} buttonStyle={globalStyle.buttonLarge} titleStyle={globalStyle.buttonPrimaryText}  onPress={onBackClick} />
       </>
     );
   };
@@ -378,16 +383,25 @@ export function Game({ route, navigation }: GameProps) {
       <Dialog
         isVisible={isEightBallDialogVisible}
         onBackdropPress={onCloseDialog}
+        overlayStyle={globalStyle.dialog}
+        style={globalStyle.dialog}
       >
-        <Dialog.Title title={'Rack Over'} />
-        <Text>How did {curPlayer.name} make the 8 ball?</Text>
-        <View style={styles.eightBallDialogForm}>
+        <Dialog.Title titleStyle={[globalStyle.background, globalStyle.textLarge]} title={'Rack Over'} />
+        <Text style={[globalStyle.background, globalStyle.textMedium]}>How did {curPlayer.name} make the 8 ball?</Text>
+        <View>
           <CheckBox
             checked={eightBallDialogState === 0}
             onPress={() => setEightBallDialogState(0)}
             checkedIcon='dot-circle-o'
             uncheckedIcon='circle-o'
             title='Made the 8 ball'
+            containerStyle={{
+              backgroundColor: theme.colors.primary
+            }}
+            textStyle={[globalStyle.textMedium, globalStyle.background]}
+            style={{borderColor: theme.colors.secondary}}
+            checkedColor={theme.colors.background}
+            uncheckedColor={theme.colors.background}
           />
           <CheckBox
             checked={eightBallDialogState === 1}
@@ -395,11 +409,32 @@ export function Game({ route, navigation }: GameProps) {
             checkedIcon='dot-circle-o'
             uncheckedIcon='circle-o'
             title='Made the 8 ball early'
+            containerStyle={{
+              backgroundColor: theme.colors.primary
+            }}
+            textStyle={[globalStyle.textMedium, globalStyle.background]}
+            style={{borderColor: theme.colors.secondary}}
+            checkedColor={theme.colors.background}
+            uncheckedColor={theme.colors.background}
           />
         </View>
         <Dialog.Actions>
-          <Button title='Confirm' onPress={() => { onEightBallGameOver(eightBallDialogState === 0); onCloseDialog(); }} style={styles.buttonPrimary} />
-          <Button title='Cancel' onPress={onCloseDialog} style={styles.buttonSecondary} />
+          <View style={ styles.dialogActions }>
+            <Dialog.Button
+              title='Cancel'
+              buttonStyle={globalStyle.buttonMedium}
+              containerStyle={globalStyle.buttonError}
+              titleStyle={globalStyle.textMedium}
+              onPress={onCloseDialog}
+            />
+            <Dialog.Button 
+              title='Confirm'
+              buttonStyle={globalStyle.buttonMedium}
+              containerStyle={globalStyle.buttonPrimary}
+              titleStyle={globalStyle.textMedium}
+              onPress={() => { onEightBallGameOver(eightBallDialogState === 0); onCloseDialog(); }}
+            />
+          </View>
         </Dialog.Actions>
       </Dialog>
     );
@@ -412,20 +447,20 @@ export function Game({ route, navigation }: GameProps) {
         <View style={styles.deadBallContainer}>
           {renderDeadBallTracker(nineBallState)}
         </View>
-        <View style={styles.ballScoringContainer}>
+        <View style={[styles.ballScoringContainer, { backgroundColor: theme.colors.grey0}]}>
           {renderBallTracker(nineBallState)}
         </View>
       </View>
     );
   }
   return (
-    <View style={styles.container}>
-      <View style={styles.playerRow}>
+    <View style={globalStyle.container}>
+      <View style={[styles.playerRow, {backgroundColor: theme.colors.primary}]}>
         {renderPlayerBox(gamePlayer1, gamePlayer2)}
         {renderPlayerBox(gamePlayer2, gamePlayer1)}
       </View>
-      <View style={styles.inningCounter}>
-        <Text h3 style={styles.textCenter}>{Math.floor(matchTurnCount / 2)} innings</Text>
+      <View style={[styles.inningCounter, {backgroundColor: theme.colors.primary}]}>
+        <Text style={[globalStyle.background, globalStyle.textMedium, globalStyle.textCenter, globalStyle.bold]}>{Math.floor(matchTurnCount / 2)} innings</Text>
       </View>
       <View style={styles.playerInfo}>
         {renderPlayerInfo(isPlayerOneTurn ? gamePlayer1 : gamePlayer2)}
@@ -440,24 +475,14 @@ export function Game({ route, navigation }: GameProps) {
 }
 
 const styles = StyleSheet.create({
-  textCenter: {
-    textAlign: 'center'
-  },
-  container: {
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    height: '100%'
-  },
   playerRow: {
     display: 'flex',
     flexDirection: 'row',
     gap: 3,
-    backgroundColor: 'black'
+    paddingTop: 30
   },
   playerBox: {
     flex: 1,
-    backgroundColor: 'lightgrey',
     padding: 10,
     marginBottom: 3
   },
@@ -469,10 +494,9 @@ const styles = StyleSheet.create({
   },
   inningCounter: {
     width: '100%',
-    backgroundColor: 'lightgrey'
+    height: 32
   },
   ballScoringContainer: {
-    backgroundColor: 'lightgrey',
     flexShrink: 1,
     display: 'flex',
     flexDirection: 'row',
@@ -537,13 +561,9 @@ const styles = StyleSheet.create({
     gap: 10,
     padding: 10
   },
-  buttonPrimary: {
-
-  },
-  buttonSecondary: {
-
-  },
-  eightBallDialogForm: {
-
+  dialogActions: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 10
   }
 });

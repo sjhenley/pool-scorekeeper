@@ -73,6 +73,7 @@ export const useGlobalStyles = makeStyles((theme) => ({
   },
   dialog: {
     backgroundColor: theme.colors.primary,
+    minWidth: 375
   },
   input: {
     color: theme.colors.white
