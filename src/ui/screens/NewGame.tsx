@@ -1,10 +1,11 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Text, Tab, TabView, Button } from '@rneui/themed';
+import { Text, Tab, TabView, Button, useTheme } from '@rneui/themed';
 import Player from '@app/models/player';
 import { loadPlayerList } from '@app/util/storage.util';
 import { Picker } from '@react-native-picker/picker';
 import { NavigationProp, ParamListBase } from '@react-navigation/native';
+import { useGlobalStyles } from '@app/styles';
 
 
 interface NewGameProps {
@@ -12,6 +13,9 @@ interface NewGameProps {
 }
 
 export function NewGame({ navigation }: NewGameProps) {
+  const globalStyle = useGlobalStyles();
+  const theme = useTheme().theme;
+
   const [tabIndex, setTabIndex] = React.useState(0);
 
   const [playerList, setPlayerList] = React.useState<Player[]>([]);
@@ -35,6 +39,7 @@ export function NewGame({ navigation }: NewGameProps) {
       return (
         <Picker.Item
           key={player.name}
+          style={globalStyle.textMedium}
           label={`${player.name} - ${isEightBall() ? player.skill8 : player.skill9}`}
           value={player}
         />
@@ -46,26 +51,22 @@ export function NewGame({ navigation }: NewGameProps) {
     return (
       <>
         <View style={styles.pickerRow}>
-          <Text style={styles.pickerLabel}>Player 1</Text>
+          <Text style={[globalStyle.textMedium, globalStyle.primary, styles.pickerLabel, globalStyle.bold]}>Player 1</Text>
           <Picker
             prompt='Player 1'
             selectedValue={player1}
-            style={styles.picker}
-            onValueChange={(itemValue) =>
-              setPlayer1(itemValue)
-            }>
+            style={[globalStyle.primary, styles.picker]}
+            onValueChange={(itemValue) => setPlayer1(itemValue) }>
             {renderPickerItems()}
           </Picker>
         </View>
         <View style={styles.pickerRow}>
-          <Text style={styles.pickerLabel}>Player 2</Text>
+          <Text style={[globalStyle.textMedium, globalStyle.primary, styles.pickerLabel, globalStyle.bold]}>Player 2</Text>
           <Picker
             prompt='Player 2'
             selectedValue={player2}
-            style={styles.picker}
-            onValueChange={(itemValue) =>
-              setPlayer2(itemValue)
-            }>
+            style={[globalStyle.primary, styles.picker]}
+            onValueChange={(itemValue) => setPlayer2(itemValue) }>
             {renderPickerItems()}
           </Picker>
         </View>
@@ -82,23 +83,28 @@ export function NewGame({ navigation }: NewGameProps) {
   }
 
   return (
-    <>
+    <View style={[globalStyle.container, { paddingBottom: 30 }]}>
       <Tab
         value={tabIndex}
         onChange={setTabIndex}
-        indicatorStyle={styles.tabIndicator}
+        indicatorStyle={{
+          backgroundColor: theme.colors.background,
+          height: 5
+        }}
       >
         <Tab.Item
           title="8 Ball"
-          titleStyle={{ fontSize: 12 }}
+          titleStyle={[globalStyle.background, globalStyle.textLarge]}
+          containerStyle={{ backgroundColor: tabIndex ? theme.colors.grey0 : theme.colors.grey1 }}
         />
         <Tab.Item
           title="9 Ball"
-          titleStyle={{ fontSize: 12 }}
+          titleStyle={[globalStyle.background, globalStyle.textLarge]}
+          containerStyle={{ backgroundColor: tabIndex ? theme.colors.grey1 : theme.colors.grey0 }}
         />
       </Tab>
 
-      <TabView containerStyle={{ width: '100%' }} value={tabIndex} onChange={setTabIndex} animationType='spring'>
+      <TabView containerStyle={[{ width: '100%' }, globalStyle.container]} value={tabIndex} onChange={setTabIndex} animationType='spring'>
         <TabView.Item style={{ width: '100%' }}>
           {renderPlayerList()}
         </TabView.Item>
@@ -107,27 +113,29 @@ export function NewGame({ navigation }: NewGameProps) {
         </TabView.Item>
       </TabView>
 
-      <Button title={'Start Game'} containerStyle={styles.buttonContainer} onPress={startGame} />
-    </>
+      <Button
+        title={'Start Game'}
+        buttonStyle={globalStyle.buttonLarge}
+        titleStyle={globalStyle.buttonPrimaryText}
+        containerStyle={styles.buttonContainer}
+        onPress={startGame}
+      />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  tabIndicator: {
-    backgroundColor: 'white',
-    height: 3
-  },
   pickerRow: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    padding: 20
   },
   pickerLabel: {
-    flexGrow: 1,
-    fontWeight: 'bold'
+    flexGrow: 1
   },
   picker: {
-    flexGrow: 1
+    flexGrow: 2
   },
   buttonContainer: {
     display: 'flex',

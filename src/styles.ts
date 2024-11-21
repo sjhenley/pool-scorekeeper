@@ -4,12 +4,16 @@ export const COLORS = {
   light: {
     primary: '#4b4f7b',
     secondary: '#3C5562',
-    background: '#F4F4FB'
+    background: '#F4F4FB',
+    grey0: '#4B4F7A',
+    grey1: '#323965'
   },
   dark: {
     primary: '#F4F4FB',
     secondary: '#3C5562',
-    background: '#4b4f7b'
+    background: '#4b4f7b',
+    grey0: '#DEDBFD',
+    grey1: '#BCBAEE'
   }
 };
 
@@ -31,6 +35,9 @@ export const useGlobalStyles = makeStyles((theme) => ({
   },
   textCenter: {
     textAlign: 'center'
+  },
+  bold: {
+    fontWeight: 900
   },
   buttonPrimary: {
     backgroundColor: theme.colors.background
