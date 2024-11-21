@@ -205,7 +205,7 @@ export function Game({ route, navigation }: GameProps) {
     return ballIcons.map((img, index) => {
       if (ballState[index + 1] === BallStatus.DEAD || ballState[index + 1] === BallStatus.PREV_DEAD) {
         return (
-          <View style={styles.deadBallIconGroup}>
+          <View key={index} style={styles.deadBallIconGroup}>
             <Image source={img} style={styles.deadBallIcon} />
             <Image source={require('@assets/icons/remove.png')} style={styles.deadBallIndicator} />
           </View>
