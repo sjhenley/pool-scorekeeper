@@ -66,7 +66,11 @@ export function Game({ route, navigation }: GameProps) {
   const undoGameOver = (playerOneWins: boolean) => {
     if (isEightBall) {
       removePoints(playerOneWins, 1);
-      setIsPlayerOneTurn(isPlayerOneTurn && shooterWins);
+      setRackTurnCount(previousGameTurnCount);
+      setMatchTurnCount(matchTurnCount - 1);
+      if (!shooterWins) {
+        setIsPlayerOneTurn(!isPlayerOneTurn);
+      }
     }
   };
 
@@ -314,6 +318,10 @@ export function Game({ route, navigation }: GameProps) {
       removePoints(isPlayerOneTurn, 1);
       setMatchTurnCount(matchTurnCount - 1);
       setRackTurnCount(previousGameTurnCount);
+
+      if (!shooterWins) {
+        setIsPlayerOneTurn(!isPlayerOneTurn);
+      }
     };
 
     const playerName = isPlayerOneTurn ? gamePlayer1.name : gamePlayer2.name;
@@ -356,6 +364,7 @@ export function Game({ route, navigation }: GameProps) {
     setIsPlayerOneTurn(playerOneWins);
     setPreviousGameTurnCount(rackTurnCount);
     setRackTurnCount(0);
+    setMatchTurnCount(matchTurnCount + 1);
   };
 
   const onCloseDialog = () => {
