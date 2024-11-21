@@ -4,23 +4,13 @@ export const COLORS = {
   light: {
     primary: '#4b4f7b',
     secondary: '#3C5562',
-    background: '#F4F4FB',
-    black: '#1A1A1A',
-    white: '#FFFFFF'
+    background: '#F4F4FB'
   },
   dark: {
     primary: '#F4F4FB',
     secondary: '#3C5562',
-    background: '#4b4f7b',
-    black: '#1A1A1A',
-    white: '#FFFFFF'
+    background: '#4b4f7b'
   }
-};
-
-export const TYPOGRAPHY = {
-  heading: { fontSize: 36, fontWeight: '600' },
-  subheading: { fontSize: 28, fontWeight: '500' },
-  body: { fontSize: 18, fontWeight: '400' }
 };
 
 export const useGlobalStyles = makeStyles((theme) => ({
@@ -30,12 +20,23 @@ export const useGlobalStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'center'
   },
+  primary: {
+    color: theme.colors.primary
+  },
+  secondary: {
+    color: theme.colors.secondary
+  },
+  background: {
+    color: theme.colors.background
+  },
   textCenter: {
     textAlign: 'center'
   },
   buttonPrimary: {
-    minWidth: 200,
-    fontSize: 36,
+    backgroundColor: theme.colors.background
+  },
+  buttonError: {
+    backgroundColor: theme.colors.error
   },
   buttonPrimaryText: {
     color: theme.colors.background,
@@ -45,5 +46,28 @@ export const useGlobalStyles = makeStyles((theme) => ({
   buttonLarge: {
     minWidth: 350,
     height: 70,
+  },
+  buttonMedium: {
+    minWidth: 100,
+  },
+  textExtraLarge: {
+    fontSize: 48,
+    fontWeight: 900
+  },
+  textLarge: {
+    fontSize: 32,
+    fontWeight: 900
+  },
+  textMedium: {
+    fontSize: 24
+  },
+  textSmall: {
+    fontSize: 18
+  },
+  dialog: {
+    backgroundColor: theme.colors.primary,
+  },
+  input: {
+    color: theme.colors.white
   }
 }));

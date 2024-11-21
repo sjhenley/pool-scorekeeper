@@ -4,8 +4,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import * as Screens from './ui/screens';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Player from './models/player';
-import { ThemeProvider, createTheme } from '@rneui/themed';
-import { COLORS } from './styles';
+import { ThemeProvider, createTheme, useTheme } from '@rneui/themed';
+import { COLORS, useGlobalStyles } from './styles';
 
 export type RootStackParamList = {
   Home: undefined,
@@ -21,8 +21,20 @@ export type RootStackParamList = {
 const Stack = createStackNavigator<RootStackParamList>();
 
 function RootStack() {
+  const globalStyles = useGlobalStyles();
+  const theme = useTheme().theme;
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: {          
+          backgroundColor: theme.colors.background,
+        },
+        headerTitleStyle: {
+          ...globalStyles.textLarge
+        },
+        headerTintColor: theme.colors.primary,
+      }}
+    >
       <Stack.Screen name="Home" component={Screens.Home} options={{ headerShown: false }}/>
       <Stack.Screen name="New Game" component={Screens.NewGame} />
       <Stack.Screen name="Players" component={Screens.PlayerList} />
