@@ -36,6 +36,12 @@ export const useGlobalStyles = makeStyles((theme) => ({
   textCenter: {
     textAlign: 'center'
   },
+  textRight: {
+    textAlign: 'right'
+  },
+  textLeft: {
+    textAlign: 'left'
+  },
   bold: {
     fontWeight: 900
   },

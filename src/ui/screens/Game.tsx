@@ -130,17 +130,29 @@ export function Game({ route, navigation }: GameProps) {
     }, [navigation]
   );
 
-  const renderPlayerBox = (player: GamePlayer, opponent: GamePlayer) => {
+  const renderPlayerBox = (player: GamePlayer, opponent: GamePlayer, align: 'left' | 'right') => {
     const skill = isEightBall ? player.skill8 : player.skill9;
     const opponentSkill = isEightBall ? opponent.skill8 : opponent.skill9;
     const scoreGoal = getScoreGoal(skill, opponentSkill, isEightBall);
     const isPlayerTurn = isPlayerOneTurn === (player === gamePlayer1);
     return (
       <View style={[styles.playerBox, {backgroundColor: isPlayerTurn ? theme.colors.grey1 : theme.colors.primary}]}>
-        <Text style={[globalStyle.background, globalStyle.textLarge]}>{player.name}</Text>
-        <Text style={[globalStyle.background, globalStyle.textMedium]}>{player.score} / {scoreGoal} points</Text>
+        <Text style={[globalStyle.background, globalStyle.textLarge, align === 'left' ? globalStyle.textLeft : globalStyle.textRight]}>{player.name}</Text>
+        <Text style={[globalStyle.background, globalStyle.textMedium, align === 'left' ? globalStyle.textLeft : globalStyle.textRight]}>{player.score} / {scoreGoal} points</Text>
       </View>
     );
+  };
+
+  const renderPlayerBallTracker = (ballState: BallStatus[], isPlayerOne: boolean) => {
+    return ballIcons.map((img, index) => {
+      const ballScoredState = isPlayerOne ? BallStatus.SCORED_PLAYER_ONE : BallStatus.SCORED_PLAYER_TWO;
+      const ballPrevScoredState = isPlayerOne ? BallStatus.PREV_SCORED_PLAYER_ONE : BallStatus.PREV_SCORED_PLAYER_TWO;
+      if (ballState[index + 1] === ballScoredState || ballState[index + 1] === ballPrevScoredState) {
+        return (
+          <Image key={index} source={img} style={styles.playerBallIcon} />
+        )
+      }
+    });
   };
 
   const renderPlayerInfo = (player: GamePlayer) => {
@@ -158,11 +170,13 @@ export function Game({ route, navigation }: GameProps) {
       points = 2;
     }
 
+    const scoredBallState = isPlayerOneTurn ? BallStatus.SCORED_PLAYER_ONE : BallStatus.SCORED_PLAYER_TWO;
+
     const newBallState = [...nineBallState];
     if (nineBallState[ballNumber] === BallStatus.FREE) {
-      newBallState[ballNumber] = BallStatus.SCORED;
+      newBallState[ballNumber] = scoredBallState;
       addPoints(isPlayerOneTurn, points);
-    } else if (nineBallState[ballNumber] === BallStatus.SCORED) {
+    } else if (nineBallState[ballNumber] === scoredBallState) {
       if (ballNumber === 9) {
         newBallState[ballNumber] = BallStatus.FREE;
       } else {
@@ -176,9 +190,12 @@ export function Game({ route, navigation }: GameProps) {
   };
 
   const renderBallTracker = (ballState: BallStatus[]) => {
+    const scoredBallState = isPlayerOneTurn ? BallStatus.SCORED_PLAYER_ONE : BallStatus.SCORED_PLAYER_TWO;
     return ballIcons.map((img, index) => {
-      const displayBall = ballState[index + 1] !== BallStatus.PREV_SCORED && ballState[index + 1] !== BallStatus.PREV_DEAD;
-      const displayScoredIndicator = ballState[index + 1] === BallStatus.SCORED;
+      const isBallPrevScored = ballState[index + 1] === BallStatus.PREV_SCORED_PLAYER_ONE || ballState[index + 1] === BallStatus.PREV_SCORED_PLAYER_TWO;
+      const isBallDead = ballState[index + 1] == BallStatus.PREV_DEAD
+      const displayBall = !isBallPrevScored && !isBallDead;
+      const displayScoredIndicator = ballState[index + 1] === scoredBallState;
       const displayDeadIndicator = ballState[index + 1] === BallStatus.DEAD;
       let ball, indicator;
 
@@ -205,10 +222,7 @@ export function Game({ route, navigation }: GameProps) {
     return ballIcons.map((img, index) => {
       if (ballState[index + 1] === BallStatus.DEAD || ballState[index + 1] === BallStatus.PREV_DEAD) {
         return (
-          <View key={index} style={styles.deadBallIconGroup}>
-            <Image source={img} style={styles.deadBallIcon} />
-            <Image source={require('@assets/icons/remove.png')} style={styles.deadBallIndicator} />
-          </View>
+          <Image key={index} source={img} style={styles.deadBallIcon} />
         )
       }
     });
@@ -233,7 +247,9 @@ export function Game({ route, navigation }: GameProps) {
         };
         console.log('SAVE STATE ', JSON.stringify(rackState, null, 2));
         setNineBallRackHistory([...nineBallRackHistory, rackState]);
-        if (nineBallState[9] === BallStatus.SCORED) {
+        const scoredBallState = isPlayerOneTurn ? BallStatus.SCORED_PLAYER_ONE : BallStatus.SCORED_PLAYER_TWO;
+        const prevScoredState = isPlayerOneTurn ? BallStatus.PREV_SCORED_PLAYER_ONE : BallStatus.PREV_SCORED_PLAYER_TWO;
+        if (nineBallState[9] === scoredBallState) {
           // Player scored 9 ball, start new rack
           setNineBallState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
           setMatchTurnCount(matchTurnCount + 1);
@@ -243,13 +259,14 @@ export function Game({ route, navigation }: GameProps) {
           const newBallState = nineBallState.map((state) => {
             switch (state) {
               case BallStatus.FREE:
-              case BallStatus.PREV_SCORED:
-                case BallStatus.PREV_DEAD:
+              case BallStatus.PREV_SCORED_PLAYER_ONE:
+              case BallStatus.PREV_SCORED_PLAYER_TWO:
+              case BallStatus.PREV_DEAD:
                 return state;
               case BallStatus.DEAD:
                 return BallStatus.PREV_DEAD;
               default:
-                return BallStatus.PREV_SCORED;
+                return prevScoredState;
             }
           });
           setNineBallState(newBallState);
@@ -282,7 +299,8 @@ export function Game({ route, navigation }: GameProps) {
         navigation.goBack();
       } else if (!isEightBall) {
         // If turn in progrses, confirm and clear the turn
-        const turnInProgress = nineBallState.some((state) => state === BallStatus.SCORED || state === BallStatus.DEAD);
+        const scoredBallState = isPlayerOneTurn ? BallStatus.SCORED_PLAYER_ONE : BallStatus.SCORED_PLAYER_TWO;
+        const turnInProgress = nineBallState.some((state) => state === scoredBallState || state === BallStatus.DEAD);
         if (turnInProgress && !await promptClearBalls()) {
           return;
         }
@@ -331,6 +349,7 @@ export function Game({ route, navigation }: GameProps) {
 
     const playerName = isPlayerOneTurn ? gamePlayer1.name : gamePlayer2.name;
     const opponentName = isPlayerOneTurn ? gamePlayer2.name : gamePlayer1.name;
+    const scoredBallState = isPlayerOneTurn ? BallStatus.SCORED_PLAYER_ONE : BallStatus.SCORED_PLAYER_TWO;
     let backButtonTitle = `Go back to ${opponentName}'s turn`;
     if (matchTurnCount === 0) {
       backButtonTitle = 'Cancel';
@@ -349,7 +368,7 @@ export function Game({ route, navigation }: GameProps) {
       gameOverBtn = <Button title='End Game' buttonStyle={globalStyle.buttonLarge} titleStyle={[globalStyle.textLarge, globalStyle.background]} onPress={() => setIsEightBallDialogVisible(true)} />;
     } else if (winner) {
       nextTurnLabel = `${winner} wins!`;
-    } else if (nineBallState[9] === BallStatus.SCORED) {
+    } else if (nineBallState[9] === scoredBallState) {
       nextTurnLabel = 'Start New Rack';
     }
 
@@ -440,7 +459,7 @@ export function Game({ route, navigation }: GameProps) {
     );
   };
 
-  let balls;
+  let balls, ballTracker;
   if (!isEightBall) {
     balls = (
       <View style={styles.ballContainer}>
@@ -452,15 +471,28 @@ export function Game({ route, navigation }: GameProps) {
         </View>
       </View>
     );
+    ballTracker = (
+      <View style={[styles.playerBallTracker, {backgroundColor: theme.colors.grey0}]}>
+        <View style={[styles.playerBallIconGroup, { justifyContent: 'flex-start', borderColor: theme.colors.grey1 }]}>
+          {renderPlayerBallTracker(nineBallState, true)}
+        </View>
+        <View style={[styles.playerBallIconGroup, { justifyContent: 'flex-end', borderColor: theme.colors.grey1 }]}>
+          {renderPlayerBallTracker(nineBallState, false)}
+        </View>
+      </View>
+    )
   }
   return (
     <View style={globalStyle.container}>
-      <View style={[styles.playerRow, {backgroundColor: theme.colors.primary}]}>
-        {renderPlayerBox(gamePlayer1, gamePlayer2)}
-        {renderPlayerBox(gamePlayer2, gamePlayer1)}
-      </View>
-      <View style={[styles.inningCounter, {backgroundColor: theme.colors.primary}]}>
-        <Text style={[globalStyle.background, globalStyle.textMedium, globalStyle.textCenter, globalStyle.bold]}>{Math.floor(matchTurnCount / 2)} innings</Text>
+      <View style={styles.header}>
+        <View style={[styles.playerRow, {backgroundColor: theme.colors.primary}]}>
+          {renderPlayerBox(gamePlayer1, gamePlayer2, 'left')}
+          {renderPlayerBox(gamePlayer2, gamePlayer1, 'right')}
+        </View>
+        <View style={[styles.inningCounter, {backgroundColor: theme.colors.grey0,  borderColor: theme.colors.grey1}]}>
+          <Text style={[globalStyle.background, globalStyle.textMedium, globalStyle.textCenter, globalStyle.bold]}>{Math.floor(matchTurnCount / 2)} innings</Text>
+        </View>
+        {ballTracker}
       </View>
       <View style={styles.playerInfo}>
         {renderPlayerInfo(isPlayerOneTurn ? gamePlayer1 : gamePlayer2)}
@@ -492,9 +524,19 @@ const styles = StyleSheet.create({
     padding: 10,
     flexGrow: 1
   },
+  header: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%'
+  },
   inningCounter: {
-    width: '100%',
-    height: 32
+    position: 'absolute',
+    top: 55,
+    alignSelf: 'center',
+    height: 30,
+    width: 100,
+    borderRadius: 15,
+    borderWidth: 2
   },
   ballScoringContainer: {
     flexShrink: 1,
@@ -512,26 +554,14 @@ const styles = StyleSheet.create({
     flexShrink: 1,
     display: 'flex',
     flexDirection: 'row',
-    gap: 10,
-    padding: 10,
+    gap: 5,
+    padding: 15,
     justifyContent: 'flex-end'
   },
-  deadBallIconGroup: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 30,
-    height: 30
-  },
   deadBallIcon: {
-    width: 30,
-    height: 30,
-    opacity: 0.6
-  },
-  deadBallIndicator: {
-    width: 15,
-    height: 15,
-    position: 'absolute',
-    opacity: 0.8
+    width: 40,
+    height: 40,
+    opacity: 0.7
   },
   ballIconGroup: {
     justifyContent: 'center',
@@ -565,5 +595,27 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     gap: 10
+  },
+  playerBallTracker: {
+    height: 32,
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  playerBallBox: {
+    flex: 1,
+  },
+  playerBallIconGroup: {
+    display: 'flex',
+    flexDirection: 'row',
+    flex: 1,
+    gap: 2,
+    alignItems: 'center',
+    borderStyle: 'solid',
+    borderWidth: 1,
+    padding: 5
+  },
+  playerBallIcon: {
+    height: 20,
+    width: 20
   }
 });
