@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Alert, BackHandler } from 'react-native';
 import { Button, Text, Switch, useTheme, useThemeMode } from '@rneui/themed';
 import { useGlobalStyles } from '../../styles';
 import { NavigationProp, ParamListBase } from '@react-navigation/native';
@@ -14,6 +14,35 @@ export function Home({ navigation }: HomeProps) {
   const globalStyle = useGlobalStyles();
   const themeMode = useThemeMode();
   const theme = useTheme().theme;
+
+  React.useEffect(() => {
+    const onBackPress = () => {
+      Alert.alert(
+        'Exit App',
+        'Do you want to exit?',
+        [
+          {
+            text: 'Cancel',
+            onPress: () => {
+              // Do nothing
+            },
+            style: 'cancel',
+          },
+          { text: 'YES', onPress: () => BackHandler.exitApp() },
+        ],
+        { cancelable: false }
+      );
+  
+      return true;
+    };
+  
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      onBackPress
+    );
+  
+    return () => backHandler.remove();
+  }, []);
 
   return (
     <View style={globalStyle.container}>
