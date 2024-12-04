@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList, Image } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity } from 'react-native';
 import Player, { SkillLevel } from '../../models/player';
 import { Dialog, FAB, ListItem, Input, useTheme } from '@rneui/themed';
 import { Picker } from '@react-native-picker/picker';
@@ -193,8 +193,7 @@ export function PlayerList() {
 
   function renderRow(player: Player) {
     return (
-      <Pressable onPress={() => openDialog(player)}>
-        <ListItem containerStyle={[styles.playerListItem, { backgroundColor: theme.colors.primary}]}>
+        <ListItem Component={TouchableOpacity} onPress={() => openDialog(player)} containerStyle={[styles.playerListItem, { backgroundColor: theme.colors.primary}]}>
           <ListItem.Content style={styles.playerListItemContent}>
             <ListItem.Title style={[globalStyle.textExtraLarge, styles.playerListItemTitle, { color: theme.colors.background  }]}>{player.name}</ListItem.Title>
             <View style={styles.scoreIndicator}>
@@ -207,7 +206,6 @@ export function PlayerList() {
             </View>
           </ListItem.Content>
         </ListItem>
-      </Pressable>
     );
   }
 
