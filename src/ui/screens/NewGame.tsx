@@ -6,6 +6,8 @@ import { loadPlayerList } from '@app/util/storage.util';
 import { Picker } from '@react-native-picker/picker';
 import { NavigationProp, ParamListBase } from '@react-navigation/native';
 import { useGlobalStyles } from '@app/styles';
+import { Alert, AlertType } from '@app/models/alert.model';
+import { AlertView } from '@components/AlertView';
 
 
 interface NewGameProps {
@@ -21,6 +23,8 @@ export function NewGame({ navigation }: NewGameProps) {
   const [playerList, setPlayerList] = React.useState<Player[]>([]);
   const [player1, setPlayer1] = React.useState<Player>();
   const [player2, setPlayer2] = React.useState<Player>();
+
+  const [alerts, setAlerts] = React.useState<Alert[]>([]);
 
   React.useEffect(() => {
     loadPlayerList().then((players) => {
@@ -74,12 +78,31 @@ export function NewGame({ navigation }: NewGameProps) {
     );
   }
 
-  function startGame() {
-    navigation.navigate('Game', {
-      player1,
-      player2,
-      isEightBall: isEightBall()
-    });
+  function startGame(): void {
+    const alert = {
+      type: AlertType.ERROR,
+      message: ''
+    };
+
+    const newAlerts: Alert[] = []; // alerts to display after running validation
+
+    if (!player1 || !player2) {
+      alert.message = 'Select 2 players to start';
+      newAlerts.push(alert);
+    } else if (player1.name === player2.name) {
+      alert.message = 'Select 2 different players to start';
+      newAlerts.push(alert);
+    }
+
+    setAlerts(newAlerts);
+
+    if (newAlerts.length === 0) { 
+      navigation.navigate('Game', {
+        player1,
+        player2,
+        isEightBall: isEightBall()
+      });
+    }
   }
 
   return (
@@ -112,6 +135,8 @@ export function NewGame({ navigation }: NewGameProps) {
           {renderPlayerList()}
         </TabView.Item>
       </TabView>
+
+      <AlertView alerts={alerts}></AlertView>
 
       <Button
         title={'Start Game'}
