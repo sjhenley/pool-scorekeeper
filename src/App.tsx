@@ -50,15 +50,25 @@ export default function App() {
       primary: COLORS.light.primary,
       secondary: COLORS.light.secondary,
       background: COLORS.light.background,
+      black: COLORS.light.black,
+      white: COLORS.light.white,
       grey0: COLORS.light.grey0,
-      grey1: COLORS.light.grey1
+      grey1: COLORS.light.grey1,
+      success: COLORS.light.success,
+      warning: COLORS.light.warning,
+      error: COLORS.light.error
     },
     darkColors: {
       primary: COLORS.dark.primary,
       secondary: COLORS.dark.secondary,
       background: COLORS.dark.background,
+      black: COLORS.dark.black,
+      white: COLORS.dark.white,
       grey0: COLORS.dark.grey0,
-      grey1: COLORS.dark.grey1
+      grey1: COLORS.dark.grey1,
+      success: COLORS.dark.success,
+      warning: COLORS.dark.warning,
+      error: COLORS.dark.error
     },
     components: {
       Button: {

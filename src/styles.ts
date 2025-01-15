@@ -5,15 +5,31 @@ export const COLORS = {
     primary: '#4b4f7b',
     secondary: '#3C5562',
     background: '#F4F4FB',
+    black: '#000000',
+    white: '#FFFFFF',
     grey0: '#4B4F7A',
-    grey1: '#323965'
+    grey1: '#323965',
+    success: '#187841',
+    successBackground: '#2BD473',
+    warning: '#FBD300',
+    warningBackground: '#FFEA79',
+    error: '#FF0303',
+    errorBackground: '#EE898F'
   },
   dark: {
     primary: '#F4F4FB',
     secondary: '#3C5562',
     background: '#4b4f7b',
+    black: '#000000',
+    white: '#FFFFFF',
     grey0: '#DEDBFD',
-    grey1: '#BCBAEE'
+    grey1: '#BCBAEE',
+    success: '#187841',
+    successBackground: '#2BD473',
+    warning: '#FBD300',
+    warningBackground: '#FFEA79',
+    error: '#FF0303',
+    errorBackground: '#EE898F'
   }
 };
 
@@ -32,6 +48,22 @@ export const useGlobalStyles = makeStyles((theme) => ({
   },
   background: {
     color: theme.colors.background
+  },
+  black: {
+    color: theme.colors.black
+  },
+  containerSuccess: {
+    borderColor: theme.colors.success,
+    backgroundColor: COLORS.light.successBackground
+  },
+  containerWarning: {
+    borderColor: theme.colors.warning,
+    backgroundColor: COLORS.light.warningBackground
+  },
+  containerError: {
+    borderWidth: 3,
+    borderColor: theme.colors.error,
+    backgroundColor: COLORS.light.errorBackground
   },
   textCenter: {
     textAlign: 'center'
