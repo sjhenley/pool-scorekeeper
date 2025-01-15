@@ -4,6 +4,7 @@ import { Button, Text, Switch, useTheme, useThemeMode } from '@rneui/themed';
 import { useGlobalStyles } from '../../styles';
 import { NavigationProp, ParamListBase } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { loadPlayerList } from '@app/util/storage.util';
 const packageJson = require('../../../package.json');
 
 interface HomeProps {
@@ -44,6 +45,23 @@ export function Home({ navigation }: HomeProps) {
     return () => backHandler.remove();
   }, []);
 
+  async function onPressNewGame(): Promise<void> {
+    return loadPlayerList().then((players) => {
+      if (players.length >= 2) {
+        return navigation.navigate('New Game');
+      }
+
+      Alert.alert(
+        'Not enough players',
+        'At least 2 players are required to start a match. Go to players list?',
+        [
+          { text: 'No', style: 'cancel', onPress: () => {} },
+          { text: 'Yes', onPress: () => navigation.navigate('Players') }
+        ]
+      );
+    });
+  }
+
   return (
     <View style={globalStyle.container}>
       <View style={styles.viewModeToggleContainer}>
@@ -57,7 +75,7 @@ export function Home({ navigation }: HomeProps) {
       </View>
       <View style={styles.body}>
         <Text style={styles.title}>Scorekeeper</Text>
-        <Button title={'Start Game'} buttonStyle={globalStyle.buttonLarge} titleStyle={[globalStyle.textLarge, globalStyle.background]} onPress={() => navigation.navigate('New Game')} />
+        <Button title={'Start Game'} buttonStyle={globalStyle.buttonLarge} titleStyle={[globalStyle.textLarge, globalStyle.background]} onPress={() => onPressNewGame()} />
         <Button title={'Players'} buttonStyle={globalStyle.buttonLarge} titleStyle={[globalStyle.textLarge, globalStyle.background]} onPress={() => navigation.navigate('Players')} />
         <Button title={'Game History'} buttonStyle={globalStyle.buttonLarge} titleStyle={[globalStyle.textLarge, globalStyle.background]} onPress={() => navigation.navigate('History')} />
       </View>
