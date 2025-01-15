@@ -34,6 +34,10 @@ export const COLORS = {
 };
 
 export const useGlobalStyles = makeStyles((theme) => ({
+  root: {
+    flex: 1,
+    backgroundColor: theme.colors.background
+  },
   container: {
     flex: 1,
     backgroundColor: theme.colors.background,

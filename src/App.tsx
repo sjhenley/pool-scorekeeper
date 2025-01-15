@@ -1,4 +1,5 @@
 import React from 'react';
+import { View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as Screens from './ui/screens';
@@ -44,6 +45,19 @@ function RootStack() {
   );
 }
 
+function Root() {
+  const globalStyles = useGlobalStyles();
+  return (
+    <View style={globalStyles.root}>
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <RootStack />
+        </NavigationContainer>
+      </SafeAreaProvider>
+    </View>
+  );
+}
+
 export default function App() {
   const theme = createTheme({
     lightColors: {
@@ -79,12 +93,8 @@ export default function App() {
   });
 
   return (
-    <SafeAreaProvider>
-      <ThemeProvider theme={theme}>
-        <NavigationContainer>
-          <RootStack />
-        </NavigationContainer>
-      </ThemeProvider>
-    </SafeAreaProvider>
+    <ThemeProvider theme={theme}>
+      <Root />
+    </ThemeProvider>
   );
 }
