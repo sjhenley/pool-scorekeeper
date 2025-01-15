@@ -123,7 +123,7 @@ export function Game({ route, navigation }: GameProps) {
           'Incomplete game will be discarded',
           [
             { text: 'Cancel', style: 'cancel', onPress: () => {} },
-            { text: 'Continue', style: 'destructive', onPress: () => navigation.dispatch(e.data.action) }
+            { text: 'Confirm', style: 'destructive', onPress: () => navigation.dispatch(e.data.action) }
           ]
         );
       });
