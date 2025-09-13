@@ -2,5 +2,11 @@
   "typescript.preferences.quoteStyle": "single",
   "editor.tabSize": 2,
   "typescript.tsdk": "node_modules\\typescript\\lib",
-  "eslint.useFlatConfig": true
+  "eslint.useFlatConfig": true,
+  "gitlens.autolinks": [
+    {
+      "prefix": "#",
+      "url": "https://github.com/sjhenley/pool-scorekeeper/issues/<num>"
+    }
+  ]
 }
