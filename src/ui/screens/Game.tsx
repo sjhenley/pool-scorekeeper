@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, Button, CheckBox, Dialog, useTheme } from '@rn-vui/themed';
 import { Alert, View, StyleSheet, Pressable, Image } from 'react-native';
+import Animated, { useSharedValue, withSpring, useAnimatedStyle } from 'react-native-reanimated';
 import { NavigationProp, RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '@app/App';
 import Player from '@app/models/player';
@@ -41,6 +42,29 @@ export function Game({ route, navigation }: GameProps) {
   const [gamePlayer1, setGamePlayer1] = React.useState<GamePlayer>({ ...player1, score: 0 });
   const [gamePlayer2, setGamePlayer2] = React.useState<GamePlayer>({ ...player2, score: 0 });
   const [isPlayerOneTurn, setIsPlayerOneTurn] = React.useState<boolean>(true);
+
+  React.useEffect(() => {
+    playerScaleAnimation(isPlayerOneTurn);
+  }, [isPlayerOneTurn]);
+
+  /** Player Box Animation Refs **/
+  const ACTIVE_BOX_SCALE = 1;
+  const INACTIVE_BOX_SCALE = 0.9;
+  const PLAYER_ONE_ACTIVE_SKEW = 0;
+  const PLAYER_TWO_ACTIVE_SKEW = 45;
+  const playerOneBoxTextScaleValue = useSharedValue(ACTIVE_BOX_SCALE);
+  const playerTwoBoxTextScaleValue = useSharedValue(INACTIVE_BOX_SCALE);
+  const activePlayerBoxSkewValue = useSharedValue(PLAYER_ONE_ACTIVE_SKEW);
+  const playerOneBoxAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: playerOneBoxTextScaleValue.value }]
+  }));
+  const playerTwoBoxAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: playerTwoBoxTextScaleValue.value }]
+  }));
+  const activePlayerBoxAnimatedStyle = useAnimatedStyle(() => ({
+    left: `${activePlayerBoxSkewValue.value}%`
+  }));
+
   const [shooterWins, setShooterWins] = React.useState<boolean>(true); // 8 ball to track undo match over
   const [matchTurnCount, setMatchTurnCount] = React.useState<number>(0);
   const [rackTurnCount, setRackTurnCount] = React.useState<number>(0);
@@ -50,6 +74,19 @@ export function Game({ route, navigation }: GameProps) {
 
   const [nineBallState, setNineBallState] = React.useState<BallStatus[]>([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
   const [nineBallRackHistory, setNineBallRackHistory] = React.useState<NineBallState[]>([]);
+
+  /**
+   * Trigger animations to switch player focus
+   * @param isPlayerOneTurn True if player one is next, false if player two is next
+   */
+  const playerScaleAnimation = (isPlayerOneTurn: boolean) => {
+    const targetIncreaseScale = isPlayerOneTurn ? playerOneBoxTextScaleValue : playerTwoBoxTextScaleValue;
+    const targetDecreaseScale = isPlayerOneTurn ? playerTwoBoxTextScaleValue : playerOneBoxTextScaleValue;
+
+    targetIncreaseScale.value = withSpring(ACTIVE_BOX_SCALE);
+    targetDecreaseScale.value = withSpring(INACTIVE_BOX_SCALE);
+    activePlayerBoxSkewValue.value= withSpring(isPlayerOneTurn ? PLAYER_ONE_ACTIVE_SKEW : PLAYER_TWO_ACTIVE_SKEW);
+  };
 
   const addPoints = (isPlayerOne: boolean, points: number) => {
     if (isPlayerOne) {
@@ -134,12 +171,12 @@ export function Game({ route, navigation }: GameProps) {
     const skill = isEightBall ? player.skill8 : player.skill9;
     const opponentSkill = isEightBall ? opponent.skill8 : opponent.skill9;
     const scoreGoal = getScoreGoal(skill, opponentSkill, isEightBall);
-    const isPlayerTurn = isPlayerOneTurn === (player === gamePlayer1);
+    const playerAnimationStyle = player === gamePlayer1 ? playerOneBoxAnimatedStyle : playerTwoBoxAnimatedStyle;
     return (
-      <View style={[styles.playerBox, {backgroundColor: isPlayerTurn ? theme.colors.grey1 : theme.colors.primary}]}>
-        <Text style={[globalStyle.background, globalStyle.textLarge, align === 'left' ? globalStyle.textLeft : globalStyle.textRight]}>{player.name}</Text>
-        <Text style={[globalStyle.background, globalStyle.textMedium, align === 'left' ? globalStyle.textLeft : globalStyle.textRight]}>{player.score} / {scoreGoal} points</Text>
-      </View>
+      <Animated.View style={[styles.playerBox, playerAnimationStyle]}>
+        <Text style={[globalStyle.background, globalStyle.textLarge, align === 'left' ? globalStyle.textLeft : globalStyle.textRight, globalStyle.primary]}>{player.name}</Text>
+        <Text style={[globalStyle.background, globalStyle.textMedium, align === 'left' ? globalStyle.textLeft : globalStyle.textRight, globalStyle.primary]}>{player.score} / {scoreGoal} points</Text>
+      </Animated.View>
     );
   };
 
@@ -484,10 +521,13 @@ export function Game({ route, navigation }: GameProps) {
   }
   return (
     <View style={globalStyle.container}>
-      <View style={styles.header}>
-        <View style={[styles.playerRow, {backgroundColor: theme.colors.primary}]}>
+      <View style={[styles.header]}>
+        <View style={[styles.playerRow]}>
           {renderPlayerBox(gamePlayer1, gamePlayer2, 'left')}
           {renderPlayerBox(gamePlayer2, gamePlayer1, 'right')}
+          <Animated.View
+            style={[styles.activePlayerHighlight, activePlayerBoxAnimatedStyle]}
+          ></Animated.View>
         </View>
         <View style={[styles.inningCounter, {backgroundColor: theme.colors.grey0,  borderColor: theme.colors.grey1}]}>
           <Text style={[globalStyle.background, globalStyle.textMedium, globalStyle.textCenter, globalStyle.bold]}>{Math.floor(matchTurnCount / 2)} innings</Text>
@@ -510,13 +550,21 @@ const styles = StyleSheet.create({
   playerRow: {
     display: 'flex',
     flexDirection: 'row',
-    gap: 3,
-    paddingTop: 30
   },
   playerBox: {
     flex: 1,
     padding: 10,
-    marginBottom: 3
+    paddingTop: 30,
+    paddingHorizontal: 15,
+    zIndex: 1
+  },
+  activePlayerHighlight: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    backgroundColor: '#686a87b7',
+    width: '55%',
+    justifyContent: 'center',
   },
   playerInfo: {
     width: '100%',
@@ -536,7 +584,8 @@ const styles = StyleSheet.create({
     height: 30,
     width: 100,
     borderRadius: 15,
-    borderWidth: 2
+    borderWidth: 2,
+    zIndex: 1
   },
   ballScoringContainer: {
     flexShrink: 1,
