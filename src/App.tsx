@@ -68,6 +68,7 @@ export default function App() {
       white: COLORS.light.white,
       grey0: COLORS.light.grey0,
       grey1: COLORS.light.grey1,
+      grey2: COLORS.light.grey2,
       success: COLORS.light.success,
       warning: COLORS.light.warning,
       error: COLORS.light.error
@@ -80,6 +81,7 @@ export default function App() {
       white: COLORS.dark.white,
       grey0: COLORS.dark.grey0,
       grey1: COLORS.dark.grey1,
+      grey2: COLORS.dark.grey2,
       success: COLORS.dark.success,
       warning: COLORS.dark.warning,
       error: COLORS.dark.error

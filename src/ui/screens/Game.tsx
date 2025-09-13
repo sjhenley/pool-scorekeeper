@@ -421,7 +421,7 @@ export function Game({ route, navigation }: GameProps) {
     let nextTurnLabel = playerName + '\'s Turn Over';
 
     if (isEightBall) {
-      gameOverBtn = <Button title='End Game' buttonStyle={globalStyle.buttonLarge} titleStyle={[globalStyle.textLarge, globalStyle.background]} onPress={() => setIsEightBallDialogVisible(true)} />;
+      gameOverBtn = <Button title='End Game' type='clear' containerStyle={[{backgroundColor: theme.colors.grey2}, styles.turnCta]} buttonStyle={[globalStyle.buttonLarge, styles.turnCta]} titleStyle={[globalStyle.textLarge, globalStyle.primary]} onPress={() => setIsEightBallDialogVisible(true)} />;
     } else if (winner) {
       nextTurnLabel = `${winner} wins!`;
     } else if (nineBallState[9] === scoredBallState) {
@@ -430,9 +430,9 @@ export function Game({ route, navigation }: GameProps) {
 
     return (
       <>
-        <Button title={nextTurnLabel} buttonStyle={globalStyle.buttonLarge} titleStyle={[globalStyle.textLarge, globalStyle.background]} onPress={onNextTurnClick} />
+        <Button title={nextTurnLabel} type='clear' containerStyle={[{backgroundColor: theme.colors.grey2}, styles.turnCta]} buttonStyle={[globalStyle.buttonLarge, styles.turnCta]} titleStyle={[globalStyle.textLarge, globalStyle.primary]} onPress={onNextTurnClick} />
         {gameOverBtn}
-        <Button color='error' title={backButtonTitle} buttonStyle={globalStyle.buttonLarge} titleStyle={[globalStyle.textLarge, globalStyle.primary]}  onPress={onBackClick} />
+        <Button title={backButtonTitle} type='clear' containerStyle={[{backgroundColor: theme.colors.error}, styles.turnCta]} buttonStyle={[globalStyle.buttonLarge, styles.turnCta]} titleStyle={[globalStyle.textLarge, globalStyle.primary]} onPress={onBackClick} />
       </>
     );
   };
@@ -680,5 +680,9 @@ const styles = StyleSheet.create({
   playerBallIcon: {
     height: 20,
     width: 20
+  },
+  turnCta: {
+    borderRadius: 19,
+    boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.5)'
   }
 });

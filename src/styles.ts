@@ -9,6 +9,7 @@ export const COLORS = {
     white: '#FFFFFF',
     grey0: '#4B4F7A',
     grey1: '#323965',
+    grey2: '#636262',
     success: '#187841',
     successBackground: '#2BD473',
     warning: '#FBD300',
@@ -24,11 +25,12 @@ export const COLORS = {
     white: '#FFFFFF',
     grey0: '#bebfd3ff',
     grey1: '#ffffff3b',
+    grey2: '#636262',
     success: '#187841',
     successBackground: '#2BD473',
     warning: '#FBD300',
     warningBackground: '#FFEA79',
-    error: '#FF0303',
+    error: '#690909',
     errorBackground: '#EE898F'
   }
 };
