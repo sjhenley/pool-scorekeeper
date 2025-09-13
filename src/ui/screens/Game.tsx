@@ -167,10 +167,7 @@ export function Game({ route, navigation }: GameProps) {
     }, [navigation]
   );
 
-  const renderPlayerBox = (player: GamePlayer, opponent: GamePlayer, align: 'left' | 'right') => {
-    const skill = isEightBall ? player.skill8 : player.skill9;
-    const opponentSkill = isEightBall ? opponent.skill8 : opponent.skill9;
-    const scoreGoal = getScoreGoal(skill, opponentSkill, isEightBall);
+  const renderPlayerBox = (player: GamePlayer, scoreGoal: number, align: 'left' | 'right') => {
     const playerAnimationStyle = player === gamePlayer1 ? playerOneBoxAnimatedStyle : playerTwoBoxAnimatedStyle;
     return (
       <Animated.View style={[styles.playerBox, playerAnimationStyle]}>
@@ -192,11 +189,13 @@ export function Game({ route, navigation }: GameProps) {
     });
   };
 
-  const renderPlayerInfo = (player: GamePlayer) => {
+  const renderPlayerInfo = (player: GamePlayer, scoreGoal: number, isEightBall: boolean) => {
+    const remainingPoints = scoreGoal - player.score;
     return (
       <>
-        <Text h2>{player.name}</Text>
-        <Text h3>Skill Level {isEightBall ? player.skill8 : player.skill9}</Text>
+        <Text style={[globalStyle.primary]} h2>{player.name}</Text>
+        <Text style={[globalStyle.primary]} h3>Skill Level {isEightBall ? player.skill8 : player.skill9}</Text>
+        <Text style={[globalStyle.primary]}>{remainingPoints} {isEightBall ? (remainingPoints > 1 ? 'games' : 'game') : 'points'} remaining</Text>
       </>
     );
   };
@@ -519,12 +518,18 @@ export function Game({ route, navigation }: GameProps) {
       </View>
     )
   }
+
+  const playerOneSkill = isEightBall ? gamePlayer1.skill8 : gamePlayer1.skill9;
+  const playerTwoSkill = isEightBall ? gamePlayer2.skill8 : gamePlayer2.skill9;
+  const playerOneScoreGoal = getScoreGoal(playerOneSkill, playerTwoSkill, isEightBall);
+  const playerTwoScoreGoal = getScoreGoal(playerTwoSkill, playerOneSkill, isEightBall);
+
   return (
     <View style={globalStyle.container}>
       <View style={[styles.header]}>
         <View style={[styles.playerRow]}>
-          {renderPlayerBox(gamePlayer1, gamePlayer2, 'left')}
-          {renderPlayerBox(gamePlayer2, gamePlayer1, 'right')}
+          {renderPlayerBox(gamePlayer1, playerOneScoreGoal, 'left')}
+          {renderPlayerBox(gamePlayer2, playerTwoScoreGoal, 'right')}
           <Animated.View
             style={[styles.activePlayerHighlight, activePlayerBoxAnimatedStyle]}
           ></Animated.View>
@@ -535,7 +540,7 @@ export function Game({ route, navigation }: GameProps) {
         {ballTracker}
       </View>
       <View style={styles.playerInfo}>
-        {renderPlayerInfo(isPlayerOneTurn ? gamePlayer1 : gamePlayer2)}
+        {renderPlayerInfo(isPlayerOneTurn ? gamePlayer1 : gamePlayer2, isPlayerOneTurn ? playerOneScoreGoal : playerTwoScoreGoal, isEightBall)}
       </View>
       {balls}
       <View style={styles.buttonContainer}>
