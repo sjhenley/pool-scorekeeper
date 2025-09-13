@@ -533,6 +533,8 @@ export function Game({ route, navigation }: GameProps) {
   const playerTwoSkill = isEightBall ? gamePlayer2.skill8 : gamePlayer2.skill9;
   const playerOneScoreGoal = getScoreGoal(playerOneSkill, playerTwoSkill, isEightBall);
   const playerTwoScoreGoal = getScoreGoal(playerTwoSkill, playerOneSkill, isEightBall);
+  const innings = Math.floor(matchTurnCount / 2);
+  const inningUnit = innings === 1 ? 'inning' : 'innings';
 
   return (
     <View style={globalStyle.container}>
@@ -543,7 +545,7 @@ export function Game({ route, navigation }: GameProps) {
           {renderPlayerBox(gamePlayer2, playerTwoScoreGoal, 'right')}
         </View>
         <View style={[styles.inningCounter, {backgroundColor: theme.colors.grey0,  borderColor: theme.colors.grey1}]}>
-          <Text style={[globalStyle.background, globalStyle.textMedium, globalStyle.textCenter, globalStyle.bold]}>{Math.floor(matchTurnCount / 2)} innings</Text>
+          <Text style={[globalStyle.background, globalStyle.textMedium, globalStyle.textCenter, globalStyle.bold]}>{innings} {inningUnit} </Text>
         </View>
       </View>
       <View style={styles.playerInfo}>
