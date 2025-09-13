@@ -578,6 +578,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     width: '55%',
     justifyContent: 'center',
+    boxShadow: '6px 6px 6px rgba(0, 0, 0, 0.5)'
   },
   playerInfo: {
     width: '100%',
