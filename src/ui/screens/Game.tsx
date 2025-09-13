@@ -522,7 +522,7 @@ export function Game({ route, navigation }: GameProps) {
         <View style={styles.deadBallContainer}>
           {renderDeadBallTracker(nineBallState)}
         </View>
-        <View style={[styles.ballScoringContainer, { backgroundColor: theme.colors.grey0}]}>
+        <View style={[styles.ballScoringContainer, { backgroundColor: theme.colors.secondary}]}>
           {renderBallTracker(nineBallState)}
         </View>
       </View>
@@ -539,7 +539,7 @@ export function Game({ route, navigation }: GameProps) {
   return (
     <View style={globalStyle.container}>
       <View style={[styles.header, { borderColor: theme.colors.grey1}]}>
-        <Animated.View style={[styles.activePlayerHighlight, activePlayerBoxAnimatedStyle]}></Animated.View>
+        <Animated.View style={[styles.activePlayerHighlight, activePlayerBoxAnimatedStyle, { backgroundColor: theme.colors.secondary}]}></Animated.View>
         <View style={[styles.playerRow]}>
           {renderPlayerBox(gamePlayer1, playerOneScoreGoal, 'left')}
           {renderPlayerBox(gamePlayer2, playerTwoScoreGoal, 'right')}
@@ -576,7 +576,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     bottom: 0,
-    backgroundColor: '#686a87b7',
     width: '55%',
     justifyContent: 'center',
   },

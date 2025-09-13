@@ -3,7 +3,7 @@ import { makeStyles } from '@rn-vui/themed';
 export const COLORS = {
   light: {
     primary: '#4b4f7b',
-    secondary: '#3C5562',
+    secondary: '#686a87b7',
     background: '#F4F4FB',
     black: '#000000',
     white: '#FFFFFF',
@@ -18,7 +18,7 @@ export const COLORS = {
   },
   dark: {
     primary: '#F4F4FB',
-    secondary: '#3C5562',
+    secondary: '#686a87b7',
     background: '#2d2f4a',
     black: '#000000',
     white: '#FFFFFF',
