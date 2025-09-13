@@ -200,11 +200,22 @@ export function Game({ route, navigation }: GameProps) {
 
   const renderPlayerInfo = (player: GamePlayer, scoreGoal: number, isEightBall: boolean) => {
     const remainingPoints = scoreGoal - player.score;
+    let pointUnit: string;
+    let scoreInfo: string;
+    if (remainingPoints <= 0) {
+      scoreInfo = `${player.name} wins!`;
+    } else {
+      pointUnit = isEightBall ? 'games' : 'points';
+      if (remainingPoints === 1) {
+        pointUnit =  pointUnit.slice(0, -1);
+      }
+      scoreInfo = `${remainingPoints} ${pointUnit} remaining`;
+    }
     return (
       <>
         <Text style={[globalStyle.primary]} h2>{player.name}</Text>
         <Text style={[globalStyle.primary]} h3>Skill Level {isEightBall ? player.skill8 : player.skill9}</Text>
-        <Text style={[globalStyle.primary]}>{remainingPoints} {isEightBall ? (remainingPoints > 1 ? 'games' : 'game') : 'points'} remaining</Text>
+        <Text style={[globalStyle.primary]}>{scoreInfo}</Text>
       </>
     );
   };
