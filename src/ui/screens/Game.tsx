@@ -169,10 +169,19 @@ export function Game({ route, navigation }: GameProps) {
 
   const renderPlayerBox = (player: GamePlayer, scoreGoal: number, align: 'left' | 'right') => {
     const playerAnimationStyle = player === gamePlayer1 ? playerOneBoxAnimatedStyle : playerTwoBoxAnimatedStyle;
+    let ballTracker: React.JSX.Element | null = null;
+    if (!isEightBall) {
+      ballTracker = (
+        <View style={[styles.playerBallIconGroup, { justifyContent: align === 'left' ? 'flex-start' : 'flex-end' }]}>
+          {renderPlayerBallTracker(nineBallState, align === 'left')}
+        </View>
+      );
+    }
     return (
       <Animated.View style={[styles.playerBox, playerAnimationStyle]}>
         <Text style={[globalStyle.background, globalStyle.textLarge, align === 'left' ? globalStyle.textLeft : globalStyle.textRight, globalStyle.primary]}>{player.name}</Text>
         <Text style={[globalStyle.background, globalStyle.textMedium, align === 'left' ? globalStyle.textLeft : globalStyle.textRight, globalStyle.primary]}>{player.score} / {scoreGoal} points</Text>
+        {ballTracker}
       </Animated.View>
     );
   };
@@ -495,7 +504,7 @@ export function Game({ route, navigation }: GameProps) {
     );
   };
 
-  let balls, ballTracker;
+  let balls;
   if (!isEightBall) {
     balls = (
       <View style={styles.ballContainer}>
@@ -507,16 +516,6 @@ export function Game({ route, navigation }: GameProps) {
         </View>
       </View>
     );
-    ballTracker = (
-      <View style={[styles.playerBallTracker, {backgroundColor: theme.colors.grey0}]}>
-        <View style={[styles.playerBallIconGroup, { justifyContent: 'flex-start', borderColor: theme.colors.grey1 }]}>
-          {renderPlayerBallTracker(nineBallState, true)}
-        </View>
-        <View style={[styles.playerBallIconGroup, { justifyContent: 'flex-end', borderColor: theme.colors.grey1 }]}>
-          {renderPlayerBallTracker(nineBallState, false)}
-        </View>
-      </View>
-    )
   }
 
   const playerOneSkill = isEightBall ? gamePlayer1.skill8 : gamePlayer1.skill9;
@@ -526,18 +525,15 @@ export function Game({ route, navigation }: GameProps) {
 
   return (
     <View style={globalStyle.container}>
-      <View style={[styles.header]}>
+      <View style={[styles.header, { borderColor: theme.colors.grey1}]}>
+        <Animated.View style={[styles.activePlayerHighlight, activePlayerBoxAnimatedStyle]}></Animated.View>
         <View style={[styles.playerRow]}>
           {renderPlayerBox(gamePlayer1, playerOneScoreGoal, 'left')}
           {renderPlayerBox(gamePlayer2, playerTwoScoreGoal, 'right')}
-          <Animated.View
-            style={[styles.activePlayerHighlight, activePlayerBoxAnimatedStyle]}
-          ></Animated.View>
         </View>
         <View style={[styles.inningCounter, {backgroundColor: theme.colors.grey0,  borderColor: theme.colors.grey1}]}>
           <Text style={[globalStyle.background, globalStyle.textMedium, globalStyle.textCenter, globalStyle.bold]}>{Math.floor(matchTurnCount / 2)} innings</Text>
         </View>
-        {ballTracker}
       </View>
       <View style={styles.playerInfo}>
         {renderPlayerInfo(isPlayerOneTurn ? gamePlayer1 : gamePlayer2, isPlayerOneTurn ? playerOneScoreGoal : playerTwoScoreGoal, isEightBall)}
@@ -580,7 +576,8 @@ const styles = StyleSheet.create({
   header: {
     display: 'flex',
     flexDirection: 'column',
-    width: '100%'
+    width: '100%',
+    borderBottomWidth: 1
   },
   inningCounter: {
     position: 'absolute',
@@ -665,8 +662,8 @@ const styles = StyleSheet.create({
     gap: 2,
     alignItems: 'center',
     borderStyle: 'solid',
-    borderWidth: 1,
-    padding: 5
+    marginTop: 15,
+    marginBottom: 5
   },
   playerBallIcon: {
     height: 20,
