@@ -1,4 +1,4 @@
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 
 export const COLORS = {
   light: {

@@ -1,10 +1,9 @@
 import React from 'react';
 import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity } from 'react-native';
 import Player, { SkillLevel } from '../../models/player';
-import { Dialog, FAB, ListItem, Input, useTheme } from '@rneui/themed';
+import { Dialog, FAB, ListItem, Input, useTheme } from '@rn-vui/themed';
 import { Picker } from '@react-native-picker/picker';
 import { loadPlayerList, savePlayerList } from '@app/util/storage.util';
-import { Pressable } from 'react-native-gesture-handler';
 import { formatTitleString } from '@app/util/string.util';
 import { useGlobalStyles } from '@app/styles';
 
@@ -77,7 +76,7 @@ export function PlayerList() {
   }
 
   const renderDialog = () => {
-    const nameInput = React.useRef(0);
+    const nameInput = React.useRef<any>(null);
 
     const pickerItems = [];
     for (let i = 1; i <= 9; i++) {
@@ -99,7 +98,7 @@ export function PlayerList() {
       }
 
       if (err && nameInput) {
-        nameInput.current.shake();
+        nameInput.current?.shake();
       } else {
         addPlayer(name, skill8, skill9);
       }
@@ -193,7 +192,7 @@ export function PlayerList() {
 
   function renderRow(player: Player) {
     return (
-        <ListItem Component={TouchableOpacity} onPress={() => openDialog(player)} containerStyle={[styles.playerListItem, { backgroundColor: theme.colors.primary}]}>
+        <ListItem onPress={() => openDialog(player)} containerStyle={[styles.playerListItem, { backgroundColor: theme.colors.primary}]}>
           <ListItem.Content style={styles.playerListItemContent}>
             <ListItem.Title style={[globalStyle.textExtraLarge, styles.playerListItemTitle, { color: theme.colors.background  }]}>{player.name}</ListItem.Title>
             <View style={styles.scoreIndicator}>

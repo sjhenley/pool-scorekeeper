@@ -5,7 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import * as Screens from './ui/screens';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Player from './models/player';
-import { ThemeProvider, createTheme, useTheme } from '@rneui/themed';
+import { ThemeProvider, createTheme, useTheme } from '@rn-vui/themed';
 import { COLORS, useGlobalStyles } from './styles';
 
 export type RootStackParamList = {

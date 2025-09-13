@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Text, Tab, TabView, Button, useTheme } from '@rneui/themed';
+import { Text, Tab, TabView, Button, useTheme } from '@rn-vui/themed';
 import Player from '@app/models/player';
 import { loadPlayerList } from '@app/util/storage.util';
 import { Picker } from '@react-native-picker/picker';
@@ -8,7 +8,6 @@ import { NavigationProp, ParamListBase } from '@react-navigation/native';
 import { useGlobalStyles } from '@app/styles';
 import { Alert, AlertType } from '@app/models/alert.model';
 import { AlertView } from '@components/AlertView';
-
 
 interface NewGameProps {
   navigation: NavigationProp<ParamListBase>;

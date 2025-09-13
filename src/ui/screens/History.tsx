@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Text } from '@rneui/themed';
+import { Text } from '@rn-vui/themed';
 import { useGlobalStyles } from '../../styles';
 
 export function History() {

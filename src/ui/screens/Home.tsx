@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Alert, BackHandler } from 'react-native';
-import { Button, Text, Switch, useTheme, useThemeMode } from '@rneui/themed';
+import { Button, Text, Switch, useTheme, useThemeMode } from '@rn-vui/themed';
 import { useGlobalStyles } from '../../styles';
 import { NavigationProp, ParamListBase } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';

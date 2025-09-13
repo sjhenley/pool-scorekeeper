@@ -1,7 +1,7 @@
 import { Alert } from '@app/models/alert.model';
 import { View, StyleSheet } from 'react-native';
 import { useGlobalStyles } from '@app/styles';
-import { Text } from '@rneui/themed';
+import { Text } from '@rn-vui/themed';
 
 interface AlertViewProps {
   alerts: Alert[];

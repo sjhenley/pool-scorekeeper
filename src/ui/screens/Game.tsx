@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, Button, CheckBox, Dialog, useTheme } from '@rneui/themed';
+import { Text, Button, CheckBox, Dialog, useTheme } from '@rn-vui/themed';
 import { Alert, View, StyleSheet, Pressable, Image } from 'react-native';
 import { NavigationProp, RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '@app/App';
