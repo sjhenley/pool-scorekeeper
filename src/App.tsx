@@ -37,7 +37,7 @@ function RootStack() {
       }}
     >
       <Stack.Screen name="Home" component={Screens.Home} options={{ headerShown: false }}/>
-      <Stack.Screen name="New Game" component={Screens.NewGame} />
+      <Stack.Screen name="New Game" component={Screens.NewGame} options={{title: '', headerShown: false }}/>
       <Stack.Screen name="Players" component={Screens.PlayerList} />
       <Stack.Screen name="History" component={Screens.History} />
       <Stack.Screen name="Game" component={Screens.Game} options={{ headerShown: false }}/>

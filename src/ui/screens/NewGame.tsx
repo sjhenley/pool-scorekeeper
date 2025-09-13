@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Text, Tab, TabView, Button, useTheme } from '@rn-vui/themed';
+import { Text, Button, useTheme, ButtonGroup } from '@rn-vui/themed';
 import Player from '@app/models/player';
 import { loadPlayerList } from '@app/util/storage.util';
 import { Picker } from '@react-native-picker/picker';
@@ -17,7 +17,7 @@ export function NewGame({ navigation }: NewGameProps) {
   const globalStyle = useGlobalStyles();
   const theme = useTheme().theme;
 
-  const [tabIndex, setTabIndex] = React.useState(0);
+  const [selectedGame, setSelectedGame] = React.useState(0);
 
   const [playerList, setPlayerList] = React.useState<Player[]>([]);
   const [player1, setPlayer1] = React.useState<Player>();
@@ -34,7 +34,7 @@ export function NewGame({ navigation }: NewGameProps) {
   }, []);
 
   function isEightBall(): boolean {
-    return tabIndex === 0;
+    return selectedGame === 0;
   }
 
   function renderPickerItems() {
@@ -48,33 +48,6 @@ export function NewGame({ navigation }: NewGameProps) {
         />
       );
     });
-  }
-
-  function renderPlayerList() {
-    return (
-      <>
-        <View style={styles.pickerRow}>
-          <Text style={[globalStyle.textMedium, globalStyle.primary, styles.pickerLabel, globalStyle.bold]}>Player 1</Text>
-          <Picker
-            prompt='Player 1'
-            selectedValue={player1}
-            style={[globalStyle.primary, styles.picker]}
-            onValueChange={(itemValue) => setPlayer1(itemValue) }>
-            {renderPickerItems()}
-          </Picker>
-        </View>
-        <View style={styles.pickerRow}>
-          <Text style={[globalStyle.textMedium, globalStyle.primary, styles.pickerLabel, globalStyle.bold]}>Player 2</Text>
-          <Picker
-            prompt='Player 2'
-            selectedValue={player2}
-            style={[globalStyle.primary, styles.picker]}
-            onValueChange={(itemValue) => setPlayer2(itemValue) }>
-            {renderPickerItems()}
-          </Picker>
-        </View>
-      </>
-    );
   }
 
   function startGame(): void {
@@ -105,43 +78,52 @@ export function NewGame({ navigation }: NewGameProps) {
   }
 
   return (
-    <View style={[globalStyle.container, { paddingBottom: 30 }]}>
-      <Tab
-        value={tabIndex}
-        onChange={setTabIndex}
-        indicatorStyle={{
-          backgroundColor: theme.colors.background,
-          height: 5
-        }}
-      >
-        <Tab.Item
-          title="8 Ball"
-          titleStyle={[globalStyle.background, globalStyle.textLarge]}
-          containerStyle={{ backgroundColor: tabIndex ? theme.colors.grey0 : theme.colors.grey1 }}
-        />
-        <Tab.Item
-          title="9 Ball"
-          titleStyle={[globalStyle.background, globalStyle.textLarge]}
-          containerStyle={{ backgroundColor: tabIndex ? theme.colors.grey1 : theme.colors.grey0 }}
-        />
-      </Tab>
-
-      <TabView containerStyle={[{ width: '100%' }, globalStyle.container]} value={tabIndex} onChange={setTabIndex} animationType='spring'>
-        <TabView.Item style={{ width: '100%' }}>
-          {renderPlayerList()}
-        </TabView.Item>
-        <TabView.Item style={{ width: '100%' }}>
-          {renderPlayerList()}
-        </TabView.Item>
-      </TabView>
+    <View style={[globalStyle.container, styles.container]}>
+      <Text style={[styles.title, globalStyle.primary]}>New Game</Text>
+      <View style={styles.pickerContainer}>
+        <View style={styles.pickerRow}>
+          <Text style={[globalStyle.textMedium, globalStyle.primary, styles.pickerLabel, globalStyle.bold]}>Game Type</Text>
+          <ButtonGroup
+            buttons={['8-Ball', '9-Ball']}
+            containerStyle={[styles.picker, styles.gameOptionContainer, { backgroundColor: theme.colors.grey2, borderColor: theme.colors.grey2 }]}
+            buttonStyle={[{ backgroundColor: theme.colors.background }]}
+            selectedButtonStyle={[{ backgroundColor: theme.colors.grey2 }]}
+            textStyle={[globalStyle.textMedium, globalStyle.primary]}
+            innerBorderStyle={{color: theme.colors.grey2}}
+            selectedIndex={selectedGame}
+            onPress={setSelectedGame}
+          />
+        </View>
+        <View style={styles.pickerRow}>
+          <Text style={[globalStyle.textMedium, globalStyle.primary, styles.pickerLabel, globalStyle.bold]}>Player 1</Text>
+          <Picker
+            prompt='Player 1'
+            selectedValue={player1}
+            style={[globalStyle.primary, styles.picker]}
+            onValueChange={(itemValue) => setPlayer1(itemValue) }>
+            {renderPickerItems()}
+          </Picker>
+        </View>
+        <View style={styles.pickerRow}>
+          <Text style={[globalStyle.textMedium, globalStyle.primary, styles.pickerLabel, globalStyle.bold]}>Player 2</Text>
+          <Picker
+            prompt='Player 2'
+            selectedValue={player2}
+            style={[globalStyle.primary, styles.picker]}
+            onValueChange={(itemValue) => setPlayer2(itemValue) }>
+            {renderPickerItems()}
+          </Picker>
+        </View>
+      </View>
 
       <AlertView alerts={alerts}></AlertView>
 
       <Button
         title={'Start Game'}
-        buttonStyle={globalStyle.buttonLarge}
-        titleStyle={[globalStyle.textLarge, globalStyle.background]}
-        containerStyle={styles.buttonContainer}
+        type='clear'
+        containerStyle={[{backgroundColor: theme.colors.grey2}, styles.startGame]}
+        buttonStyle={[globalStyle.buttonLarge, styles.startGame]}
+        titleStyle={[globalStyle.textLarge, globalStyle.primary]}
         onPress={startGame}
       />
     </View>
@@ -149,21 +131,47 @@ export function NewGame({ navigation }: NewGameProps) {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    paddingVertical: 100,
+    paddingHorizontal: 20
+  },
+  pickerContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+    alignSelf: 'center',
+    flex: 3
+  },
   pickerRow: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 20
+    padding: 5
   },
   pickerLabel: {
-    flexGrow: 1
+    flex: 1
   },
   picker: {
-    flexGrow: 2
+    flex: 2
   },
   buttonContainer: {
     display: 'flex',
     marginHorizontal: 50,
     marginVertical: 10
+  },
+  gameOptionContainer: {
+    borderWidth: 2,
+    height: 60
+  },
+  startGame: {
+    borderRadius: 19,
+    boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.5)'
+  },
+  title: {
+    fontSize: 48,
+    flex: 1
   }
 });
