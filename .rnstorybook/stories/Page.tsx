@@ -41,7 +41,7 @@ export const Page = () => {
         <View>
           <Text>
             Use a higher-level connected component. Storybook helps you compose such data from the
-            "args" of child component stories
+            &quot;args&quot; of child component stories
           </Text>
           <Text>
             Assemble data in the page component from your services. You can mock these services out
@@ -78,39 +78,39 @@ export const Page = () => {
 
 const styles = StyleSheet.create({
   section: {
-    fontFamily: "'Nunito Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+    fontFamily: '\'Nunito Sans\', \'Helvetica Neue\', Helvetica, Arial, sans-serif',
     fontSize: 14,
     lineHeight: 24,
     paddingVertical: 48,
     paddingHorizontal: 20,
     marginHorizontal: 'auto',
     maxWidth: 600,
-    color: '#333',
+    color: '#333'
   },
 
   h2: {
     fontWeight: '900',
     fontSize: 32,
     lineHeight: 1,
-    marginBottom: 4,
+    marginBottom: 4
   },
 
   p: {
     marginVertical: 16,
-    marginHorizontal: 0,
+    marginHorizontal: 0
   },
 
   a: {
-    color: '#1ea7fd',
+    color: '#1ea7fd'
   },
 
   ul: {
     paddingLeft: 30,
-    marginVertical: 16,
+    marginVertical: 16
   },
 
   li: {
-    marginBottom: 8,
+    marginBottom: 8
   },
 
   tip: {
@@ -120,13 +120,13 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     paddingHorizontal: 12,
     marginRight: 10,
-    marginBottom: 4,
+    marginBottom: 4
   },
   tipText: {
     fontSize: 11,
     lineHeight: 12,
     fontWeight: '700',
-    color: '#66bf3c',
+    color: '#66bf3c'
   },
 
   tipWrapper: {
@@ -135,13 +135,13 @@ const styles = StyleSheet.create({
     marginTop: 40,
     marginBottom: 40,
     flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexWrap: 'wrap'
   },
 
   tipWrapperSvg: {
     height: 12,
     width: 12,
     marginRight: 4,
-    marginTop: 3,
-  },
+    marginTop: 3
+  }
 });
