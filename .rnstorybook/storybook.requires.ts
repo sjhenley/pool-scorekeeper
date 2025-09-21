@@ -15,7 +15,7 @@ const normalizedStories = [
       '../.rnstorybook/stories',
       true,
       /^\.(?:(?:^|[\\/]|(?:(?:(?!(?:^|[\\/])\.).)*?)[\\/])(?!\.)(?=.)[^\\/]*?\.stories\.(?:ts|tsx|js|jsx)?)$/
-    )
+    ),
   }
 ];
 
@@ -41,7 +41,8 @@ module?.hot?.accept?.();
 if (!global.view) {
   global.view = start({
     annotations,
-    storyEntries: normalizedStories
+    storyEntries: normalizedStories,
+
   });
 } else {
   updateView(global.view, annotations, normalizedStories);

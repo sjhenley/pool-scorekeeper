@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "rewrite-scorekeeper",
-    "slug": "rewrite-scorekeeper",
-    "version": "1.0.0",
+    "name": "Pool Scorekeeper",
+    "slug": "pool-scorekeeper",
+    "version": "0.2.0-rc.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "rewritescorekeeper",
+    "scheme": "poolscorekeeper",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
@@ -13,13 +13,12 @@
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/images/android-icon-foreground.png",
-        "backgroundImage": "./assets/images/android-icon-background.png",
-        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.sjhenley.poolscorekeeper"
     },
     "web": {
       "output": "static",
@@ -44,6 +43,11 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "643a997e-5bd7-4a0a-947c-2a993fd4fdb9"
+      }
     }
   }
 }

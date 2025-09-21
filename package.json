@@ -1,7 +1,7 @@
 {
-  "name": "rewrite-scorekeeper",
+  "name": "pool-scorekeeper",
   "main": "expo-router/entry",
-  "version": "1.0.0",
+  "version": "0.2.0-rc.1",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
@@ -9,7 +9,8 @@
     "web": "expo start --web",
     "lint": "expo lint",
     "lint:fix": "npx expo lint --fix",
-    "storybook-generate": "sb-rn-get-stories"
+    "storybook-generate": "sb-rn-get-stories",
+    "build:preview": "eas build --profile preview --platform android"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.2",
@@ -58,6 +59,9 @@
     "react-native-svg": "15.12.1",
     "storybook": "^9.1.7",
     "typescript": "~5.9.2"
+  },
+  "engines": {
+    "node": ">=20.0.0"
   },
   "private": true,
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
