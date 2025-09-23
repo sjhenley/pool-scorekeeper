@@ -1,9 +1,4 @@
 {
-  "editor.codeActionsOnSave": {
-    "source.fixAll": "explicit",
-    "source.organizeImports": "explicit",
-    "source.sortMembers": "explicit"
-  },
   "typescript.preferences.quoteStyle": "single",
   "editor.tabSize": 2,
   "typescript.tsdk": "node_modules\\typescript\\lib",
