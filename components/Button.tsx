@@ -19,8 +19,8 @@ export const Button = ({
   const textColor = primary ? 'text-text-200 dark:text-text-900' : 'text-text-900 dark:text-text-200';
 
   return (
-    <TouchableOpacity className='w-full shadow-lg' accessibilityRole="button" activeOpacity={0.6} onPress={onPress}>
-      <View className={`${containerColor} py-5 items-center rounded-xl shadow-lg`}>
+    <TouchableOpacity className={`${containerColor} py-5 items-center w-full rounded-xl shadow-lg`} accessibilityRole="button" activeOpacity={0.6} onPress={onPress}>
+      <View>
         <Text className={`${textColor} font-sans text-3xl`}>{label}</Text>
       </View>
     </TouchableOpacity>
