@@ -14,14 +14,13 @@ export default function Index() {
   };
 
   return (
-    <View className="bg-background-200 dark:bg-background-900 flex-1 justify-center items-center gap-10 p-5">
-      <Text className="text-6xl font-sans font-bold text-text-900 dark:text-text-100">Scorekeeper</Text>
+    <View className="bg-light-background dark:bg-dark-background flex-1 justify-center items-center gap-10 p-5">
+      <Text className="text-6xl font-sans font-bold text-light-text dark:text-dark-text">Scorekeeper</Text>
       <Button primary onPress={() => router.navigate('/storybook')} label="Go to Storybook" />
       <Button
         label={`Switch to ${currentTheme === 'dark' ? 'light' : 'dark'} mode`}
         onPress={() => setColorScheme(currentTheme === 'dark' ? 'light' : 'dark')}
       />
-      <View className="bg-green-500 text-green-500 outline-purple-600" />
     </View>
   );
 }

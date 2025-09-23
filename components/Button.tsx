@@ -15,12 +15,12 @@ export const Button = ({
   primary = false,
   onPress
 }: ButtonProps) => {
-  const containerColor = primary ? 'bg-primary-800 dark:bg-primary-400' : 'bg-secondary-300 dark:bg-secondary-800';
-  const textColor = primary ? 'text-text-200 dark:text-text-900' : 'text-text-900 dark:text-text-200';
+  const containerColor = primary ? 'bg-light-primary dark:bg-dark-primary' : 'bg-light-secondary dark:bg-dark-secondary';
+  const textColor = primary ? 'text-light-background dark:text-dark-background' : 'text-light-text dark:text-dark-text';
 
   return (
-    <TouchableOpacity className='w-full shadow-lg' accessibilityRole="button" activeOpacity={0.6} onPress={onPress}>
-      <View className={`${containerColor} py-5 items-center rounded-xl shadow-lg`}>
+    <TouchableOpacity className={`py-5 items-center w-full rounded-xl shadow-lg ${containerColor}`} accessibilityRole="button" activeOpacity={0.6} onPress={onPress}>
+      <View>
         <Text className={`${textColor} font-sans text-3xl`}>{label}</Text>
       </View>
     </TouchableOpacity>
