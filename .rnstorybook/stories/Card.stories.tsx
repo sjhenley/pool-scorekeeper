@@ -6,7 +6,7 @@ import { fn } from 'storybook/test';
 import { Card } from '../../components/Card';
 
 const meta = {
-  title: 'Card',
+  title: 'Components/Card',
   component: Card,
   decorators: [
     (Story) => {
@@ -40,7 +40,7 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Primary: Story = {
+export const EightBall: Story = {
   args: {
     title: '8 Ball',
     description: 'Shoot all your group balls then pocket the 8 ball',
@@ -49,3 +49,12 @@ export const Primary: Story = {
   }
 };
 
+export const Profile: Story = {
+  args: {
+    title: 'Profile',
+    iconName: 'account-circle',
+    description: 'View and edit your profile information',
+    cta: 'Edit Profile',
+    disabled: false
+  }
+};

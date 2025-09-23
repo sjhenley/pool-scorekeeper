@@ -1,7 +1,7 @@
 import { useRouter } from 'expo-router';
 import { colorScheme } from 'nativewind';
 import { useState } from 'react';
-import { Text, View } from 'react-native';
+import { Text } from 'react-native';
 import { Button } from '@/components/Button';
 import { LinearGradient } from 'expo-linear-gradient';
 

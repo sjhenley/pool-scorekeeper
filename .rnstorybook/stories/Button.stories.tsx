@@ -7,7 +7,7 @@ import { fn } from 'storybook/test';
 import { Button } from '../../components/Button';
 
 const meta = {
-  title: 'Example/Button',
+  title: 'Components/Button',
   component: Button,
   decorators: [
     (Story) => {
