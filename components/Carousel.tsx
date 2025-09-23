@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Dimensions, Animated } from 'react-native';
 import { Card, CardProps } from '@/components/Card';
 
@@ -18,8 +18,33 @@ export const Carousel = ({
   data
 }: CarouselProps) => {
   const scrollX = useRef(new Animated.Value(0)).current;
+  const scrollViewRef = useRef<Animated.ScrollView>(null);
+  const [focusedIndex, setFocusedIndex] = useState(0);
+
+  useEffect(() => {
+    const listenerId = scrollX.addListener(({ value }) => {
+      const idx = Math.round(value / snapToInterval);
+      setFocusedIndex(idx);
+    });
+    return () => scrollX.removeListener(listenerId);
+  }, [scrollX]);
+
+  const handleCardPress = (i: number, card: CardProps) => {
+    if (i !== focusedIndex && scrollViewRef.current) {
+      // Scroll to the selected card
+      scrollViewRef.current.scrollTo({
+        x: i * snapToInterval,
+        animated: true
+      });
+    } else if (!card.disabled && card.onPress) {
+      // If already focused, trigger the card's onPress
+      card.onPress();
+    }
+  };
+
   return (
     <Animated.ScrollView
+      ref={scrollViewRef}
       horizontal
       showsHorizontalScrollIndicator={false}
       snapToInterval={snapToInterval}
@@ -58,7 +83,11 @@ export const Carousel = ({
               alignItems: 'center'
             }}
           >
-            <Card {...cardProps} />
+            <Card
+              {...cardProps}
+              disabled={card.disabled && i === focusedIndex}
+              onPress={() => handleCardPress(i, card)}
+            />
           </Animated.View>
         );
       })}
