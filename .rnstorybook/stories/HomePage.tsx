@@ -1,12 +1,11 @@
-
 import React, { useRef, useState } from 'react';
 import { Dimensions, ScrollView, Text, View, Animated } from 'react-native';
 import { Card } from '../../components/Card';
 
 
 const { width: screenWidth } = Dimensions.get('window');
-const cardWidth = 240;
-const gap = 20;
+const cardWidth = 225;
+const gap = 40;
 const snapToInterval = cardWidth + gap;
 const sidePadding = (screenWidth - cardWidth) / 2;
 
@@ -27,9 +26,12 @@ export const HomePage = () => {
         horizontal
         showsHorizontalScrollIndicator={false}
         snapToInterval={snapToInterval}
-        snapToAlignment="center"
+        snapToAlignment="start"
         decelerationRate="fast"
-        contentContainerStyle={{ gap, paddingHorizontal: sidePadding }}
+        contentContainerStyle={{
+          paddingHorizontal: sidePadding,
+          alignItems: 'center',
+        }}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { x: scrollX } } }],
           { useNativeDriver: true }
@@ -45,14 +47,23 @@ export const HomePage = () => {
           ];
           const scale = scrollX.interpolate({
             inputRange,
-            outputRange: [1, 1.1, 1],
+            outputRange: [0.95, 1.15, 0.95],
             extrapolate: 'clamp'
           });
           const key = card.key;
-          delete card.key;
+          const cardProps = { ...card };
+          delete cardProps.key;
           return (
-            <Animated.View key={key} style={{ transform: [{ scale }], width: cardWidth }}>
-              <Card {...card} onPress={() => console.log(card.title + ' Card Pressed')} />
+            <Animated.View
+              key={key}
+              style={{
+                transform: [{ scale }],
+                width: cardWidth,
+                marginRight: i === cards.length - 1 ? 0 : gap,
+                alignItems: 'center'
+              }}
+            >
+              <Card {...cardProps} onPress={() => console.log(card.title + ' Card Pressed')} />
             </Animated.View>
           );
         })}

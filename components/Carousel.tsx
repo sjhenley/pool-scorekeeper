@@ -59,7 +59,6 @@ export const Carousel = ({
         { useNativeDriver: true }
       )}
       scrollEventThrottle={16}
-      style={{ paddingTop: 75 }}
     >
       {data.map((card, i) => {
         const inputRange = [
