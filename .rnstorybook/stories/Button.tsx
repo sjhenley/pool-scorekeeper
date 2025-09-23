@@ -24,25 +24,10 @@ export const Button = ({
   style,
   onPress
 }: ButtonProps) => {
-  const modeStyle = primary ? styles.primary : styles.secondary;
-  const textModeStyle = primary ? styles.primaryText : styles.secondaryText;
-
-  const sizeStyle = styles[size];
-  const textSizeStyle = textSizeStyles[size];
-
   return (
     <TouchableOpacity accessibilityRole="button" activeOpacity={0.6} onPress={onPress}>
-      <View
-        style={[
-          styles.button,
-          modeStyle,
-          sizeStyle,
-          style,
-          !!backgroundColor && { backgroundColor },
-          { borderColor: 'black' }
-        ]}
-      >
-        <Text style={[textModeStyle, textSizeStyle]}>{label}</Text>
+      <View className='bg-primary-600'>
+        <Text className='text-text-100 font-sans text-xl'>{label}</Text>
       </View>
     </TouchableOpacity>
   );

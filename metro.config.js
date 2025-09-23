@@ -1,5 +1,4 @@
 const { getDefaultConfig } = require('expo/metro-config');
-const { mergeConfig } = require('@react-native/metro-config');
 const withStorybook = require('@storybook/react-native/metro/withStorybook');
 const { withNativeWind } = require('nativewind/metro');
 

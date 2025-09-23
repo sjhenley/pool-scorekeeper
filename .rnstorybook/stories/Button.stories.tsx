@@ -1,19 +1,32 @@
 import type { Meta, StoryObj } from '@storybook/react-native';
-
-import { View } from 'react-native';
+import { colorScheme } from 'nativewind';
+import { useState } from 'react';
+import { View, Button as NativeButton } from 'react-native';
 import { fn } from 'storybook/test';
 
-import { Button } from './Button';
+import { Button } from '../../components/Button';
 
 const meta = {
   title: 'Example/Button',
   component: Button,
   decorators: [
-    (Story) => (
-      <View style={{ flex: 1, alignItems: 'flex-start' }}>
-        <Story />
-      </View>
-    )
+    (Story) => {
+      const [currentTheme, setCurrentTheme] = useState<'light' | 'dark'>('light');
+
+      const setColorScheme = (scheme: 'light' | 'dark') => {
+        colorScheme.set(scheme);
+        setCurrentTheme(scheme);
+      };
+      return (
+        <View className="flex-1 items-center justify-center bg-background-300 dark:bg-background-900 p-5 gap-10">
+          <Story />
+          <NativeButton
+            title={`Switch to ${currentTheme === 'dark' ? 'light' : 'dark'} mode`}
+            onPress={() => setColorScheme(currentTheme === 'dark' ? 'light' : 'dark')}
+          />
+        </View>
+      );
+    }
   ],
   // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
   tags: ['autodocs'],
@@ -27,27 +40,14 @@ type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
   args: {
-    primary: true,
-    label: 'Button'
+    label: 'Button',
+    primary: true
   }
 };
 
 export const Secondary: Story = {
   args: {
-    label: 'Button'
-  }
-};
-
-export const Large: Story = {
-  args: {
-    size: 'large',
-    label: 'Button'
-  }
-};
-
-export const Small: Story = {
-  args: {
-    size: 'small',
-    label: 'Button'
+    label: 'Button',
+    primary: false
   }
 };
