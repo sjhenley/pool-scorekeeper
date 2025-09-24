@@ -18,7 +18,7 @@ const meta = {
         setCurrentTheme(scheme);
       };
       return (
-        <View className="flex-1 items-center justify-center bg-background-300 dark:bg-background-900 p-5 gap-10">
+        <View className="flex-1 items-center justify-center bg-background-300 dark:bg-background-900 p-5 px-36 gap-10">
           <Story />
           <NativeButton
             title={`Switch to ${currentTheme === 'dark' ? 'light' : 'dark'} mode`}
@@ -45,9 +45,25 @@ export const Primary: Story = {
   }
 };
 
+export const PrimaryTransparent: Story = {
+  args: {
+    label: 'Button',
+    primary: true,
+    transparent: true
+  }
+};
+
 export const Secondary: Story = {
   args: {
     label: 'Button',
     primary: false
+  }
+};
+
+export const SecondaryTransparent: Story = {
+  args: {
+    label: 'Button',
+    primary: false,
+    transparent: true
   }
 };
