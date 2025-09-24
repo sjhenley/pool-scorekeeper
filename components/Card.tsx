@@ -37,11 +37,14 @@ export const Card = ({
         { iconName && <StyledMaterialIcons name={iconName} size={80} className="text-text-200 dark:text-text-900" /> }
         { !iconName && <Image source={image} className='size-24' />}
         <Text className='text-text-200 dark:text-text-900 font-sans text-lg text-center'>{description}</Text>
-        <View className="flex-row items-center">
-          <StyledMaterialIcons name="chevron-right" size={24} className="text-text-200 dark:text-text-900" />
-          <Text className='text-text-200 dark:text-text-900 font-sans text-lg font-bold'>{cta}</Text>
-        </View>
-
+        {
+          cta && (
+            <View className="flex-row items-center">
+              <StyledMaterialIcons name="chevron-right" size={24} className="text-text-200 dark:text-text-900" />
+              <Text className='text-text-200 dark:text-text-900 font-sans text-lg font-bold'>{cta}</Text>
+            </View>
+          )
+        }
       </View>
     </Pressable>
   );

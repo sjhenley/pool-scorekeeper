@@ -7,7 +7,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 export default function Index() {
   const router = useRouter();
-  const [currentTheme, setCurrentTheme] = useState<'light' | 'dark'>('light');
+  const [currentTheme, setCurrentTheme] = useState<'light' | 'dark'>(colorScheme.get() || 'light');
 
   const setColorScheme = (scheme: 'light' | 'dark') => {
     colorScheme.set(scheme);
@@ -17,7 +17,8 @@ export default function Index() {
   const gameCards = [
     { title: '8 Ball', description: 'Shoot all your group balls then pocket the 8 ball', cta: 'Play Now', image: require('../assets/balls/8.png') },
     { title: '9 Ball', description: 'Shoot balls in order from 1 to 9', cta: 'Play Now', image: require('../assets/balls/9.png') },
-    { title: 'Practice', description: 'Play solo to improve your skills', cta: 'Start Practice', iconName: 'trending-up' }
+    { title: 'Practice', description: 'Coming Soon', iconName: 'trending-up', disabled: true },
+    { title: 'Online', description: 'Coming Soon', iconName: 'cloud', disabled: true }
   ];
 
   return (
