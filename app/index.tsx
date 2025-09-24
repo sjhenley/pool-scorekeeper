@@ -1,7 +1,7 @@
 import { useRouter } from 'expo-router';
 import { colorScheme, cssInterop } from 'nativewind';
 import { Text, TouchableOpacity, View } from 'react-native';
-import { Carousel } from '@/components';
+import { Button, Carousel } from '@/components';
 import { LinearGradient } from 'expo-linear-gradient';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useEffect, useState } from 'react';
@@ -39,6 +39,20 @@ export default function Index() {
         <Carousel data={gameCards} />
       </View>
       <View className='flex-col items-center gap-5'>
+        <Button
+          primary
+          transparent
+          size='md'
+          icon='group'
+          label="Player List"
+        />
+        <Button
+          primary
+          transparent
+          size='md'
+          icon='history'
+          label='Match History'
+        />
       </View>
       <TouchableOpacity className='absolute top-12 left-6 flex-row items-center gap-2 p-3 rounded-full' onPress={() => router.navigate('/settings')}>
         <StyledMaterialIcons name="settings" size={30} className="text-text-200 dark:text-text-900" />

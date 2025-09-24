@@ -17,10 +17,12 @@ export default function Settings() {
     <View className='flex-1 justify-center items-center bg-text-300 dark:bg-background-900 gap-5 p-5'>
       <Button
         primary
+        size='lg'
         label="Go to Storybook"
         onPress={() => router.navigate('/storybook')} />
       <Button
         primary
+        size='lg'
         label={`Switch to ${currentTheme === 'dark' ? 'light' : 'dark'} mode`}
         onPress={() => setColorScheme(currentTheme === 'dark' ? 'light' : 'dark')}
       />
