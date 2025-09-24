@@ -52,7 +52,8 @@ export const Carousel = ({
       decelerationRate="fast"
       contentContainerStyle={{
         paddingHorizontal: sidePadding,
-        alignItems: 'center'
+        alignItems: 'center',
+        height: 500
       }}
       onScroll={Animated.event(
         [{ nativeEvent: { contentOffset: { x: scrollX } } }],

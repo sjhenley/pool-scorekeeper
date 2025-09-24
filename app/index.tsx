@@ -24,17 +24,17 @@ export default function Index() {
     <LinearGradient
       colors={
         currentTheme === 'dark'
-          ? ['#060e23', '#3a5dd9']
+          ? ['#a2a5c3', '#131420']
           : ['#50547c', '#a2a5c3']
       }
       start={{ x: 0.5, y: 0.2 }}
-      end={{ x: 0.5, y: .6 }}
-      className="justify-center items-center grid-rows-3 h-full">
-      <Text className="grid-row text-6xl flex-3 font-sans font-bold text-text-900 dark:text-text-100">Scorekeeper</Text>
-      <View className='grid-row h-1 flex-1 border-red-500 border'>
+      end={{ x: 0.5, y: .4 }}
+      className="justify-center items-center flex h-full">
+      <Text className="flex-row text-6xl font-bold text-text-50 dark:text-text-800">Scorekeeper</Text>
+      <View className='flex-row '>
         <Carousel data={gameCards} />
       </View>
-      <View className='grid-row'>
+      <View className='flex-col items-center gap-5'>
         <Button primary onPress={() => router.navigate('/storybook')} label="Go to Storybook" />
         <Button
           label={`Switch to ${currentTheme === 'dark' ? 'light' : 'dark'} mode`}
