@@ -1,18 +1,21 @@
 import { useRouter } from 'expo-router';
-import { colorScheme } from 'nativewind';
-import { useState } from 'react';
-import { Text, View } from 'react-native';
-import { Button, Carousel } from '@/components';
+import { colorScheme, cssInterop } from 'nativewind';
+import { Text, TouchableOpacity, View } from 'react-native';
+import { Carousel } from '@/components';
 import { LinearGradient } from 'expo-linear-gradient';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { useEffect, useState } from 'react';
 
 export default function Index() {
   const router = useRouter();
+
   const [currentTheme, setCurrentTheme] = useState<'light' | 'dark'>(colorScheme.get() || 'light');
 
-  const setColorScheme = (scheme: 'light' | 'dark') => {
-    colorScheme.set(scheme);
-    setCurrentTheme(scheme);
-  };
+  useEffect(() => {
+    setCurrentTheme(colorScheme.get() || 'light');
+  }, []);
+
+  const StyledMaterialIcons = cssInterop(MaterialIcons, { className: 'style' });
 
   const gameCards = [
     { title: '8 Ball', description: 'Shoot all your group balls then pocket the 8 ball', cta: 'Play Now', image: require('../assets/balls/8.png') },
@@ -36,12 +39,10 @@ export default function Index() {
         <Carousel data={gameCards} />
       </View>
       <View className='flex-col items-center gap-5'>
-        <Button primary onPress={() => router.navigate('/storybook')} label="Go to Storybook" />
-        <Button
-          label={`Switch to ${currentTheme === 'dark' ? 'light' : 'dark'} mode`}
-          onPress={() => setColorScheme(currentTheme === 'dark' ? 'light' : 'dark')}
-        />
       </View>
+      <TouchableOpacity className='absolute top-12 left-6 flex-row items-center gap-2 p-3 rounded-full' onPress={() => router.navigate('/settings')}>
+        <StyledMaterialIcons name="settings" size={30} className="text-text-200 dark:text-text-900" />
+      </TouchableOpacity>
     </LinearGradient>
   );
 }

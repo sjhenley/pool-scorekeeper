@@ -8,7 +8,7 @@ export interface CardProps {
   /** Card Description */
   description: string;
   /** Card CTA */
-  cta: string;
+  cta?: string;
   /** Card Image */
   image?: ImageSourcePropType;
   /** Card Icon. Will override image if provided */
