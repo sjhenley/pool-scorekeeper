@@ -55,7 +55,7 @@ export const NewPlayerDialog = ({
         />
       </View>
       <View
-        className='flex-col w-[50%]'>
+        className='flex-col w-[60%]'>
         <Text className='text-primary text-2xl font-bold'>8-Ball Skill</Text>
         <NumberSelector
           min={2}
@@ -65,7 +65,7 @@ export const NewPlayerDialog = ({
         />
       </View>
       <View
-        className='flex-col w-[50%]'>
+        className='flex-col w-[60%]'>
         <Text className='text-primary text-2xl font-bold'>9-Ball Skill</Text>
         <NumberSelector
           min={2}

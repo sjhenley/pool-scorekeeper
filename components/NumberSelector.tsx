@@ -9,8 +9,8 @@ interface IncrementButtonProps {
 
 const IncrementButton = ({ onPress, icon }: IncrementButtonProps) => {
   return (
-    <TouchableOpacity className='bg-primary-800 dark:bg-primary-200 flex justify-center items-center p-3' onPress={onPress}>
-      <StyledMaterialIcon name={icon as any} size={28} className='text-text-50 dark:text-text-900 flex' />
+    <TouchableOpacity hitSlop={25} className='bg-primary-800 dark:bg-primary-200 flex justify-center items-center p-3' onPress={onPress}>
+      <StyledMaterialIcon name={icon as any} size={34} className='text-text-50 dark:text-text-900 flex' />
     </TouchableOpacity>
   );
 };
@@ -38,14 +38,14 @@ export const NumberSelector = ({
   const [value, setValue] = React.useState<number>(initial);
 
   return (
-    <View className='flex-row'>
+    <View className='flex-row shadow-lg shadow-background-900 dark:shadow-background-200 rounded-md overflow-hidden bg-primary-400 m-2'>
       <IncrementButton icon='remove' onPress={() => {
         const newValue = Math.max(min, value - step);
         setValue(newValue);
         onValueChange?.(newValue);
       }} />
       <View className='flex-grow justify-center items-center bg-text-200'>
-        <Text className='text-4xl font-sans font-bold text-primary flex-grow pt-2'>{value}</Text>
+        <Text className='text-4xl font-sans font-bold text-primary justify-center items-center'>{value}</Text>
       </View>
       <IncrementButton icon='add' onPress={() => {
         const newValue = Math.min(max, value + step);
