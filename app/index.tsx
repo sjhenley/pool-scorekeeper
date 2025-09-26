@@ -51,7 +51,7 @@ export default function Index() {
           containerClass='w-full'
         />
       </View>
-      <TouchableOpacity className='absolute top-12 left-6 flex-row items-center gap-2 p-3 rounded-full' onPress={() => router.navigate('/settings')}>
+      <TouchableOpacity className='absolute top-12 right-6 flex-row items-center gap-2 p-3 rounded-full' onPress={() => router.navigate('/settings')}>
         <StyledMaterialIcons name="settings" size={30} className="text-text-200 dark:text-text-900" />
       </TouchableOpacity>
     </LinearGradient>
