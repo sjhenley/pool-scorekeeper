@@ -55,3 +55,14 @@ export async function deletePlayer(playerId: string): Promise<void> {
   const updatedPlayers = players.filter(p => p.id !== playerId);
   await AsyncStorage.setItem(PLAYER_STORAGE_KEY, JSON.stringify(updatedPlayers));
 }
+
+/**
+ * Clears all player data from AsyncStorage.
+ */
+export async function clearAllPlayers(): Promise<void> {
+  try {
+    await AsyncStorage.removeItem(PLAYER_STORAGE_KEY);
+  } catch (e) {
+    console.error('Error clearing players:', e);
+  }
+}

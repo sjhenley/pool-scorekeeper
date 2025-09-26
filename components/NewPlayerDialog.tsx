@@ -3,19 +3,30 @@ import Player, { SkillLevel } from '@/models/player';
 import React from 'react';
 import { NumberSelector } from './NumberSelector';
 import { Button } from './Button';
-export interface NewPlayerDialogProps {
+export interface PlayerDialogProps {
   /** Handler for creating a new player */
   onClose: (player?: Player) => void;
+  /** Initial player data */
+  player?: Player;
 }
 
-export const NewPlayerDialog = ({
-  onClose
-}: NewPlayerDialogProps) => {
+export const PlayerDialog = ({
+  onClose,
+  player
+}: PlayerDialogProps) => {
 
   const [playerName, setPlayerName] = React.useState<string>('');
   const [skillEightBall, setSkillEightBall] = React.useState<SkillLevel>(3);
   const [skillNineBall, setSkillNineBall] = React.useState<SkillLevel>(3);
   const [nameError, setNameError] = React.useState<string>();
+
+  React.useEffect(() => {
+    if (player) {
+      setPlayerName(player.name);
+      setSkillEightBall(player.skill8);
+      setSkillNineBall(player.skill9);
+    }
+  }, [player]);
 
   const onNameChange = (text: string) => {
     if (nameError && text.trim().length > 0) {
@@ -32,22 +43,34 @@ export const NewPlayerDialog = ({
       setNameError(undefined);
     }
 
-    onClose(new Player(
-      playerName.trim(),
-      skillEightBall,
-      skillNineBall
-    ));
+    if (player) {
+      // Update the existing player object and pass it back
+      player.name = playerName.trim();
+      player.skill8 = skillEightBall;
+      player.skill9 = skillNineBall;
+      onClose(player);
+    } else {
+      // Return a new player object
+      onClose(new Player(
+        playerName.trim(),
+        skillEightBall,
+        skillNineBall
+      ));
+    }
+
+
   };
 
   return (
     <View className='flex gap-5'>
-      <Text className={`text-primary text-4xl font-bold ${!nameError && 'mb-8'}`}>New Player</Text>
+      <Text className={`text-primary text-4xl font-bold ${!nameError && 'mb-8'}`}>{player ? 'Edit Player' : 'New Player'}</Text>
       {nameError && <Text className='text-2xl font-sans text-red-500'>{nameError}</Text>}
       <View
         className='flex-col'>
         <Text className='text-primary text-2xl font-bold'>Name</Text>
         <TextInput
           autoCapitalize='words'
+          value={playerName}
           inputMode='text'
           maxLength={75}
           placeholder='e.g. John Doe'
@@ -61,7 +84,7 @@ export const NewPlayerDialog = ({
         <NumberSelector
           min={2}
           max={7}
-          initial={3}
+          initial={player?.skill8 ?? 3}
           onValueChange={(value) => setSkillEightBall(value as SkillLevel)}
         />
       </View>
@@ -71,7 +94,7 @@ export const NewPlayerDialog = ({
         <NumberSelector
           min={1}
           max={9}
-          initial={3}
+          initial={player?.skill9 ?? 3}
           onValueChange={(value) => setSkillNineBall(value as SkillLevel)}
         />
       </View>
@@ -83,7 +106,7 @@ export const NewPlayerDialog = ({
           containerClass='flex-1'
         />
         <Button
-          label='Create'
+          label={player ? 'Update' : 'Create'}
           onPress={onSubmit}
           containerClass='flex-1'
           // disabled={playerName.trim().length === 0}

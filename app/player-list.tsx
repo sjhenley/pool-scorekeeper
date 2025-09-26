@@ -1,5 +1,6 @@
 import { useRouter } from 'expo-router';
-import { Button, Dialog, NewPlayerDialog } from '@/components';
+import { useFocusEffect } from '@react-navigation/native';
+import { Button, Dialog, PlayerDialog } from '@/components';
 import { PlayerCard } from '@/components/PlayerCard';
 import Player from '@/models/player';
 import React from 'react';
@@ -11,6 +12,7 @@ export default function PlayerList() {
   const [newPlayerDialogShown, setNewPlayerDialogShown] = React.useState(false);
   const router = useRouter();
 
+  // Refresh player list whenever the new player dialog is closed
   React.useEffect(() => {
     async function fetchPlayers() {
       const loadedPlayers = await getPlayers();
@@ -18,6 +20,19 @@ export default function PlayerList() {
     }
     fetchPlayers();
   }, [newPlayerDialogShown]);
+
+  // Refresh player list whenever the screen is focused
+  useFocusEffect(
+    React.useCallback(() => {
+      let isActive = true;
+      async function fetchPlayers() {
+        const loadedPlayers = await getPlayers();
+        if (isActive) setPlayers(loadedPlayers);
+      }
+      fetchPlayers();
+      return () => { isActive = false; };
+    }, [])
+  );
 
   async function onCreatePlayer(player?: Player): Promise<void> {
     if (player) {
@@ -32,10 +47,9 @@ export default function PlayerList() {
         isOpen={newPlayerDialogShown}
         onClose={() => setNewPlayerDialogShown(false)}
       >
-        <NewPlayerDialog onClose={onCreatePlayer} />
+        <PlayerDialog onClose={onCreatePlayer} />
       </Dialog>
       <View className='flex-1 justify-center items-center bg-text-300 dark:bg-background-900 gap-5 pt-5'>
-
         <Button
           primary
           transparent
