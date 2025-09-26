@@ -63,7 +63,7 @@ export const Dialog = ({ children, isOpen, onClose }: DialogProps) => {
         }}
         className='bg-background-50 dark:bg-background-900 rounded-xl p-5 w-auto'
       >
-        <Pressable className='max-w-[90%] w-auto' onPress={(e) => e.stopPropagation()}>{children}</Pressable>
+        <Pressable className='max-w-[90%] w-screen' onPress={(e) => e.stopPropagation()}>{children}</Pressable>
       </Animated.View>
     </Animated.View>
   );

@@ -1,4 +1,3 @@
-// MyDialog.jsx
 import Player from '@/models/player';
 import React from 'react';
 import { View, Text, Image } from 'react-native';
