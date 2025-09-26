@@ -9,7 +9,13 @@ interface IncrementButtonProps {
 
 const IncrementButton = ({ onPress, icon }: IncrementButtonProps) => {
   return (
-    <TouchableOpacity hitSlop={25} className='bg-primary-800 dark:bg-primary-200 flex justify-center items-center p-3' onPress={onPress}>
+    <TouchableOpacity
+      hitSlop={25}
+      className='bg-primary-800 dark:bg-primary-200 flex justify-center items-center p-3'
+      onPress={onPress}
+      accessible={true}
+      accessibilityRole="button"
+    >
       <StyledMaterialIcon name={icon as any} size={34} className='text-text-50 dark:text-text-900 flex' />
     </TouchableOpacity>
   );

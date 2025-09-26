@@ -48,6 +48,7 @@ export const NewPlayerDialog = ({
         <Text className='text-primary text-2xl font-bold'>Name</Text>
         <TextInput
           autoCapitalize='words'
+          inputMode='text'
           maxLength={75}
           placeholder='e.g. John Doe'
           onChangeText={onNameChange}
@@ -68,8 +69,8 @@ export const NewPlayerDialog = ({
         className='flex-col w-[60%]'>
         <Text className='text-primary text-2xl font-bold'>9-Ball Skill</Text>
         <NumberSelector
-          min={2}
-          max={7}
+          min={1}
+          max={9}
           initial={3}
           onValueChange={(value) => setSkillNineBall(value as SkillLevel)}
         />
