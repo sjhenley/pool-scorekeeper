@@ -39,6 +39,7 @@ export default function Index() {
           size='md'
           icon='group'
           label="Player List"
+          onPress={() => router.navigate('/player-list')}
         />
         <Button
           primary
