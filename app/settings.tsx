@@ -5,14 +5,14 @@ import { View } from 'react-native';
 import { Button } from '@/components';
 
 export default function Settings() {
-  const [currentTheme, setCurrentTheme] = useState<'light' | 'dark'>(colorScheme.get() || 'light');
-
+  const [currentTheme, setCurrentTheme] = useState<'light' | 'dark' | 'system'>(colorScheme.get() || 'system');
   const router = useRouter();
 
-  const setColorScheme = (scheme: 'light' | 'dark') => {
+  const setColorScheme = (scheme: 'light' | 'dark' | 'system') => {
     colorScheme.set(scheme);
     setCurrentTheme(scheme);
   };
+
   return (
     <View className='flex-1 justify-center items-center bg-text-300 dark:bg-background-900 gap-5 p-5'>
       <Button

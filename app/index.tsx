@@ -1,19 +1,13 @@
 import { useRouter } from 'expo-router';
-import { colorScheme, cssInterop } from 'nativewind';
+import { useColorScheme, cssInterop } from 'nativewind';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { Button, Carousel } from '@/components';
 import { LinearGradient } from 'expo-linear-gradient';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { useEffect, useState } from 'react';
 
 export default function Index() {
   const router = useRouter();
-
-  const [currentTheme, setCurrentTheme] = useState<'light' | 'dark'>(colorScheme.get() || 'light');
-
-  useEffect(() => {
-    setCurrentTheme(colorScheme.get() || 'light');
-  }, []);
+  const colorScheme = useColorScheme();
 
   const StyledMaterialIcons = cssInterop(MaterialIcons, { className: 'style' });
 
@@ -27,7 +21,7 @@ export default function Index() {
   return (
     <LinearGradient
       colors={
-        currentTheme === 'dark'
+        colorScheme.colorScheme === 'dark'
           ? ['#a2a5c3', '#131420']
           : ['#50547c', '#a2a5c3']
       }
