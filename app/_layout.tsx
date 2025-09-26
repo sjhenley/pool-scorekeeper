@@ -17,7 +17,8 @@ export default function RootLayout() {
           fontWeight: 'bold',
           color: colorScheme.colorScheme === 'dark' ? '#1e1e2f' : '#e4e4e6',
           fontFamily: 'sans'
-        }
+        },
+        headerTintColor: colorScheme.colorScheme === 'dark' ? '#1e1e2f' : '#e4e4e6'
       }}
     >
       <Stack.Screen name="index" options={{ headerShown: false }} />
