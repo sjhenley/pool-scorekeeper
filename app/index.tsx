@@ -40,7 +40,7 @@ export default function Index() {
           icon='group'
           label="Player List"
           containerClass='w-full'
-          onPress={() => router.navigate('/player-list')}
+          onPress={() => router.navigate('/players')}
         />
         <Button
           primary

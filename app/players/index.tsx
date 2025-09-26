@@ -53,7 +53,7 @@ export default function PlayerList() {
         <ScrollView className='w-full' contentContainerClassName='justify-center items-center pb-12'>
           {
             players.map((player, idx) => (
-              <TouchableOpacity key={'player-card' + player.id + idx} onPress={() => router.push(`/profile/${player.id}` as any)}>
+              <TouchableOpacity key={'player-card' + player.id + idx} onPress={() => router.push(`/players/${player.id}` as any)}>
                 <PlayerCard player={player} />
               </TouchableOpacity>
             ))
