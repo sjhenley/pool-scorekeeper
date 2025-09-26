@@ -3,14 +3,16 @@ import { colorScheme } from 'nativewind';
 import { useState } from 'react';
 import { View } from 'react-native';
 import { Button, Dialog } from '@/components';
-import { clearAllPlayers } from '@/dao/player.dao';
+import { clearAllPlayers, putPlayer } from '@/dao/player.dao';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ConfirmDialog } from '@/components/ConfirmDialog';
+import { getPlayerTestData } from '@/util/test.util';
 
 export default function Settings() {
   const [currentTheme, setCurrentTheme] = useState<'light' | 'dark' | 'system'>(colorScheme.get() || 'system');
   const [confirmClearPlayerDataDialogVisible, setConfirmClearPlayerDataDialogVisible] = useState<boolean>(false);
   const [confirmClearAllDataDiaglogVisible, setConfirmClearAllDataDialogVisible] = useState<boolean>(false);
+  const [createTestDataDialogVisible, setCreateTestDataDialogVisible] = useState<boolean>(false);
 
   const router = useRouter();
 
@@ -30,6 +32,16 @@ export default function Settings() {
     setConfirmClearAllDataDialogVisible(false);
     if (confirmed) {
       await AsyncStorage.clear();
+    }
+  }
+
+  async function onCreateTestDataConfirm(confirmed: boolean): Promise<void> {
+    setCreateTestDataDialogVisible(false);
+    if (confirmed) {
+      const data = getPlayerTestData(5);
+      for (const player of data) {
+        await putPlayer(player);
+      }
     }
   }
 
@@ -55,13 +67,31 @@ export default function Settings() {
           message='Are you sure you want to delete all local storage? This action cannot be undone.'
         />
       </Dialog>
+      <Dialog
+        isOpen={createTestDataDialogVisible}
+        onClose={() => setCreateTestDataDialogVisible(false)}
+      >
+        <ConfirmDialog
+          onClose={onCreateTestDataConfirm}
+          header='Create Test Data'
+          message='Create 5 test players?'
+        />
+      </Dialog>
       <View className='flex-1 justify-center items-center bg-text-300 dark:bg-background-900 gap-5 p-5'>
+        <Button
+          primary
+          size='lg'
+          label="Create Test Data"
+          containerClass='w-full'
+          onPress={() => setCreateTestDataDialogVisible(true)}
+        />
         <Button
           primary
           size='lg'
           label="Go to Storybook"
           containerClass='w-full'
-          onPress={() => router.navigate('/storybook')} />
+          onPress={() => router.navigate('/storybook')}
+        />
         <Button
           primary
           size='lg'
