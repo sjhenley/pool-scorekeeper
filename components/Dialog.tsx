@@ -1,6 +1,6 @@
 // MyDialog.jsx
 import React, { ReactNode, useEffect, useRef } from 'react';
-import { Pressable, Animated } from 'react-native';
+import { Pressable, Animated, KeyboardAvoidingView, Platform } from 'react-native';
 
 export interface DialogProps {
   /** The content to be rendered inside the dialog. */
@@ -49,22 +49,28 @@ export const Dialog = ({ children, isOpen, onClose }: DialogProps) => {
   if (!visible) return null;
 
   return (
-    <Animated.View
-      style={{
-        backgroundColor: 'rgba(0,0,0,0.5)',
-        opacity
-      }}
-      className = 'absolute top-0 left-0 w-full h-full justify-center align-center items-center z-50'
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={80}
+      className='absolute w-full h-full z-50'
     >
-      <Pressable className='absolute h-full w-full' onPress={onClose} />
       <Animated.View
         style={{
-          transform: [{ scale }]
+          backgroundColor: 'rgba(0,0,0,0.5)',
+          opacity
         }}
-        className='bg-background-50 dark:bg-background-800 rounded-xl p-5 w-auto'
+        className='w-full h-full justify-center items-center z-50'
       >
-        <Pressable className='max-w-[90%] w-screen' onPress={(e) => e.stopPropagation()}>{children}</Pressable>
+        <Pressable className='absolute h-full w-full' onPress={onClose} />
+        <Animated.View
+          style={{
+            transform: [{ scale }]
+          }}
+          className='bg-background-50 dark:bg-background-800 rounded-xl p-5 w-auto'
+        >
+          <Pressable className='max-w-[90%] w-screen' onPress={(e) => e.stopPropagation()}>{children}</Pressable>
+        </Animated.View>
       </Animated.View>
-    </Animated.View>
+    </KeyboardAvoidingView>
   );
 };
