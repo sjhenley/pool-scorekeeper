@@ -51,7 +51,7 @@ export const NewPlayerDialog = ({
           maxLength={75}
           placeholder='e.g. John Doe'
           onChangeText={onNameChange}
-          className={`text-primary text-2xl px-4 py-2 rounded-md bg-white border-2 focus:border-primary-500 focus:bg-primary-50 shadow-sm ${nameError ? 'border-red-500' : 'border-primary-200'}`}
+          className={`text-black text-2xl px-4 py-2 rounded-md bg-white border-2 focus:border-primary-500 focus:bg-primary-50 shadow-sm ${nameError ? 'border-red-500' : 'border-primary-200'}`}
         />
       </View>
       <View

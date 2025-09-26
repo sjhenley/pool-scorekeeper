@@ -38,13 +38,13 @@ export const NumberSelector = ({
   const [value, setValue] = React.useState<number>(initial);
 
   return (
-    <View className='flex-row shadow-lg shadow-background-900 dark:shadow-background-200 rounded-md overflow-hidden bg-primary-400 m-2'>
+    <View className='flex-row shadow-lg shadow-background-900 dark:shadow-background-800 rounded-md overflow-hidden bg-primary-400 m-2'>
       <IncrementButton icon='remove' onPress={() => {
         const newValue = Math.max(min, value - step);
         setValue(newValue);
         onValueChange?.(newValue);
       }} />
-      <View className='flex-grow justify-center items-center bg-text-200'>
+      <View className='flex-grow justify-center items-center bg-background-200 dark:bg-background-700'>
         <Text className='text-4xl font-sans font-bold text-primary justify-center items-center'>{value}</Text>
       </View>
       <IncrementButton icon='add' onPress={() => {
