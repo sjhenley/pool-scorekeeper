@@ -30,8 +30,11 @@ const players: Player[] = [
 export default function PlayerList() {
   const [ newPlayerDialogShown, setNewPlayerDialogShown ] = React.useState(false);
 
-  function onCreatePlayer(player: Player): void {
-    // TODO
+  function onCreatePlayer(player?: Player): void {
+    if (player) {
+      // TODO
+    }
+    setNewPlayerDialogShown(false);
   }
 
   return (
@@ -40,7 +43,7 @@ export default function PlayerList() {
         isOpen={newPlayerDialogShown}
         onClose={() => setNewPlayerDialogShown(false)}
       >
-        <NewPlayerDialog onCreate={onCreatePlayer} />
+        <NewPlayerDialog onClose={onCreatePlayer} />
       </Dialog>
       <View className='flex-1 justify-center items-center bg-text-300 dark:bg-background-900 gap-5 pt-5'>
 
@@ -50,6 +53,7 @@ export default function PlayerList() {
           size='md'
           icon='add'
           label="New Player"
+          containerClass='w-full'
           onPress={() => setNewPlayerDialogShown(true)}
         />
         <ScrollView className='w-full'>

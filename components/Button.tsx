@@ -26,8 +26,8 @@ const textColorConfig = {
 
 const containerSizeConfig = {
   sm: 'w-32 p-2',
-  md: 'w-48 p-3',
-  lg: 'w-72 p-5'
+  md: 'max-w-48 p-3',
+  lg: 'max-w-full p-5'
 };
 
 const textSizeConfig = {
@@ -55,6 +55,8 @@ export interface ButtonProps {
   icon?: typeof MaterialIcons['name'];
   /** Optional click handler */
   onPress?: () => void;
+  /** Class list to apply to the button container */
+  containerClass?: string;
 }
 
 /** Primary UI component for user interaction */
@@ -64,7 +66,8 @@ export const Button = ({
   transparent = false,
   size = 'md',
   icon,
-  onPress
+  onPress,
+  containerClass = ''
 }: ButtonProps) => {
 
   const primaryMapper = primary ? 'primary' : 'secondary';
@@ -74,13 +77,14 @@ export const Button = ({
   const containerSize = containerSizeConfig[size];
   const textColor = textColorConfig[primaryMapper][styleType];
   const textSize = textSizeConfig[size];
+  const textAlign = icon ? 'text-left' : 'text-center';
   const iconSize = iconSizeConfig[size];
 
   return (
-    <TouchableOpacity className={`${containerColor} ${containerSize} items-center rounded-xl`} accessibilityRole="button" activeOpacity={0.6} onPress={onPress}>
-      <View className="w-full flex-row gap-2 items-center justify-center">
+    <TouchableOpacity className={`${containerClass} ${containerColor} ${containerSize} items-center rounded-xl px-2`} accessibilityRole="button" activeOpacity={0.6} onPress={onPress}>
+      <View className="flex-row gap-2 items-center justify-center">
         { icon && <StyledMaterialIcon name={icon as any} size={iconSize} className={`${textColor} mb-1 flex`} /> }
-        <Text className={`${textColor} ${textSize} font-sans text-center items-center text-align-center flex`}>{label}</Text>
+        <Text className={`${textColor} ${textSize} font-sans ${textAlign} items-center flex`}>{label}</Text>
       </View>
     </TouchableOpacity>
   );

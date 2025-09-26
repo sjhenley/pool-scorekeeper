@@ -45,7 +45,7 @@ export const NumberSelector = ({
         onValueChange?.(newValue);
       }} />
       <View className='flex-grow justify-center items-center bg-text-200'>
-        <Text className='text-4xl font-sans font-bold text-primary flex-grow pt-3'>{value}</Text>
+        <Text className='text-4xl font-sans font-bold text-primary flex-grow pt-2'>{value}</Text>
       </View>
       <IncrementButton icon='add' onPress={() => {
         const newValue = Math.min(max, value + step);

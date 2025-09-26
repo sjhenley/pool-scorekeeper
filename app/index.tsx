@@ -29,16 +29,17 @@ export default function Index() {
       end={{ x: 0.5, y: .4 }}
       className="justify-center items-center flex h-full">
       <Text className="flex-row text-6xl font-bold text-text-50 dark:text-text-800">Scorekeeper</Text>
-      <View className='flex-row '>
+      <View className='flex-row'>
         <Carousel data={gameCards} />
       </View>
-      <View className='flex-col items-center gap-5'>
+      <View className='flex-col items-center gap-5 w-[60%]'>
         <Button
           primary
           transparent
           size='md'
           icon='group'
           label="Player List"
+          containerClass='w-full'
           onPress={() => router.navigate('/player-list')}
         />
         <Button
@@ -46,7 +47,8 @@ export default function Index() {
           transparent
           size='md'
           icon='history'
-          label='Match History'
+          label='History'
+          containerClass='w-full'
         />
       </View>
       <TouchableOpacity className='absolute top-12 left-6 flex-row items-center gap-2 p-3 rounded-full' onPress={() => router.navigate('/settings')}>
