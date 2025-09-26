@@ -26,7 +26,7 @@ const textColorConfig = {
 
 const containerSizeConfig = {
   sm: 'w-32 p-2',
-  md: 'max-w-48 p-3',
+  md: 'max-w-52 p-3',
   lg: 'max-w-full p-5'
 };
 

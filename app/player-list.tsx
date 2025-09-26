@@ -49,17 +49,8 @@ export default function PlayerList() {
       >
         <PlayerDialog onClose={onCreatePlayer} />
       </Dialog>
-      <View className='flex-1 justify-center items-center bg-text-300 dark:bg-background-900 gap-5 pt-5'>
-        <Button
-          primary
-          transparent
-          size='md'
-          icon='add'
-          label="New Player"
-          containerClass='w-full'
-          onPress={() => setNewPlayerDialogShown(true)}
-        />
-        <ScrollView className='w-full'>
+      <View className='flex-1 justify-center items-center bg-text-300 dark:bg-background-900 gap-5'>
+        <ScrollView className='w-full' contentContainerClassName='justify-center items-center pb-12'>
           {
             players.map((player, idx) => (
               <TouchableOpacity key={'player-card' + player.id + idx} onPress={() => router.push(`/profile/${player.id}` as any)}>
@@ -67,7 +58,20 @@ export default function PlayerList() {
               </TouchableOpacity>
             ))
           }
+
+
         </ScrollView>
+        <View style={{ position: 'absolute', left: 0, right: 0, bottom: 0, zIndex: 10 }} className='w-full bg-text-300 dark:bg-background-900 flex-1 items-center pb-12 pt-4 border-t border-text-500 dark:border-text-700'>
+          <Button
+            primary
+            transparent
+            size='md'
+            icon='add'
+            label="New Player"
+            containerClass='w-full'
+            onPress={() => setNewPlayerDialogShown(true)}
+          />
+        </View>
       </View>
     </View>
 
