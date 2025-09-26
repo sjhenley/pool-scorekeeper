@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.text-primary {
+  @apply text-text-800 dark:text-text-200 font-sans
+}

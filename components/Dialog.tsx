@@ -54,16 +54,16 @@ export const Dialog = ({ children, isOpen, onClose }: DialogProps) => {
         backgroundColor: 'rgba(0,0,0,0.5)',
         opacity
       }}
-      className = 'absolute top-0 left-0 w-full h-full justify-center align-center'
+      className = 'absolute top-0 left-0 w-full h-full justify-center align-center items-center z-50'
     >
       <Pressable className='absolute h-full w-full' onPress={onClose} />
       <Animated.View
         style={{
           transform: [{ scale }]
         }}
-        className='bg-background-50 dark:bg-background-900 rounded-xl p-5 mx-auto'
+        className='bg-background-50 dark:bg-background-900 rounded-xl p-5 w-auto'
       >
-        <Pressable onPress={(e) => e.stopPropagation()}>{children}</Pressable>
+        <Pressable className='max-w-[90%] w-auto' onPress={(e) => e.stopPropagation()}>{children}</Pressable>
       </Animated.View>
     </Animated.View>
   );
