@@ -58,8 +58,7 @@ export default function PlayerList() {
               </TouchableOpacity>
             ))
           }
-
-
+          <View className='h-24' /> {/* Spacer to ensure content is not hidden behind the button */}
         </ScrollView>
         <View style={{ position: 'absolute', left: 0, right: 0, bottom: 0, zIndex: 10 }} className='w-full bg-text-300 dark:bg-background-900 flex-1 items-center pb-12 pt-4 border-t border-text-500 dark:border-text-700'>
           <Button
