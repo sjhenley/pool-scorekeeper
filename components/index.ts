@@ -6,3 +6,5 @@ export { PlayerDialog, PlayerDialogProps } from './NewPlayerDialog';
 export { PlayerCard, PlayerCardProps } from './PlayerCard';
 export { NumberSelector, NumberSelectorProps } from './NumberSelector';
 export { ConfirmDialog, ConfirmDialogProps } from './ConfirmDialog';
+export { GameReview, GameReviewProps } from './game-review';
+export { PlayerSelect, PlayerSelectProps } from './player-select';

@@ -1,6 +1,6 @@
-import { useRouter } from 'expo-router';
+import { useRouter, useFocusEffect } from 'expo-router';
 import { useColorScheme, cssInterop } from 'nativewind';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, View, BackHandler } from 'react-native';
 import { Button, Carousel } from '@/components';
 import { LinearGradient } from 'expo-linear-gradient';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
@@ -17,6 +17,14 @@ export default function Index() {
     { title: 'Practice', description: 'Coming Soon', iconName: 'trending-up', disabled: true },
     { title: 'Online', description: 'Coming Soon', iconName: 'cloud', disabled: true }
   ];
+
+  useFocusEffect(() => {
+    const subscription = BackHandler.addEventListener('hardwareBackPress', () => {
+      BackHandler.exitApp(); // Close the app when back is pressed on home
+      return true;
+    });
+    return () => subscription.remove();
+  });
 
   return (
     <LinearGradient
