@@ -12,8 +12,8 @@ export default function Index() {
   const StyledMaterialIcons = cssInterop(MaterialIcons, { className: 'style' });
 
   const gameCards = [
-    { title: '8 Ball', description: 'Shoot all your group balls then pocket the 8 ball', cta: 'Play Now', image: require('../assets/balls/8.png') },
-    { title: '9 Ball', description: 'Shoot balls in order from 1 to 9', cta: 'Play Now', image: require('../assets/balls/9.png') },
+    { title: '8 Ball', description: 'Shoot all your group balls then pocket the 8 ball', cta: 'Play Now', image: require('../assets/balls/8.png'), onPress: () => router.navigate({ pathname: '/new-game', params: { gameId: 'apa-eight-ball' } }) },
+    { title: '9 Ball', description: 'Shoot balls in order from 1 to 9', cta: 'Play Now', image: require('../assets/balls/9.png'), onPress: () => router.navigate({ pathname: '/new-game', params: { gameId: 'apa-nine-ball' } }) },
     { title: 'Practice', description: 'Coming Soon', iconName: 'trending-up', disabled: true },
     { title: 'Online', description: 'Coming Soon', iconName: 'cloud', disabled: true }
   ];
