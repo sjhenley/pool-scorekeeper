@@ -1,5 +1,4 @@
 import { useRouter } from 'expo-router';
-import { colorScheme } from 'nativewind';
 import { useState } from 'react';
 import { View } from 'react-native';
 import { Button, Dialog } from '@/components';
@@ -7,18 +6,21 @@ import { clearAllPlayers, putPlayer } from '@/dao/player.dao';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ConfirmDialog } from '@/components/ConfirmDialog';
 import { getPlayerTestData } from '@/util/test.util';
+import { usePreferences } from '@/hooks/use-preferences';
+import { useColorScheme } from 'nativewind';
 
 export default function Settings() {
-  const [currentTheme, setCurrentTheme] = useState<'light' | 'dark' | 'system'>(colorScheme.get() || 'system');
   const [confirmClearPlayerDataDialogVisible, setConfirmClearPlayerDataDialogVisible] = useState<boolean>(false);
   const [confirmClearAllDataDiaglogVisible, setConfirmClearAllDataDialogVisible] = useState<boolean>(false);
   const [createTestDataDialogVisible, setCreateTestDataDialogVisible] = useState<boolean>(false);
 
   const router = useRouter();
+  const {setPreference } = usePreferences();
+  const colorScheme = useColorScheme();
 
   const setColorScheme = (scheme: 'light' | 'dark' | 'system') => {
-    colorScheme.set(scheme);
-    setCurrentTheme(scheme);
+    setPreference('colorScheme', scheme);
+    colorScheme.setColorScheme(scheme);
   };
 
   async function onClearPlayerDataConfirm(confirmed: boolean): Promise<void> {
@@ -95,9 +97,9 @@ export default function Settings() {
         <Button
           primary
           size='lg'
-          label={`Switch to ${currentTheme === 'dark' ? 'light' : 'dark'} mode`}
+          label={`Switch to ${colorScheme.colorScheme === 'dark' ? 'light' : 'dark'} mode`}
           containerClass='w-full'
-          onPress={() => setColorScheme(currentTheme === 'dark' ? 'light' : 'dark')}
+          onPress={() => setColorScheme(colorScheme.colorScheme === 'dark' ? 'light' : 'dark')}
         />
         <Button
           primary

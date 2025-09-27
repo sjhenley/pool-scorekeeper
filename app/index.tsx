@@ -4,10 +4,13 @@ import { Text, TouchableOpacity, View, BackHandler } from 'react-native';
 import { Button, Carousel } from '@/components';
 import { LinearGradient } from 'expo-linear-gradient';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { usePreferences } from '@/hooks/use-preferences';
+import { useEffect } from 'react';
 
 export default function Index() {
   const router = useRouter();
   const colorScheme = useColorScheme();
+  const { preferences } = usePreferences();
 
   const StyledMaterialIcons = cssInterop(MaterialIcons, { className: 'style' });
 
@@ -25,6 +28,14 @@ export default function Index() {
     });
     return () => subscription.remove();
   });
+
+  useEffect(() => {
+    console.log('Preferences changed: ', preferences);
+    if (!preferences?.colorScheme) return;
+    if (preferences.colorScheme === colorScheme.colorScheme) return;
+    console.log('Applying color scheme from preferences: ', preferences.colorScheme);
+    colorScheme.setColorScheme(preferences.colorScheme);
+  }, [preferences]);
 
   return (
     <LinearGradient

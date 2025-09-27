@@ -2,7 +2,7 @@
 import Player from '@/models/player';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const PLAYER_STORAGE_KEY = 'players';
+const STORAGE_KEY = 'players';
 
 /**
  * Fetches all players from AsyncStorage.
@@ -10,7 +10,7 @@ const PLAYER_STORAGE_KEY = 'players';
  */
 export async function getPlayers(): Promise<Player[]> {
   try {
-    const jsonValue = await AsyncStorage.getItem(PLAYER_STORAGE_KEY);
+    const jsonValue = await AsyncStorage.getItem(STORAGE_KEY);
     return jsonValue != null ? JSON.parse(jsonValue) : [];
   } catch (e) {
     console.error('Error fetching players:', e);
@@ -42,7 +42,7 @@ export async function putPlayer(player: Player): Promise<void> {
   } else {
     players.push(player);
   }
-  await AsyncStorage.setItem(PLAYER_STORAGE_KEY, JSON.stringify(players));
+  await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(players));
 }
 
 /**
@@ -53,7 +53,7 @@ export async function putPlayer(player: Player): Promise<void> {
 export async function deletePlayer(playerId: string): Promise<void> {
   const players = await getPlayers();
   const updatedPlayers = players.filter(p => p.id !== playerId);
-  await AsyncStorage.setItem(PLAYER_STORAGE_KEY, JSON.stringify(updatedPlayers));
+  await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedPlayers));
 }
 
 /**
@@ -61,7 +61,7 @@ export async function deletePlayer(playerId: string): Promise<void> {
  */
 export async function clearAllPlayers(): Promise<void> {
   try {
-    await AsyncStorage.removeItem(PLAYER_STORAGE_KEY);
+    await AsyncStorage.removeItem(STORAGE_KEY);
   } catch (e) {
     console.error('Error clearing players:', e);
   }
