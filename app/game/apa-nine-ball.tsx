@@ -1,55 +1,19 @@
-import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
-import { colorScheme } from 'nativewind';
-import { useState, useReducer, useCallback } from 'react';
-import { View, Text } from 'react-native';
-import { Button, Dialog } from '@/components';
-import { clearAllPlayers, getPlayers, putPlayer } from '@/dao/player.dao';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ConfirmDialog } from '@/components/ConfirmDialog';
-import { getPlayerTestData } from '@/util/test.util';
-import Player, { SkillLevel } from '@/models/player';
+import { useFocusEffect, useLocalSearchParams } from 'expo-router';
+import React, { useReducer, useCallback } from 'react';
+import { View } from 'react-native';
+import { getPlayers } from '@/dao/player.dao';
 import { BallStatus } from '@/models/ball-status.enum';
 import { getScoreGoal } from '@/util/score.util';
-
-interface GamePlayer {
-      id: string,
-      skill: SkillLevel,
-      name: string
-      score: number
-      scoreTarget: number
-}
-
-interface GameState {
-  /* List of players in the game*/
-  players: GamePlayer[];
-  /* ID of the player whose turn it is */
-  currentPlayer: string;
-  /* Number of innings played so far */
-  innings: number;
-  /* Status of each ball on the table */
-  balls: BallStatus[];
-  /* Reference to previous game state */
-  prev: GameState;
-}
-
-enum GameStateAction {
-  SET_PLAYERS,
-  MAKE_BALL,
-  DEAD_BALL,
-  END_TURN,
-  UNDO
-}
-
-type GameAction = { type: GameStateAction.SET_PLAYERS; players: GamePlayer[] }
-  | { type: GameStateAction.MAKE_BALL; ballIndex: number }
-  | { type: GameStateAction.DEAD_BALL; ballIndex: number }
-  | { type: GameStateAction.END_TURN }
-  | { type: GameStateAction.UNDO };
+import { GamePlayer } from '@/models/game-player.model';
+import { GameAction, GameState, GameStateAction } from '@/models/game-state.model';
+import { ScoreBox } from '@/components/ScoreBox';
+import { BallSelector } from '@/components/BallSelector';
+import { TurnActions } from '@/components/TurnActions';
 
 
 function gameStateReducer(prevState: GameState, payload: GameAction): GameState {
-  console.debug('Game state update dispatched: ', payload.type);
-  console.debug('Current game state: ', JSON.stringify(prevState));
+  console.debug('Current game state: ', JSON.stringify({ ...prevState, prev: prevState.prev ? '...' : null }));
+  console.debug('Game state update dispatched: ', payload);
 
   if (!prevState?.players?.length && payload.type !== GameStateAction.SET_PLAYERS) {
     // players must be set first
@@ -71,9 +35,9 @@ function gameStateReducer(prevState: GameState, payload: GameAction): GameState 
   // For a more complex app, consider using a library like immer or redux
   const newState: GameState = { ...prevState, prev: prevState };
 
-  const isPlayerOneTurn = prevState.currentPlayer === prevState.players[0].id;
+  const isPlayerOneTurn = prevState.currentPlayer === prevState.players[0]?.id;
   const activePlayer = prevState.players[isPlayerOneTurn ? 0 : 1];
-  const nonActivePlayers = prevState.players.filter(p => p.id !== activePlayer.id);
+  const nonActivePlayers = prevState.players.filter(p => p.id !== activePlayer?.id);
 
   switch (payload.type) {
   case GameStateAction.SET_PLAYERS:
@@ -81,35 +45,75 @@ function gameStateReducer(prevState: GameState, payload: GameAction): GameState 
     newState.currentPlayer = payload.players[0].id;
     break;
   case GameStateAction.MAKE_BALL:
-    newState.balls[payload.ballIndex] = isPlayerOneTurn ? BallStatus.SCORED_PLAYER_ONE : BallStatus.SCORED_PLAYER_TWO;
+    newState.balls = newState.balls.map((ball, idx) =>
+      idx === payload.ballIndex
+        ? (isPlayerOneTurn ? BallStatus.SCORED_PLAYER_ONE : BallStatus.SCORED_PLAYER_TWO)
+        : ball
+    );
     activePlayer.score = activePlayer.score + 1;
     newState.players = [activePlayer, ...nonActivePlayers];
     break;
   case GameStateAction.DEAD_BALL:
-    newState.balls[payload.ballIndex] = BallStatus.DEAD;
+    newState.balls = newState.balls.map((ball, idx) =>
+      idx === payload.ballIndex
+        ? BallStatus.DEAD
+        : ball
+    );
     activePlayer.score = activePlayer.score - 1;
     newState.players = [activePlayer, ...nonActivePlayers];
     break;
+  case GameStateAction.FREE_BALL:
+    newState.balls = newState.balls.map((ball, idx) =>
+      idx === payload.ballIndex
+        ? BallStatus.FREE
+        : ball
+    );
+    break;
   case GameStateAction.END_TURN:
-    const currentIndex = prevState.players.findIndex(p => p.id === prevState.currentPlayer);
-    const nextIndex = (currentIndex + 1) % prevState.players.length;
-    newState.currentPlayer = prevState.players[nextIndex].id;
-    newState.innings = !isPlayerOneTurn ? prevState.innings + 1 : prevState.innings; // Only increase innings if player 2 is ending the turn
+    if (prevState.balls[8] === (isPlayerOneTurn ? BallStatus.SCORED_PLAYER_ONE : BallStatus.SCORED_PLAYER_TWO)) {
+      // 9-ball was scored, reset balls for new rack
+      newState.balls = Array(9).fill(BallStatus.FREE);
+      newState.rackTurnCount = 0;
+    } else {
+      // Switch to next player
+      const currentIndex = prevState.players.findIndex(p => p.id === prevState.currentPlayer);
+      const nextIndex = (currentIndex + 1) % prevState.players.length;
+      newState.currentPlayer = prevState.players[nextIndex].id;
+      newState.balls = prevState.balls.map(ball => {
+        switch (ball) {
+        case BallStatus.SCORED_PLAYER_ONE:
+          return BallStatus.PREV_SCORED_PLAYER_ONE;
+        case BallStatus.SCORED_PLAYER_TWO:
+          return BallStatus.PREV_SCORED_PLAYER_TWO;
+        case BallStatus.DEAD:
+          return BallStatus.PREV_DEAD;
+        default:
+          return ball;
+        }
+      });
+      newState.rackTurnCount = prevState.rackTurnCount + 1;
+      newState.matchTurnCount = prevState.matchTurnCount + 1;
+    }
     break;
   default:
-    console.warn('Unknown action type: ', payload);
+    console.warn('Unhandled action type: ', payload);
   }
-  console.debug('Game state updated: ', JSON.stringify(newState));
+  console.debug('Game state updated: ', JSON.stringify({ ...newState, prev: newState.prev ? '...' : null }));
   console.info('Game state updated: ', payload.type);
   return newState;
 }
 
 export default function ApaNineBall() {
-
-  const initialState = {} as any;
+  const initialState = {
+    players: [],
+    currentPlayer: '',
+    matchTurnCount: 0,
+    rackTurnCount: 0,
+    balls: Array(9).fill(BallStatus.FREE),
+    prev: null
+  };
 
   const [ gameState, dispatch ] = useReducer<GameState, any>(gameStateReducer, initialState );
-
   const { players: stagedPlayers } = useLocalSearchParams<{ players: string }>();
 
   useFocusEffect(
@@ -149,12 +153,26 @@ export default function ApaNineBall() {
     }, [stagedPlayers])
   );
 
+  /** Press handler for ball selection. Dispatches different actions based on ball status
+   * @param idx index of the ball pressed (0-8 for 9-ball)
+   */
+  const onBallPress = (idx: number) => {
+    switch (gameState.balls[idx]) {
+    case BallStatus.FREE:
+      return dispatch({ type: GameStateAction.MAKE_BALL, ballIndex: idx });
+    case BallStatus.SCORED_PLAYER_ONE:
+    case BallStatus.SCORED_PLAYER_TWO:
+      return dispatch({ type: GameStateAction.DEAD_BALL, ballIndex: idx });
+    case BallStatus.DEAD:
+      return dispatch({ type: GameStateAction.FREE_BALL, ballIndex: idx });
+    }
+  };
 
   return (
-    <View className='w-full h-full'>
-      <View className='flex-1 justify-center items-center bg-text-300 dark:bg-background-900 gap-5 p-5'>
-        <Text className='text-4xl font-bold text-primary mb-8'>APA 9 Ball</Text>
-      </View>
+    <View className='w-full h-full flex'>
+      <ScoreBox state={gameState} />
+      <BallSelector state={gameState} onBallPress={onBallPress}/>
+      <TurnActions state={gameState} onAction={dispatch}/>
     </View>
   );
 }

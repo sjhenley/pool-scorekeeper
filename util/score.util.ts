@@ -1,3 +1,5 @@
+import { GamePlayer } from '@/models/game-player.model';
+import { GameState } from '@/models/game-state.model';
 import { SkillLevel } from '@/models/player';
 
 const nineBallScoreLut = new Map<SkillLevel, number>([
@@ -54,4 +56,26 @@ const eightBallScoreLut = new Map<string, number>([
 
 export const getScoreGoal = (skill: SkillLevel, opponentSkill: SkillLevel, isEightBall: boolean): number => {
   return isEightBall ? eightBallScoreLut.get(`${skill}${opponentSkill}`) || 0 : nineBallScoreLut.get(skill) || 0;
+};
+
+/** Analyzes the game state and returns the winning player, if any
+ * @param state current game state
+ * @returns winning player, or null if no winner yet
+ */
+export const findWinner = (state: GameState): GamePlayer | null => {
+  for (const player of state.players) {
+    if (player.score >= player.scoreTarget) {
+      return player;
+    }
+  }
+  return null;
+};
+
+/**
+ * Returns the active player based on the current game state
+ * @param state current game state
+ * @returns active player, or null if not found
+ */
+export const getActivePlayer = (state: GameState): GamePlayer | null => {
+  return state.players.find(p => p.id === state.currentPlayer) || null;
 };

@@ -63,9 +63,9 @@ export default function NewGame() {
       return;
     }
 
-    // If all checks pass, navigate to the game screen
+    // If all checks pass, (navigate to the game screen
     router.push({
-      pathname: '/game',
+      pathname: `/game/${gameConfig.id}` as any, // trust the route is valid based on prior checks
       params: {
         gameId: localId,
         players: stagedPlayers
