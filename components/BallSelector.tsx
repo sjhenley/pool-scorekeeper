@@ -18,18 +18,18 @@ export const BallSelector = ({
 
   return (
     <View className='w-full flex-shrink'>
-      <View className='w-full flex-shrink flex-row justify-flex-end flex-wrap gap-2 p-3'>
+      <View className='w-full flex-shrink flex-row justify-flex-end flex-wrap gap-1 p-2'>
         {
           BALL_IMAGES.map((img, idx) => {
             if (state.balls[idx] === BallStatus.DEAD || state.balls[idx] === BallStatus.PREV_DEAD) {
               return (
-                <Image key={'dead-ball-img-' + idx} source={img} className='size-4 opacity-70' />
+                <Image key={'dead-ball-img-' + idx} source={img} className='size-10 opacity-70' />
               );
             }
           })
         }
       </View>
-      <View className='flex-row flex-shrink justify-center flex-wrap p-2 bg-primary-200 dark:bg-primary-700'>
+      <View className='flex-row flex-shrink justify-center flex-wrap gap-1 p-2 bg-primary-200 dark:bg-primary-700'>
         {
           BALL_IMAGES.map((img, idx) => {
             console.debug('Rendering ball index ', idx, ' with status ', BallStatus[state.balls[idx]]);
@@ -42,13 +42,13 @@ export const BallSelector = ({
             let ball, indicator;
 
             if (displayScoredIndicator) {
-              indicator = <Image source={require('../assets/icons/accept.png')} className='size-8 opacity-90 absolute' />;
+              indicator = <Image source={require('../assets/icons/accept.png')} className='size-10 opacity-90 absolute' />;
             } else if (displayDeadIndicator) {
-              indicator = <Image source={require('../assets/icons/remove.png')} className='size-8 opacity-90 absolute' />;
+              indicator = <Image source={require('../assets/icons/remove.png')} className='size-10 opacity-90 absolute' />;
             }
 
             if (displayBall) {
-              ball = <Image source={img} className={`size-16 ${indicator ? 'opacity-40' : ''}`} />;
+              ball = <Image source={img} className={`size-20 ${indicator ? 'opacity-40' : ''}`} />;
             }
 
             return (

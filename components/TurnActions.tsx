@@ -27,7 +27,7 @@ export const TurnActions = ({
     backButtonTitle = 'Cancel';
   } else if (state.rackTurnCount === 0) {
     if (false) {
-      // TODO eight ball
+      // TODO eight ball+
       backButtonTitle = 'Undo Game Over';
     } else {
       backButtonTitle = 'Undo New Rack';
@@ -47,7 +47,7 @@ export const TurnActions = ({
   }
 
   return (
-    <View className='w-full'>
+    <View className='w-full p-4 gap-2 mb-6'>
       <Button label={nextTurnLabel} primary size='lg' containerClass='w-full' onPress={() => onAction({ type: GameStateAction.END_TURN })} />
       {gameOverBtn}
       <Button label={backButtonTitle} primary size='lg' transparent containerClass='w-full' onPress={() => onAction({ type: GameStateAction.UNDO })} />

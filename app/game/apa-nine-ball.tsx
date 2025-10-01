@@ -169,8 +169,9 @@ export default function ApaNineBall() {
   };
 
   return (
-    <View className='w-full h-full flex'>
+    <View className='w-full h-full flex bg-text-300 dark:bg-background-900'>
       <ScoreBox state={gameState} />
+      <View className='w-full flex-grow'> </View>
       <BallSelector state={gameState} onBallPress={onBallPress}/>
       <TurnActions state={gameState} onAction={dispatch}/>
     </View>

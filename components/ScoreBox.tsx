@@ -24,9 +24,9 @@ const PlayerBallList = ({
   scoredBallIndexes
 }: PlayerBallListProps) => {
   return (
-    <View className={`flex-row gap-1 items-center border-2 mt-4 mb-2 ${align === 'left' ? 'justify-start' : 'justify-end'}`}>
+    <View className={`flex-row gap-1 items-center mt-4 ${align === 'left' ? 'justify-start' : 'justify-end'}`}>
       {scoredBallIndexes.map((ballIndex, idx) => (
-        <Image key={`scored-ball-${ballIndex}-${idx}`} source={BALL_IMAGES[ballIndex]} className='size-4' />
+        <Image key={`scored-ball-${ballIndex}-${idx}`} source={BALL_IMAGES[ballIndex]} className='size-5' />
       ))}
     </View>
   );
@@ -54,9 +54,9 @@ const PlayerBox = ({
   }));
 
   return (
-    <Animated.View className='flex p-4 z-10' style={[animatedStyle]}>
-      <Text className={`text-primary text-4xl ${align === 'left' ? 'text-left' : 'text-right'}`}>{player.name}</Text>
-      <Text className='text-primary text-4xl'>{player.score} / {player.scoreTarget} points</Text>
+    <Animated.View className='flex p-4 pt-10 z-10 flex-grow' style={[animatedStyle]}>
+      <Text className={`text-text-200 dark:text-text-800 font-sans text-4xl font-bold ${align === 'left' ? 'text-left' : 'text-right'}`}>{player.name}</Text>
+      <Text className={`text-text-200 dark:text-text-800 font-sans text-xl ${align === 'left' ? 'text-left' : 'text-right'}`}>{player.score} / {player.scoreTarget} points</Text>
       {scoredBallIndexes && (
         <PlayerBallList align={align} scoredBallIndexes={scoredBallIndexes} />
       )}
@@ -84,7 +84,7 @@ export const ScoreBox = ({
     playerOneTextScaleValue.value = withSpring(isPlayerOneTurn ? ACTIVE_BOX_SCALE : INACTIVE_BOX_SCALE);
     playerTwoTextScaleValue.value = withSpring(isPlayerOneTurn ? INACTIVE_BOX_SCALE : ACTIVE_BOX_SCALE);
     activePlayerBoxSkewValue.value = withSpring(isPlayerOneTurn ? PLAYER_ONE_ACTIVE_SKEW : PLAYER_TWO_ACTIVE_SKEW);
-  }, [state.currentPlayer, state.players]);
+  }, [state.currentPlayer, state.players, activePlayerBoxSkewValue, playerOneTextScaleValue, playerTwoTextScaleValue]);
 
   const playerOneScoredBalls = getBallsInState(state.balls, BallStatus.SCORED_PLAYER_ONE);
   const playerTwoScoredBalls = getBallsInState(state.balls, BallStatus.SCORED_PLAYER_TWO);
@@ -96,8 +96,8 @@ export const ScoreBox = ({
 
   return (
     <View className='flex-col w-full border-b-1 border-text-500 dark:border-text-700'>
-      <Animated.View className='w-[55%] justify-center shadow-2xl bg-primary-800 dark:bg-primary-200' style={[{ position: 'absolute', top: 0 }, activePlayerBoxAnimatedStyle]}></Animated.View>
-      <View className='flex-row'>
+      <Animated.View className='w-[55%] justify-center shadow-2xl bg-primary-800 dark:bg-primary-400 z-10 h-full' style={[{ position: 'absolute', top: 0, left: 50 }, activePlayerBoxAnimatedStyle]}></Animated.View>
+      <View className='flex-row bg-gray-600 dark:bg-gray-400'>
         <PlayerBox
           textAnimationScale={playerOneTextScaleValue}
           align='left'
@@ -111,8 +111,10 @@ export const ScoreBox = ({
           scoredBallIndexes={playerTwoScoredBalls}
         />
       </View>
-      <View className='align-self-center h-3 w-48 rounded-xl border-3 z-10 bg-primary-300 dark:bg-primary-800 border-text-500 dark:border-text-200' style={[{ position: 'absolute', top: 5 }]}>
-        <Text className='text-primary text-lg font-bold text-center' >{innings} {inningUnit} </Text>
+      <View className='z-10 w-full flex items-center pt-20' style={[{ position: 'absolute' }]}>
+        <View className='align-self-center rounded-xl border-3 bg-primary-300 dark:bg-primary-800 border-text-500 dark:border-text-200'>
+          <Text className='text-primary mx-8 text-2xl font-bold text-center' >{innings} {inningUnit}</Text>
+        </View>
       </View>
     </View>
   );
