@@ -42,7 +42,7 @@ export const TurnActions = ({
     gameOverBtn = <Button label='End Game' primary size='lg' />;
   } else if (winner) {
     nextTurnLabel = `${winner.name} wins!`;
-  } else if (state.balls[9] === scoredBallState) {
+  } else if (state.balls[8] === scoredBallState) {
     nextTurnLabel = 'Start New Rack';
   }
 

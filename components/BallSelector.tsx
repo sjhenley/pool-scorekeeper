@@ -12,9 +12,12 @@ export const BallSelector = ({
   state,
   onBallPress
 }: BallSelectorProps) => {
-  console.log('Ball Selector re-render! State: ', state);
   if (!state.currentPlayer || state.players.length === 0) return;
-  console.log('rendering ball selector');
+
+  function onPress(idx: number) {
+    console.debug(`Pressed ball ${idx} with status ${BallStatus[state.balls[idx]]}`);
+    onBallPress(idx);
+  }
 
   return (
     <View className='w-full flex-shrink'>
@@ -52,7 +55,7 @@ export const BallSelector = ({
             }
 
             return (
-              <Pressable key={'ball-selector-img-' + idx} onPress={() => onBallPress(idx)} className='justify-center items-center w-20 h-20'>
+              <Pressable key={'ball-selector-img-' + idx} onPress={() => onPress(idx)} className='justify-center items-center w-20 h-20'>
                 {ball}
                 {indicator}
               </Pressable>

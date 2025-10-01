@@ -162,7 +162,12 @@ export default function ApaNineBall() {
       return dispatch({ type: GameStateAction.MAKE_BALL, ballIndex: idx });
     case BallStatus.SCORED_PLAYER_ONE:
     case BallStatus.SCORED_PLAYER_TWO:
-      return dispatch({ type: GameStateAction.DEAD_BALL, ballIndex: idx });
+      if (idx !== 8) {
+        // 9 ball cannot be marked dead
+        return dispatch({ type: GameStateAction.DEAD_BALL, ballIndex: idx });
+      } else {
+        return dispatch({ type: GameStateAction.FREE_BALL, ballIndex: idx });
+      }
     case BallStatus.DEAD:
       return dispatch({ type: GameStateAction.FREE_BALL, ballIndex: idx });
     }
