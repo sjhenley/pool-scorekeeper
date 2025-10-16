@@ -26,10 +26,11 @@ export const PlayerSelect = ({ gameConfig, players, stagedPlayers, onConfirmPlay
 
   function onSubmit() {
     if (!selectedPlayer) return;
-    const selectedPlayers = [selectedPlayer?.id];
+    const selectedPlayers = [];
     if (stagedPlayers) {
       selectedPlayers.push(...JSON.parse(stagedPlayers));
     }
+    selectedPlayers.push(selectedPlayer.id);
     setSelectedPlayer(undefined);
     onConfirmPlayer(selectedPlayers);
   }

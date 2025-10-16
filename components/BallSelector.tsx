@@ -32,7 +32,7 @@ export const BallSelector = ({
           })
         }
       </View>
-      <View className='flex-row flex-shrink justify-center flex-wrap gap-1 p-2 bg-primary-200 dark:bg-primary-700'>
+      <View className='flex-row flex-shrink justify-center flex-wrap gap-2 p-2 bg-primary-200 dark:bg-primary-700'>
         {
           BALL_IMAGES.map((img, idx) => {
             console.debug('Rendering ball index ', idx, ' with status ', BallStatus[state.balls[idx]]);

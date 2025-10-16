@@ -24,7 +24,7 @@ const PlayerBallList = ({
   scoredBallIndexes
 }: PlayerBallListProps) => {
   return (
-    <View className={`flex-row gap-1 items-center mt-4 ${align === 'left' ? 'justify-start' : 'justify-end'}`}>
+    <View className={`flex-row gap-1 items-center mt-6 min-h-5 ${align === 'left' ? 'justify-start' : 'justify-end'}`}>
       {scoredBallIndexes.map((ballIndex, idx) => (
         <Image key={`scored-ball-${ballIndex}-${idx}`} source={BALL_IMAGES[ballIndex]} className='size-5' />
       ))}

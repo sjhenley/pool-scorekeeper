@@ -13,6 +13,7 @@ export enum PlayerTurn {
   PLAYER2
 }
 
+
 export interface NineBallState {
   balls: BallStatus[];
   shooter: PlayerTurn;
