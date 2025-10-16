@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import { Button, Dialog } from '@/components';
 import { clearAllPlayers, putPlayer } from '@/dao/player.dao';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -8,6 +8,8 @@ import { ConfirmDialog } from '@/components/ConfirmDialog';
 import { getPlayerTestData } from '@/util/test.util';
 import { usePreferences } from '@/hooks/use-preferences';
 import { useColorScheme } from 'nativewind';
+import * as Application from 'expo-application';
+import packageJson from '../package.json';
 
 export default function Settings() {
   const [confirmClearPlayerDataDialogVisible, setConfirmClearPlayerDataDialogVisible] = useState<boolean>(false);
@@ -15,7 +17,7 @@ export default function Settings() {
   const [createTestDataDialogVisible, setCreateTestDataDialogVisible] = useState<boolean>(false);
 
   const router = useRouter();
-  const {setPreference } = usePreferences();
+  const { setPreference } = usePreferences();
   const colorScheme = useColorScheme();
 
   const setColorScheme = (scheme: 'light' | 'dark' | 'system') => {
@@ -48,7 +50,7 @@ export default function Settings() {
   }
 
   return (
-    <View className='w-full h-full'>
+    <View className='w-full h-full bg-text-300 dark:bg-background-900'>
       <Dialog
         isOpen={confirmClearPlayerDataDialogVisible}
         onClose={() => setConfirmClearPlayerDataDialogVisible(false)}
@@ -79,7 +81,7 @@ export default function Settings() {
           message='Create 5 test players?'
         />
       </Dialog>
-      <View className='flex-1 justify-center items-center bg-text-300 dark:bg-background-900 gap-5 p-5'>
+      <View className='flex-grow justify-center items-center gap-5 p-5'>
         <Button
           primary
           size='lg'
@@ -115,6 +117,11 @@ export default function Settings() {
           containerClass='w-full'
           onPress={() => setConfirmClearAllDataDialogVisible(true)}
         />
+      </View>
+      <View className='flex-shrink mb-10'>
+        <Text className='text-md text-center text-primary'>
+          v{packageJson.version} ({Application.nativeBuildVersion})
+        </Text>
       </View>
     </View>
   );
