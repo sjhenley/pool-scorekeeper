@@ -55,7 +55,7 @@ const PlayerBox = ({
 
   return (
     <Animated.View className='flex p-4 pt-10 z-10 flex-grow' style={[animatedStyle]}>
-      <Text className={`text-text-200 dark:text-text-800 font-sans text-4xl font-bold ${align === 'left' ? 'text-left' : 'text-right'}`}>{player.name}</Text>
+      <Text className={`text-text-200 dark:text-text-800 font-sans text-3xl font-bold ${align === 'left' ? 'text-left' : 'text-right'}`}>{player.name}</Text>
       <Text className={`text-text-200 dark:text-text-800 font-sans text-xl ${align === 'left' ? 'text-left' : 'text-right'}`}>{player.score} / {player.scoreTarget} points</Text>
       {scoredBallIndexes && (
         <PlayerBallList align={align} scoredBallIndexes={scoredBallIndexes} />

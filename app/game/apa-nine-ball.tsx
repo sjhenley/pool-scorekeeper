@@ -36,8 +36,6 @@ function gameStateReducer(prevState: GameState, payload: GameAction): GameState 
   const newState: GameState = { ...prevState, prev: prevState };
 
   const isPlayerOneTurn = prevState.currentPlayer === prevState.players[0]?.id;
-  const activePlayer = prevState.players[isPlayerOneTurn ? 0 : 1];
-  const nonActivePlayers = prevState.players.filter(p => p.id !== activePlayer?.id);
 
   switch (payload.type) {
   case GameStateAction.SET_PLAYERS:
@@ -50,8 +48,13 @@ function gameStateReducer(prevState: GameState, payload: GameAction): GameState 
         ? (isPlayerOneTurn ? BallStatus.SCORED_PLAYER_ONE : BallStatus.SCORED_PLAYER_TWO)
         : ball
     );
-    activePlayer.score = activePlayer.score + 1;
-    newState.players = [activePlayer, ...nonActivePlayers];
+    newState.players = prevState.players.map((player) => {
+      const ret = { ...player };
+      if (player.id === prevState.currentPlayer) {
+        ret.score = ret.score + 1;
+      }
+      return ret;
+    });
     break;
   case GameStateAction.DEAD_BALL:
     newState.balls = newState.balls.map((ball, idx) =>
@@ -59,8 +62,13 @@ function gameStateReducer(prevState: GameState, payload: GameAction): GameState 
         ? BallStatus.DEAD
         : ball
     );
-    activePlayer.score = activePlayer.score - 1;
-    newState.players = [activePlayer, ...nonActivePlayers];
+    newState.players = prevState.players.map((player) => {
+      const ret = { ...player };
+      if (player.id === prevState.currentPlayer) {
+        ret.score = Math.max(0, ret.score - 1);
+      }
+      return ret;
+    });
     break;
   case GameStateAction.FREE_BALL:
     newState.balls = newState.balls.map((ball, idx) =>
@@ -176,7 +184,7 @@ export default function ApaNineBall() {
   return (
     <View className='w-full h-full flex bg-text-300 dark:bg-background-900'>
       <ScoreBox state={gameState} />
-      <View className='w-full flex-grow'> </View>
+      <View className='w-full flex-grow'></View>
       <BallSelector state={gameState} onBallPress={onBallPress}/>
       <TurnActions state={gameState} onAction={dispatch}/>
     </View>

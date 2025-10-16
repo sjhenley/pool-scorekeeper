@@ -35,7 +35,7 @@ export const PlayerSelect = ({ gameConfig, players, stagedPlayers, onConfirmPlay
   }
 
   return (
-    <View className='w-full'>
+    <View className='w-full h-full'>
       <View className='border-b border-text-500 dark:border-text-700 w-full'>
         <Text className='text-primary text-4xl font-bold mb-8 text-center' >{gameConfig.name}</Text>
         <Text className='text-primary text-2xl font-bold mb-8 text-center' >{gameConfig.description}</Text>
