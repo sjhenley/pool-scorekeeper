@@ -1,6 +1,6 @@
 import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useReducer, useCallback, useEffect } from 'react';
-import { View, Text, BackHandler } from 'react-native';
+import { View, BackHandler } from 'react-native';
 import { getPlayers } from '@/dao/player.dao';
 import { BallStatus } from '@/models/ball-status.enum';
 import { findWinner, getScoreGoal } from '@/util/score.util';
