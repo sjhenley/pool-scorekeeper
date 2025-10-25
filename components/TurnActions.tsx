@@ -1,4 +1,4 @@
-import { GameState, NineBallGameAction, GameStateAction } from '@/models/game-state.model';
+import { GameState, GameAction, GameStateAction } from '@/models/game-state.model';
 import { View } from 'react-native';
 import { findWinner, getActivePlayer } from '@/util/score.util';
 import { Button } from './Button';
@@ -6,7 +6,7 @@ import { BallStatus } from '@/models/ball-status.enum';
 
 export interface TurnActionProps {
   state: GameState;
-  onAction: (action: NineBallGameAction) => void;
+  onAction: (action: GameAction) => void;
 }
 
 
@@ -26,8 +26,7 @@ export const TurnActions = ({
   if (state.matchTurnCount === 0) {
     backButtonTitle = 'Cancel';
   } else if (state.rackTurnCount === 0) {
-    if (false) {
-      // TODO eight ball+
+    if (state.gameId === 'apa-eight-ball') {
       backButtonTitle = 'Undo Game Over';
     } else {
       backButtonTitle = 'Undo New Rack';
@@ -37,12 +36,11 @@ export const TurnActions = ({
   let gameOverBtn;
   let nextTurnLabel = activePlayer.name + '\'s Turn Over';
 
-  if (false) {
-    // TODO eight ball
-    gameOverBtn = <Button label='End Game' primary size='lg' />;
+  if (state.gameId === 'apa-eight-ball') {
+    gameOverBtn = <Button label='End Game' primary size='lg' containerClass='w-full' onPress={() => onAction({ type: GameStateAction.END_RACK })} />;
   } else if (winner) {
     nextTurnLabel = `${winner.name} wins!`;
-  } else if (state.balls[8] === scoredBallState) {
+  } else if (state.balls && state.balls[8] === scoredBallState) {
     nextTurnLabel = 'Start New Rack';
   }
 

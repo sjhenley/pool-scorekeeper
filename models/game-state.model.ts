@@ -2,12 +2,14 @@ import { BallStatus } from './ball-status.enum';
 import { GamePlayer } from './game-player.model';
 
 export interface GameState {
+  /** Game Type ID */
+  gameId: string;
   /** List of players in the game */
   players: GamePlayer[];
   /** ID of the player whose turn it is */
   currentPlayer: string;
   /** Status of each ball on the table */
-  balls: BallStatus[];
+  balls?: BallStatus[];
   /** Reference to previous game state */
   prev: GameState | null;
   /** Number of turns played in the current rack */
@@ -33,6 +35,15 @@ export enum GameStateAction {
   /** End the current player's turn */
   END_TURN = 'END_TURN',
 
+  /** End the current rack */
+  END_RACK = 'END_RACK',
+
+  /** Mark current rack as point for the shooter and start a new rack */
+  MARK_RACK_POINT = 'MARK_RACK_POINT',
+
+  /** Mark current rack as point for the opponent and start a new rack */
+  MARK_RACK_POINT_OPPONENT = 'MARK_RACK_POINT_OPPONENT',
+
   /** Move back to the previous shooter's turn */
   UNDO = 'UNDO',
 
@@ -55,10 +66,11 @@ export enum GameStateAction {
 export enum ConfirmationDialog {
   UNDO = 'UNDO',
   GAME_OVER = 'GAME_OVER',
-  ABORT = 'ABORT'
+  ABORT = 'ABORT',
+  END_RACK = 'END_RACK'
 }
 
-export type GameAction = { type: GameStateAction.SET_PLAYERS; players: GamePlayer[] }
+export type BaseGameAction = { type: GameStateAction.SET_PLAYERS; players: GamePlayer[] }
   | { type: GameStateAction.END_TURN }
   | { type: GameStateAction.CONFIRM_UNDO }
   | { type: GameStateAction.CANCEL_DIALOG }
@@ -66,15 +78,14 @@ export type GameAction = { type: GameStateAction.SET_PLAYERS; players: GamePlaye
   | { type: GameStateAction.CONFIRM_ABORT }
   | { type: GameStateAction.UNDO };
 
-export type NineBallGameAction = GameAction &&
+export type NineBallGameAction = BaseGameAction
   | { type: GameStateAction.MAKE_BALL; ballIndex: number }
   | { type: GameStateAction.DEAD_BALL; ballIndex: number }
-  | { type: GameStateAction.FREE_BALL; ballIndex: number }
-  | { type: GameStateAction.END_TURN }
-  | { type: GameStateAction.CONFIRM_UNDO }
-  | { type: GameStateAction.CANCEL_DIALOG }
-  | { type: GameStateAction.ABORT_GAME }
-  | { type: GameStateAction.CONFIRM_ABORT }
-  | { type: GameStateAction.UNDO };
+  | { type: GameStateAction.FREE_BALL; ballIndex: number };
 
+export type EightBallGameAction = BaseGameAction
+  | { type: GameStateAction.END_RACK }
+  | { type: GameStateAction.MARK_RACK_POINT }
+  | { type: GameStateAction.MARK_RACK_POINT_OPPONENT };
 
+export type GameAction = NineBallGameAction | EightBallGameAction;

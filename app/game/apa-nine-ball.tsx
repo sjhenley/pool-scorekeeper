@@ -12,12 +12,11 @@ import { TurnActions } from '@/components/TurnActions';
 import { Dialog } from '@/components/Dialog';
 import { ConfirmDialog } from '@/components';
 
-
 function gameStateReducer(prevState: GameState, payload: NineBallGameAction): GameState {
   console.debug('Current game state: ', JSON.stringify({ ...prevState, prev: prevState.prev ? '...' : null }));
   console.debug('Game state update dispatched: ', payload);
 
-  const modifiedBalls = prevState.balls.some((ball) => ball === BallStatus.SCORED_PLAYER_ONE || ball === BallStatus.SCORED_PLAYER_TWO || ball === BallStatus.DEAD);
+  const modifiedBalls = prevState.balls?.some((ball) => ball === BallStatus.SCORED_PLAYER_ONE || ball === BallStatus.SCORED_PLAYER_TWO || ball === BallStatus.DEAD);
 
   if (!prevState?.players?.length && payload.type !== GameStateAction.SET_PLAYERS) {
     // players must be set first
@@ -68,7 +67,7 @@ function gameStateReducer(prevState: GameState, payload: NineBallGameAction): Ga
     newState.currentPlayer = payload.players[0].id;
     break;
   case GameStateAction.MAKE_BALL:
-    newState.balls = newState.balls.map((ball, idx) =>
+    newState.balls = newState.balls?.map((ball, idx) =>
       idx === payload.ballIndex
         ? (isPlayerOneTurn ? BallStatus.SCORED_PLAYER_ONE : BallStatus.SCORED_PLAYER_TWO)
         : ball
@@ -86,7 +85,7 @@ function gameStateReducer(prevState: GameState, payload: NineBallGameAction): Ga
     });
     break;
   case GameStateAction.DEAD_BALL:
-    newState.balls = newState.balls.map((ball, idx) =>
+    newState.balls = newState.balls?.map((ball, idx) =>
       idx === payload.ballIndex
         ? (idx === 8 ? BallStatus.FREE : BallStatus.DEAD) // 9-ball cannot be marked dead
         : ball
@@ -104,7 +103,7 @@ function gameStateReducer(prevState: GameState, payload: NineBallGameAction): Ga
     });
     break;
   case GameStateAction.FREE_BALL:
-    newState.balls = newState.balls.map((ball, idx) =>
+    newState.balls = newState.balls?.map((ball, idx) =>
       idx === payload.ballIndex
         ? BallStatus.FREE
         : ball
@@ -113,7 +112,7 @@ function gameStateReducer(prevState: GameState, payload: NineBallGameAction): Ga
   case GameStateAction.END_TURN:
     if (findWinner(prevState)) {
       newState.dialogShown = ConfirmationDialog.GAME_OVER;
-    } else if (prevState.balls[8] === (isPlayerOneTurn ? BallStatus.SCORED_PLAYER_ONE : BallStatus.SCORED_PLAYER_TWO)) {
+    } else if (prevState.balls && prevState.balls[8] === (isPlayerOneTurn ? BallStatus.SCORED_PLAYER_ONE : BallStatus.SCORED_PLAYER_TWO)) {
       // 9-ball was scored, reset balls for new rack
       newState.balls = Array(9).fill(BallStatus.FREE);
       newState.rackTurnCount = 0;
@@ -122,7 +121,7 @@ function gameStateReducer(prevState: GameState, payload: NineBallGameAction): Ga
       const currentIndex = prevState.players.findIndex(p => p.id === prevState.currentPlayer);
       const nextIndex = (currentIndex + 1) % prevState.players.length;
       newState.currentPlayer = prevState.players[nextIndex].id;
-      newState.balls = prevState.balls.map(ball => {
+      newState.balls = prevState.balls?.map(ball => {
         switch (ball) {
         case BallStatus.SCORED_PLAYER_ONE:
           return BallStatus.PREV_SCORED_PLAYER_ONE;
@@ -149,6 +148,7 @@ function gameStateReducer(prevState: GameState, payload: NineBallGameAction): Ga
 
 export default function ApaNineBall() {
   const initialState = {
+    gameId: 'apa-nine-ball',
     players: [],
     currentPlayer: '',
     matchTurnCount: 0,
@@ -222,7 +222,7 @@ export default function ApaNineBall() {
    * @param idx index of the ball pressed (0-8 for 9-ball)
    */
   const onBallPress = (idx: number) => {
-    switch (gameState.balls[idx]) {
+    switch (gameState.balls && gameState.balls[idx]) {
     case BallStatus.FREE:
       return dispatch({ type: GameStateAction.MAKE_BALL, ballIndex: idx });
     case BallStatus.SCORED_PLAYER_ONE:

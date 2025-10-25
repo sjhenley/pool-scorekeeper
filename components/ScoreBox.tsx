@@ -86,8 +86,8 @@ export const ScoreBox = ({
     activePlayerBoxSkewValue.value = withSpring(isPlayerOneTurn ? PLAYER_ONE_ACTIVE_SKEW : PLAYER_TWO_ACTIVE_SKEW);
   }, [state.currentPlayer, state.players, activePlayerBoxSkewValue, playerOneTextScaleValue, playerTwoTextScaleValue]);
 
-  const playerOneScoredBalls = [...getBallsInState(state.balls, BallStatus.SCORED_PLAYER_ONE), ...getBallsInState(state.balls, BallStatus.PREV_SCORED_PLAYER_ONE)];
-  const playerTwoScoredBalls = [...getBallsInState(state.balls, BallStatus.SCORED_PLAYER_TWO), ...getBallsInState(state.balls, BallStatus.PREV_SCORED_PLAYER_TWO)];
+  const playerOneScoredBalls = state.balls ? [...getBallsInState(state.balls, BallStatus.SCORED_PLAYER_ONE), ...getBallsInState(state.balls, BallStatus.PREV_SCORED_PLAYER_ONE)] : [];
+  const playerTwoScoredBalls = state.balls ? [...getBallsInState(state.balls, BallStatus.SCORED_PLAYER_TWO), ...getBallsInState(state.balls, BallStatus.PREV_SCORED_PLAYER_TWO)] : [];
 
   const innings = Math.floor(state.matchTurnCount / 2);
   const inningUnit = innings === 1 ? 'inning' : 'innings';
