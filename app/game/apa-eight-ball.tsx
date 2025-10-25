@@ -5,10 +5,7 @@ import { getPlayers } from '@/dao/player.dao';
 import { findWinner, getScoreGoal } from '@/util/score.util';
 import { GamePlayer } from '@/models/game-player.model';
 import { EightBallGameAction, GameState, GameStateAction, ConfirmationDialog } from '@/models/game-state.model';
-import { ScoreBox } from '@/components/ScoreBox';
-import { TurnActions } from '@/components/TurnActions';
-import { Dialog } from '@/components/Dialog';
-import { ConfirmDialog } from '@/components';
+import { ScoreBox, TurnActions, Dialog, ConfirmDialog } from '@/components';
 
 function gameStateReducer(prevState: GameState, payload: EightBallGameAction): GameState {
   console.debug('Current game state: ', JSON.stringify({ ...prevState, prev: prevState.prev ? '...' : null }));

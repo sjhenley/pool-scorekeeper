@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Dimensions, Animated } from 'react-native';
-import { Card, CardProps } from '@/components/Card';
+import { Card, CardProps } from '@/components';
 
 const { width: screenWidth } = Dimensions.get('window');
 const cardWidth = 225;

@@ -9,8 +9,6 @@ export interface TurnActionProps {
   onAction: (action: GameAction) => void;
 }
 
-
-
 export const TurnActions = ({
   state,
   onAction

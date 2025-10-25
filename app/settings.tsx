@@ -1,10 +1,9 @@
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { View, Text } from 'react-native';
-import { Button, Dialog } from '@/components';
+import { Button, Dialog, ConfirmDialog } from '@/components';
 import { clearAllPlayers, putPlayer } from '@/dao/player.dao';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ConfirmDialog } from '@/components/ConfirmDialog';
 import { getPlayerTestData } from '@/util/test.util';
 import { usePreferences } from '@/hooks/use-preferences';
 import { useColorScheme } from 'nativewind';

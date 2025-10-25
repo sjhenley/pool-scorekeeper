@@ -1,7 +1,6 @@
 import { useRouter } from 'expo-router';
 import { useFocusEffect } from '@react-navigation/native';
-import { Button, Dialog, PlayerDialog } from '@/components';
-import { PlayerCard } from '@/components/PlayerCard';
+import { Button, Dialog, PlayerDialog, PlayerCard } from '@/components';
 import Player from '@/models/player';
 import React from 'react';
 import { View, ScrollView, TouchableOpacity } from 'react-native';
