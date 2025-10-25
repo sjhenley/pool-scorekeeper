@@ -23,7 +23,7 @@ export const TurnActions = ({
   const scoredBallState = activePlayer.id === state.players[0].id ? BallStatus.SCORED_PLAYER_ONE : BallStatus.SCORED_PLAYER_TWO;
 
   let backButtonTitle = `Go back to ${inactivePlayer?.name}'s turn`;
-  if (state.matchTurnCount === 0) {
+  if (!state.prev) {
     backButtonTitle = 'Cancel';
   } else if (state.rackTurnCount === 0) {
     if (state.gameId === 'apa-eight-ball') {

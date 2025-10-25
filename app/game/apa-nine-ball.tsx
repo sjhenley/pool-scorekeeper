@@ -23,15 +23,12 @@ function gameStateReducer(prevState: GameState, payload: NineBallGameAction): Ga
     console.warn('Players must be set before other actions can be performed');
     return prevState;
   } else if (payload.type === GameStateAction.UNDO || payload.type === GameStateAction.CONFIRM_UNDO) {
-    if (prevState.matchTurnCount === 0) {
+    if (!prevState?.prev) {
       // Prompt to cancel the match
       return {
         ...prevState,
         dialogShown: ConfirmationDialog.ABORT
       };
-    } else if (!prevState?.prev) {
-      console.warn('No previous state to undo to');
-      return prevState;
     } else if (modifiedBalls && payload.type === GameStateAction.UNDO) {
       // Prompt for confirmation if balls have been modified this turn
       return {

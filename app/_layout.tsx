@@ -27,6 +27,7 @@ export default function RootLayout() {
       <Stack.Screen name="storybook" options={{ headerShown: false }} />
       <Stack.Screen name="new-game" options={{ title: 'New Game' }} />
       <Stack.Screen name="game/apa-nine-ball" options={{ headerShown: false }} />
+      <Stack.Screen name="game/apa-eight-ball" options={{ headerShown: false }} />
     </Stack>
   );
 }

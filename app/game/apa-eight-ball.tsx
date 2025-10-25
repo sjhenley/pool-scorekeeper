@@ -19,15 +19,12 @@ function gameStateReducer(prevState: GameState, payload: EightBallGameAction): G
     console.warn('Players must be set before other actions can be performed');
     return prevState;
   } else if (payload.type === GameStateAction.UNDO || payload.type === GameStateAction.CONFIRM_UNDO) {
-    if (prevState.matchTurnCount === 0) {
+    if (!prevState?.prev) {
       // Prompt to cancel the match
       return {
         ...prevState,
         dialogShown: ConfirmationDialog.ABORT
       };
-    } else if (!prevState?.prev) {
-      console.warn('No previous state to undo to');
-      return prevState;
     } else if (prevState.rackTurnCount === 0 && payload.type === GameStateAction.UNDO) {
       // Prompt to undo to previous rack
       return {
@@ -36,6 +33,7 @@ function gameStateReducer(prevState: GameState, payload: EightBallGameAction): G
       };
     } else {
       console.info('Processing state undo action');
+      console.debug('Loading previous state: ', JSON.stringify({ ...prevState.prev, prev: prevState.prev.prev ? '...' : null }));
       return prevState.prev;
     }
   }
@@ -57,6 +55,7 @@ function gameStateReducer(prevState: GameState, payload: EightBallGameAction): G
     newState.isAbort = true;
     break;
   case GameStateAction.END_RACK:
+    newState.prev = prevState;
     newState.dialogShown = ConfirmationDialog.END_RACK;
     break;
   case GameStateAction.SET_PLAYERS:
@@ -76,8 +75,8 @@ function gameStateReducer(prevState: GameState, payload: EightBallGameAction): G
     if (findWinner(newState)) {
       newState.dialogShown = ConfirmationDialog.GAME_OVER;
     } else {
-      newState.prev = prevState;
       newState.dialogShown = undefined;
+      newState.rackTurnCount = 0;
     }
     break;
   case GameStateAction.MARK_RACK_POINT_OPPONENT:
@@ -98,7 +97,6 @@ function gameStateReducer(prevState: GameState, payload: EightBallGameAction): G
       newState.matchTurnCount = prevState.matchTurnCount + 1;
       newState.rackTurnCount = 0;
       newState.currentPlayer = newState.players.find(player => player.id !== newState.currentPlayer)?.id || '';
-      newState.prev = prevState;
     }
     break;
   case GameStateAction.END_TURN:
