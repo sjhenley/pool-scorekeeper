@@ -1,4 +1,4 @@
-import { GameState, GameAction, GameStateAction } from '@/models/game-state.model';
+import { GameState, NineBallGameAction, GameStateAction } from '@/models/game-state.model';
 import { View } from 'react-native';
 import { findWinner, getActivePlayer } from '@/util/score.util';
 import { Button } from './Button';
@@ -6,7 +6,7 @@ import { BallStatus } from '@/models/ball-status.enum';
 
 export interface TurnActionProps {
   state: GameState;
-  onAction: (action: GameAction) => void;
+  onAction: (action: NineBallGameAction) => void;
 }
 
 

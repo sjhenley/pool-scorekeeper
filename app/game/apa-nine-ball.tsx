@@ -5,7 +5,7 @@ import { getPlayers } from '@/dao/player.dao';
 import { BallStatus } from '@/models/ball-status.enum';
 import { findWinner, getScoreGoal } from '@/util/score.util';
 import { GamePlayer } from '@/models/game-player.model';
-import { GameAction, GameState, GameStateAction, ConfirmationDialog } from '@/models/game-state.model';
+import { NineBallGameAction, GameState, GameStateAction, ConfirmationDialog } from '@/models/game-state.model';
 import { ScoreBox } from '@/components/ScoreBox';
 import { BallSelector } from '@/components/BallSelector';
 import { TurnActions } from '@/components/TurnActions';
@@ -13,7 +13,7 @@ import { Dialog } from '@/components/Dialog';
 import { ConfirmDialog } from '@/components';
 
 
-function gameStateReducer(prevState: GameState, payload: GameAction): GameState {
+function gameStateReducer(prevState: GameState, payload: NineBallGameAction): GameState {
   console.debug('Current game state: ', JSON.stringify({ ...prevState, prev: prevState.prev ? '...' : null }));
   console.debug('Game state update dispatched: ', payload);
 

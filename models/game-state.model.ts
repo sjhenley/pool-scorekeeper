@@ -59,6 +59,14 @@ export enum ConfirmationDialog {
 }
 
 export type GameAction = { type: GameStateAction.SET_PLAYERS; players: GamePlayer[] }
+  | { type: GameStateAction.END_TURN }
+  | { type: GameStateAction.CONFIRM_UNDO }
+  | { type: GameStateAction.CANCEL_DIALOG }
+  | { type: GameStateAction.ABORT_GAME }
+  | { type: GameStateAction.CONFIRM_ABORT }
+  | { type: GameStateAction.UNDO };
+
+export type NineBallGameAction = GameAction &&
   | { type: GameStateAction.MAKE_BALL; ballIndex: number }
   | { type: GameStateAction.DEAD_BALL; ballIndex: number }
   | { type: GameStateAction.FREE_BALL; ballIndex: number }
@@ -68,3 +76,5 @@ export type GameAction = { type: GameStateAction.SET_PLAYERS; players: GamePlaye
   | { type: GameStateAction.ABORT_GAME }
   | { type: GameStateAction.CONFIRM_ABORT }
   | { type: GameStateAction.UNDO };
+
+
