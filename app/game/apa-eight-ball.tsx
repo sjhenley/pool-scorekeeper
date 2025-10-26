@@ -6,6 +6,7 @@ import { findWinner, getScoreGoal } from '@/util/score.util';
 import { GamePlayer } from '@/models/game-player.model';
 import { EightBallGameAction, GameState, GameStateAction, ConfirmationDialog } from '@/models/game-state.model';
 import { ScoreBox, TurnActions, Dialog, ConfirmDialog } from '@/components';
+import { SelectionDialog } from '@/components/SelectionDialog';
 
 function gameStateReducer(prevState: GameState, payload: EightBallGameAction): GameState {
   console.debug('Current game state: ', JSON.stringify({ ...prevState, prev: prevState.prev ? '...' : null }));
@@ -199,6 +200,21 @@ export default function ApaEightBall() {
     return () => backHandler.remove();
   }, []);
 
+  function onRackResult(result?: string) {
+    switch (result) {
+    case 'score-eight':
+      dispatch({ type: GameStateAction.MARK_RACK_POINT });
+      break;
+    case 'scratch-eight':
+    case 'early-eight':
+    case 'wrong-pocket':
+      dispatch({ type: GameStateAction.MARK_RACK_POINT_OPPONENT });
+      break;
+    default:
+      dispatch({ type: GameStateAction.CANCEL_DIALOG });
+    }
+  }
+
   return (
     <View className='w-full h-full flex bg-text-300 dark:bg-background-900'>
       <Dialog
@@ -241,12 +257,15 @@ export default function ApaEightBall() {
         isOpen={gameState.dialogShown === ConfirmationDialog.END_RACK}
         onClose={() => {}}
       >
-        <ConfirmDialog
-          onClose={(shooterWon: boolean) => dispatch({ type: shooterWon ? GameStateAction.MARK_RACK_POINT : GameStateAction.MARK_RACK_POINT_OPPONENT })}
-          header='End Rack'
-          message='Did the current shooter win the rack?'
-          confirmLabel='Yes'
-          cancelLabel='No'
+        <SelectionDialog
+          title={`How did ${gameState.players.find(p => p.id === gameState.currentPlayer)?.name} end the game?`}
+          options={[
+            { label: 'Made 8 ball', value: 'score-eight' },
+            { label: 'Scratch on 8 ball', value: 'scratch-eight' },
+            { label: 'Made 8 ball early', value: 'early-eight' },
+            { label: 'Made 8 ball in wrong pocket', value: 'wrong-pocket' }
+          ]}
+          onClose={onRackResult}
         />
       </Dialog>
       <ScoreBox state={gameState} />

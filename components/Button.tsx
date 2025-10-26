@@ -57,6 +57,8 @@ export interface ButtonProps {
   onPress?: () => void;
   /** Class list to apply to the button container */
   containerClass?: string;
+  /** Disable button */
+  disabled?: boolean;
 }
 
 /** Primary UI component for user interaction */
@@ -67,7 +69,8 @@ export const Button = ({
   size = 'md',
   icon,
   onPress,
-  containerClass = ''
+  containerClass = '',
+  disabled = false
 }: ButtonProps) => {
 
   const primaryMapper = primary ? 'primary' : 'secondary';
@@ -81,7 +84,7 @@ export const Button = ({
   const iconSize = iconSizeConfig[size];
 
   return (
-    <TouchableOpacity className={`${containerClass} ${containerColor} ${containerSize} items-center rounded-xl px-2`} accessibilityRole="button" activeOpacity={0.6} onPress={onPress}>
+    <TouchableOpacity disabled={disabled} className={`${containerClass} ${containerColor} ${containerSize} items-center rounded-xl px-2`} accessibilityRole="button" activeOpacity={0.6} onPress={onPress}>
       <View className="flex-row gap-2 items-center justify-center">
         { icon && <StyledMaterialIcon name={icon as any} size={iconSize} className={`${textColor} mb-1 flex`} /> }
         <Text className={`${textColor} ${textSize} font-sans ${textAlign} items-center flex`}>{label}</Text>
