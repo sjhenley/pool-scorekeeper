@@ -98,7 +98,7 @@ export default function Settings() {
         <Button
           primary
           size='lg'
-          label={`Switch to ${colorScheme.colorScheme === 'dark' ? 'light' : 'dark'} mode`}
+          label={`Switch to ${colorScheme.colorScheme === 'dark' ? 'Light' : 'Dark'} mode`}
           containerClass='w-full'
           onPress={() => setColorScheme(colorScheme.colorScheme === 'dark' ? 'light' : 'dark')}
         />
