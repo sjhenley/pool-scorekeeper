@@ -109,7 +109,6 @@ export const PlayerDialog = ({
           label={player ? 'Update' : 'Create'}
           onPress={onSubmit}
           containerClass='flex-1'
-          // disabled={playerName.trim().length === 0}
         />
       </View>
     </View>
