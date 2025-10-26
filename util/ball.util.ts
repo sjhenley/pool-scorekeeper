@@ -21,11 +21,7 @@ export function getBallList(): BallStatus[] {
  * @returns An array of indexes where the ball status matches the given status.
  */
 export function getBallsInState(balls: BallStatus[], status: BallStatus): number[] {
-  const ballIndexes: number[] = [];
-  balls.forEach((ballStatus, index) => {
-    if (ballStatus === status) {
-      ballIndexes.push(index);
-    }
-  });
-  return ballIndexes;
+  return balls.reduce<number[]>((indexes, ballStatus, index) => {
+    return ballStatus === status ? [...indexes, index] : indexes;
+  }, []);
 }
