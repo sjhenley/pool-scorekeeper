@@ -49,7 +49,7 @@ export default function Index() {
       className="justify-center items-center flex h-full">
       <Text className="flex-row text-6xl font-bold text-text-50 dark:text-text-800">Scorekeeper</Text>
       <View className='flex-row'>
-        <Carousel data={gameCards} />
+        <Carousel data={gameCards} initialIndex={1} />
       </View>
       <View className='flex-col items-center gap-5 w-[60%]'>
         <Button

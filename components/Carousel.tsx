@@ -8,19 +8,47 @@ const gap = 40;
 const snapToInterval = cardWidth + gap;
 const sidePadding = (screenWidth - cardWidth) / 2;
 
+function sanitizeInitialIndex(initialIndex: number | undefined, dataLength: number): number {
+  // Accept 0 as a valid index. Only treat undefined/null or out-of-range values as invalid.
+  if (initialIndex === undefined || initialIndex === null || initialIndex < 0 || initialIndex >= dataLength) {
+    return 0;
+  }
+  return initialIndex;
+}
+
 export interface CarouselProps {
   /** Cards to Display */
   data: CardProps[];
+  /** Index of carousel item to be focused on initial render */
+  initialIndex?: number;
 }
 
 /** Primary UI component for user interaction */
 export const Carousel = ({
-  data
+  data,
+  initialIndex
 }: CarouselProps) => {
-  const scrollX = useRef(new Animated.Value(0)).current;
-  const scrollViewRef = useRef<Animated.ScrollView>(null);
-  const [focusedIndex, setFocusedIndex] = useState(0);
+  // Compute a sanitized initial index once (or whenever initialIndex/data.length changes)
+  const initialIdx = sanitizeInitialIndex(initialIndex, data.length);
+  const scrollX = useRef(new Animated.Value(initialIdx * snapToInterval)).current;
+  // Use a flexible ref type for the Animated.ScrollView instance to avoid
+  // referencing the runtime value as a TypeScript type.
+  const scrollViewRef = useRef<any>(null);
+  const [focusedIndex, setFocusedIndex] = useState(initialIdx);
 
+  // Ensure the scroll view is positioned at the desired initial index when the
+  // component mounts or when initialIdx changes. Use a non-animated scroll so
+  // the starting focusedIndex remains correct even if onScroll doesn't fire.
+  useEffect(() => {
+    // scrollTo may not be immediately available; schedule on next tick if needed.
+    const handle = setTimeout(() => {
+      const ref: any = scrollViewRef.current;
+      if (ref && typeof ref.scrollTo === 'function') {
+        ref.scrollTo({ x: initialIdx * snapToInterval, animated: false });
+      }
+    }, 0);
+    return () => clearTimeout(handle);
+  }, [initialIdx]);
   useEffect(() => {
     const listenerId = scrollX.addListener(({ value }) => {
       const idx = Math.round(value / snapToInterval);
