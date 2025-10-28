@@ -1,5 +1,6 @@
 import { BallStatus } from './ball-status.enum';
 import { GamePlayer } from './game-player.model';
+import { Match } from './match.model';
 
 export interface GameState {
   /** Game Type ID */
@@ -20,6 +21,8 @@ export interface GameState {
   dialogShown?: ConfirmationDialog;
   /** Flag indicating if the game has been aborted */
   isAbort?: boolean;
+  /** Match results, populated when the match concludes */
+  matchResults?: Match;
 }
 
 export enum GameStateAction {
