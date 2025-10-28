@@ -10,7 +10,9 @@
     "lint": "expo lint",
     "lint:fix": "npx expo lint --fix",
     "storybook-generate": "sb-rn-get-stories",
-    "build:preview": "eas build --profile preview --platform android"
+    "build:preview": "eas build --profile preview --platform android",
+    "test": "echo No tests yet",
+    "test:e2e": "echo No e2e tests yet"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.2",
