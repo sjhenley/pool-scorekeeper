@@ -1,4 +1,4 @@
-import { EIGHT_BALL_SCORE_LUT, NINE_BALL_SCORE_LUT, NINE_BALL_MATCH_SCORE_COLUMN_THRESHOLDS, NINE_BALL_MATCH_SCORE_LUT } from '@/const/score.const';
+import { EIGHT_BALL_SCORE_LUT, NINE_BALL_SCORE_LUT, NINE_BALL_LOSER_SCORE_TRESHOLDS } from '@/const/score.const';
 import { GamePlayer } from '@/models/game-player.model';
 import { GameState } from '@/models/game-state.model';
 import { Match } from '@/models/match.model';
@@ -66,8 +66,37 @@ export const getEightBallMatchPoints = (playerScore: number, playerScoreTarget: 
  * @returns match points for the target player according to the APA scoring table
  */
 export const getNineBallMatchPoints = (playerScore: number, playerSkill: SkillLevel, opponentScore: number, opponentSkill: SkillLevel): number => {
-  // TODO
-  return 0;
+  // Determine the losing player
+  const targetPlayerWon = playerScore >= getScoreGoal(playerSkill, opponentSkill, false);
+
+  let loserSkillLevel: SkillLevel;
+  let loserScore: number;
+  if (targetPlayerWon) {
+    loserSkillLevel = opponentSkill;
+    loserScore = opponentScore;
+  } else {
+    loserSkillLevel = playerSkill;
+    loserScore = playerScore;
+  }
+
+  const scoreThresholds = NINE_BALL_LOSER_SCORE_TRESHOLDS[loserSkillLevel];
+
+  // Find the index of scoreThreshold such that loserScore <= idx and loserScore > idx - 1
+  let loserMatchPoints = 0;
+  for (let i = 0; i < scoreThresholds.length; i++) {
+    if (loserScore <= scoreThresholds[i]) {
+      loserMatchPoints = i;
+      break;
+    }
+    // If loserScore is greater than or equal to the last threshold, they earn maximum points
+    // Should not happen, the loser should not be passing the last treshold
+    if (i === scoreThresholds.length - 1) {
+      loserMatchPoints = scoreThresholds.length;
+    }
+  }
+
+  const winnerMatchPoints = 20 - loserMatchPoints;
+  return targetPlayerWon ? winnerMatchPoints : loserMatchPoints;
 };
 
 export const buildMatchResults = (state: GameState): Match => {
@@ -75,13 +104,22 @@ export const buildMatchResults = (state: GameState): Match => {
     gameId: state.gameId,
     matchId: randomUUID(),
     date: new Date().toISOString(),
-    players: state.players.map(player => ({
-      playerId: player.id,
-      playerName: player.name,
-      points: player.score,
-      pointsNeeded: player.scoreTarget,
-      playerSkill: player.skill,
-      matchPoints: 0
-    }))
+    players: state.players.map(player => {
+      let matchPoints;
+      const opponent = state.players.find(p => p.id !== player.id);
+      if (state.gameId === 'apa-eight-ball') {
+        matchPoints = getEightBallMatchPoints(player.score, player.scoreTarget, opponent?.score || 0);
+      } else if (state.gameId === 'apa-nine-ball') {
+        matchPoints = getNineBallMatchPoints(player.score, player.skill, opponent?.score || 0, opponent?.skill || 1);
+      }
+      return {
+        playerId: player.id,
+        playerName: player.name,
+        points: player.score,
+        pointsNeeded: player.scoreTarget,
+        playerSkill: player.skill,
+        matchPoints
+      };
+    })
   };
 };

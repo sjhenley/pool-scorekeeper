@@ -12,48 +12,20 @@ export const NINE_BALL_SCORE_LUT = new Map<SkillLevel, number>([
   [9, 75]
 ]);
 
-// Structure: [skillLevel][columnIndex] = [winnerScore, loserScore]
-export const NINE_BALL_MATCH_SCORE_LUT: Record<SkillLevel, [number, number][]> = {
-  1: [
-    [20, 0], [19, 1], [18, 2], [17, 3], [16, 4], [15, 5], [14, 6], [13, 7], [12, 8]
-  ],
-  2: [
-    [4, 8], [4, 8], [6, 8], [9, 8], [9, 8], [11, 8], [13, 8], [15, 8], [17, 8]
-  ],
-  3: [
-    [5, 8], [7, 9], [10, 8], [12, 14], [15, 8], [17, 19], [20, 8], [22, 24]
-  ],
-  4: [
-    [6, 8], [9, 11], [12, 14], [15, 18], [19, 21], [22, 24], [25, 27], [28, 30]
-  ],
-  5: [
-    [7, 10], [11, 14], [15, 18], [19, 22], [23, 26], [27, 29], [30, 33], [34, 37]
-  ],
-  6: [
-    [9, 12], [13, 17], [18, 22], [23, 27], [28, 31], [32, 36], [37, 40], [41, 45]
-  ],
-  7: [
-    [11, 15], [16, 21], [22, 26], [27, 32], [33, 37], [38, 43], [44, 49], [50, 54]
-  ],
-  8: [
-    [14, 19], [20, 26], [27, 32], [33, 39], [40, 45], [46, 52], [53, 58], [59, 64]
-  ],
-  9: [
-    [18, 24], [25, 31], [32, 38], [39, 46], [47, 53], [54, 60], [61, 67], [68, 74]
-  ]
-};
-
-// Define the maximum loser scores for each column based on skill level
-export const NINE_BALL_MATCH_SCORE_COLUMN_THRESHOLDS: Record<SkillLevel, number[]> = {
-  1: [0, 0, 0, 0, 0, 0, 0, 0, 0], // Skill level 1 uses race to N
-  2: [3, 4, 7, 9, 11, 13, 15, 17, 19],
-  3: [4, 8, 10, 13, 15, 18, 21, 23],
-  4: [5, 10, 13, 17, 20, 23, 26, 29],
-  5: [6, 13, 17, 21, 25, 28, 32, 36],
-  6: [8, 16, 21, 26, 30, 35, 39, 44],
-  7: [10, 20, 25, 31, 36, 42, 48, 53],
-  8: [13, 25, 31, 38, 44, 51, 57, 63],
-  9: [17, 30, 37, 45, 52, 59, 66, 73]
+/**
+ * Point tresholds the losing shooter must reach to earn a point, organized by loser's skill level.
+ * Example: If the losing player was a 5, they must reach at least 7 ball points to score 1 match point, at least 11 ball points to score 2 match points, etc.
+ */
+export const NINE_BALL_LOSER_SCORE_TRESHOLDS = {
+  1: [2, 3, 4, 6, 7, 8, 10, 11, 13],
+  2: [3, 5, 7, 8, 10, 12, 14, 16, 18],
+  3: [4, 6, 9, 11, 14, 16, 19, 21, 24],
+  4: [5, 8, 11, 14, 18, 21, 24, 27, 30],
+  5: [6, 10, 14, 18, 22, 26, 29, 33, 37],
+  6: [8, 12, 17, 22, 27, 31, 36, 40, 45],
+  7: [10, 15, 21, 26, 32, 37, 43, 49, 54],
+  8: [13, 19, 26, 32, 39, 45, 52, 58, 64],
+  9: [17, 24, 31, 38, 46, 53, 60, 67, 74]
 };
 
 export const EIGHT_BALL_SCORE_LUT = new Map<string, number>([
