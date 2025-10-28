@@ -79,3 +79,29 @@ export const findWinner = (state: GameState): GamePlayer | null => {
 export const getActivePlayer = (state: GameState): GamePlayer | null => {
   return state.players.find(p => p.id === state.currentPlayer) || null;
 };
+
+/**
+ * Calculates the match points for an 8-ball match based on the scores
+ * @param playerScore number of racks won by the target player
+ * @param playerScoreTarget total number of racks player needed to win the match
+ * @param opponentScore number of racks won by the opposing player
+ * @returns match points for the target player according to the APA scoring table
+ */
+export const getEightBallMatchPoints = (playerScore: number, playerScoreTarget: number, opponentScore: number): number => {
+  if (playerScore >= playerScoreTarget) {
+    // Target player won the match
+    if (opponentScore === 0) {
+      return 3; // Shutout win
+    } else {
+      return 2;
+    }
+  } else {
+    // Target player lost the match
+    if (playerScore === playerScoreTarget - 1) {
+      // Player was one point away from winning
+      return 1;
+    } else {
+      return 0;
+    }
+  }
+};
