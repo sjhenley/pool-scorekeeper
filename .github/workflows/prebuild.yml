@@ -5,7 +5,8 @@ name: Prebuild
 
 on:
   pull_request:
-    branches: [ "*" ]
+    branches-ignore:
+      - 'main'
 
 jobs:
   build:
@@ -14,7 +15,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x, 20.x, 22.x]
+        node-version: [22.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -24,5 +25,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: npm ci
-    - run: npx expo prebuild --no-install --platform=all
+    - name: Install Project Dependencies
+      run: npm ci
+    - name: Prebuild
+      run: npx expo prebuild --no-install --platform=all
