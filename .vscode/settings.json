@@ -8,5 +8,8 @@
       "prefix": "#",
       "url": "https://github.com/sjhenley/pool-scorekeeper/issues/<num>"
     }
-  ]
+  ],
+  "files.associations": {
+    "*.css": "tailwindcss"
+  }
 }
