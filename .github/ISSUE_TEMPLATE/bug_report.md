@@ -10,6 +10,9 @@ assignees: ''
 ## :triangular_flag_on_post: Summary
 A clear and concise description of what the bug is.
 
+## :gear: Impacted Version
+List all known versions of the application where this issue is present. Include the version number and build number (e.g. `v1.0.0 (134)`)
+
 ## :wrench: Impacted Functionality
 List the modules/features/functions impacted by this issue
 
