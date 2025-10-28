@@ -55,6 +55,9 @@ function gameStateReducer(prevState: GameState, payload: NineBallGameAction): Ga
   case GameStateAction.CONFIRM_ABORT:
     newState.isAbort = true;
     break;
+  case GameStateAction.CONFIRM_MATCH_CONCLUDED:
+    newState.isAbort = true;
+    break;
   case GameStateAction.SET_PLAYERS:
     newState.players = payload.players;
     newState.currentPlayer = payload.players[0].id;
@@ -257,7 +260,7 @@ export default function ApaNineBall() {
         onClose={() => {}}
       >
         <ConfirmDialog
-          onClose={(confirmed: boolean) => dispatch({ type: confirmed ? GameStateAction.CONFIRM_ABORT : GameStateAction.CANCEL_DIALOG })}
+          onClose={(confirmed: boolean) => dispatch({ type: confirmed ? GameStateAction.CONFIRM_MATCH_CONCLUDED : GameStateAction.CANCEL_DIALOG })}
           header='Game Over'
           message={`${findWinner(gameState)?.name} wins!`}
           confirmLabel='Confirm'

@@ -60,7 +60,10 @@ export enum GameStateAction {
   FREE_BALL = 'FREE_BALL',
 
   /** Cancel any open dialog */
-  CANCEL_DIALOG = 'CANCEL_DIALOG'
+  CANCEL_DIALOG = 'CANCEL_DIALOG',
+
+  /** Confirm the match has concluded */
+  CONFIRM_MATCH_CONCLUDED = 'CONFIRM_MATCH_CONCLUDED'
 }
 
 export enum ConfirmationDialog {
@@ -76,7 +79,8 @@ export type BaseGameAction = { type: GameStateAction.SET_PLAYERS; players: GameP
   | { type: GameStateAction.CANCEL_DIALOG }
   | { type: GameStateAction.ABORT_GAME }
   | { type: GameStateAction.CONFIRM_ABORT }
-  | { type: GameStateAction.UNDO };
+  | { type: GameStateAction.UNDO }
+  | { type: GameStateAction.CONFIRM_MATCH_CONCLUDED };
 
 export type NineBallGameAction = BaseGameAction
   | { type: GameStateAction.MAKE_BALL; ballIndex: number }
