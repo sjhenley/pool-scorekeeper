@@ -26,5 +26,9 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: npm ci
-    - run: npx eas build --profile preview --platform android
+    - name: Install Project Dependencies
+      run: npm ci
+    - name: Install EAS CLI
+      run: npm install -g eas-cli@latest
+    - name: Build
+      run: npx eas build --profile preview --platform android
