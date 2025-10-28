@@ -3,10 +3,11 @@ import React, { useReducer, useCallback, useEffect } from 'react';
 import { View, BackHandler } from 'react-native';
 import { getPlayers } from '@/dao/player.dao';
 import { BallStatus } from '@/models/ball-status.enum';
-import { findWinner, getScoreGoal } from '@/util/score.util';
+import { buildMatchResults, findWinner, getScoreGoal } from '@/util/score.util';
 import { GamePlayer } from '@/models/game-player.model';
 import { NineBallGameAction, GameState, GameStateAction, ConfirmationDialog } from '@/models/game-state.model';
 import { ScoreBox, BallSelector, TurnActions, Dialog, ConfirmDialog } from '@/components';
+import { addMatchToHistory } from '@/dao/history.dao';
 
 function gameStateReducer(prevState: GameState, payload: NineBallGameAction): GameState {
   console.debug('Current game state: ', JSON.stringify({ ...prevState, prev: prevState.prev ? '...' : null }));
@@ -54,6 +55,9 @@ function gameStateReducer(prevState: GameState, payload: NineBallGameAction): Ga
     break;
   case GameStateAction.CONFIRM_ABORT:
     newState.isAbort = true;
+    break;
+  case GameStateAction.CONFIRM_MATCH_CONCLUDED:
+    newState.matchResults = buildMatchResults(prevState);
     break;
   case GameStateAction.SET_PLAYERS:
     newState.players = payload.players;
@@ -200,6 +204,17 @@ export default function ApaNineBall() {
   }, [gameState, router]);
 
   useEffect(() => {
+    async function doGameConclusion() {
+      if (!!gameState?.matchResults) {
+        // Game has concluded, save the match and navigate to match summary
+        await addMatchToHistory(gameState.matchResults);
+        router.replace(`/history/${gameState.matchResults.matchId}`);
+      }
+    }
+    doGameConclusion();
+  }, [gameState, router]);
+
+  useEffect(() => {
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
       () => {
@@ -257,7 +272,7 @@ export default function ApaNineBall() {
         onClose={() => {}}
       >
         <ConfirmDialog
-          onClose={(confirmed: boolean) => dispatch({ type: confirmed ? GameStateAction.CONFIRM_ABORT : GameStateAction.CANCEL_DIALOG })}
+          onClose={(confirmed: boolean) => dispatch({ type: confirmed ? GameStateAction.CONFIRM_MATCH_CONCLUDED : GameStateAction.CANCEL_DIALOG })}
           header='Game Over'
           message={`${findWinner(gameState)?.name} wins!`}
           confirmLabel='Confirm'
