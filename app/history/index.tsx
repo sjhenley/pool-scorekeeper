@@ -2,8 +2,9 @@ import { useRouter } from 'expo-router';
 import { useFocusEffect } from '@react-navigation/native';
 import { Match } from '@/models/match.model';
 import React from 'react';
-import { View, ScrollView, Text, TouchableOpacity } from 'react-native';
+import { View, ScrollView, TouchableOpacity } from 'react-native';
 import { getMatchHistory } from '@/dao/history.dao';
+import { MatchHistoryCard } from '@/components';
 
 export default function PlayerList() {
   const [history, setHistory] = React.useState<Match[]>([]);
@@ -30,9 +31,7 @@ export default function PlayerList() {
           {
             history.map((match, idx) => (
               <TouchableOpacity key={'match-card' + match.matchId + idx} onPress={() => router.push(`/history/${match.matchId}` as any)}>
-                <View className='w-full'>
-                  <Text className='text-primary text-2xl'>Match: {match.matchId}</Text>
-                </View>
+                <MatchHistoryCard match={match} />
               </TouchableOpacity>
             ))
           }

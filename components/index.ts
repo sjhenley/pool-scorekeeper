@@ -11,3 +11,4 @@ export { PlayerSelect, PlayerSelectProps } from './PlayerSelect';
 export { ScoreBox, ScoreBoxProps } from './ScoreBox';
 export { TurnActions, TurnActionProps } from './TurnActions';
 export { BallSelector, BallSelectorProps } from './BallSelector';
+export { MatchHistoryCard, MatchHistoryCardProps } from './MatchHistoryCard';
