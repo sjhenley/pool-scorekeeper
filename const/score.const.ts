@@ -13,10 +13,10 @@ export const NINE_BALL_SCORE_LUT = new Map<SkillLevel, number>([
 ]);
 
 /**
- * Point tresholds the losing shooter must reach to earn a point, organized by loser's skill level.
+ * Point thresholds the losing shooter must reach to earn a point, organized by loser's skill level.
  * Example: If the losing player was a 5, they must reach at least 7 ball points to score 1 match point, at least 11 ball points to score 2 match points, etc.
  */
-export const NINE_BALL_LOSER_SCORE_TRESHOLDS = {
+export const NINE_BALL_LOSER_SCORE_THRESHOLDS = {
   1: [2, 3, 4, 6, 7, 8, 10, 11, 13],
   2: [3, 5, 7, 8, 10, 12, 14, 16, 18],
   3: [4, 6, 9, 11, 14, 16, 19, 21, 24],

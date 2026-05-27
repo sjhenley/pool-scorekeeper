@@ -6,7 +6,7 @@ import { View, ScrollView, TouchableOpacity } from 'react-native';
 import { getMatchHistory } from '@/dao/history.dao';
 import { MatchHistoryCard } from '@/components';
 
-export default function PlayerList() {
+export default function HistoryIndex() {
   const [history, setHistory] = React.useState<Match[]>([]);
   const router = useRouter();
 
@@ -16,7 +16,6 @@ export default function PlayerList() {
       let isActive = true;
       async function fetchHistory() {
         const loadedHistory = await getMatchHistory();
-        console.log('loadedHistory ', loadedHistory);
         if (isActive) setHistory(loadedHistory);
       }
       fetchHistory();

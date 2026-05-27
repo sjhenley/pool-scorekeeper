@@ -1,3 +1,4 @@
+import { SkillLevel } from './player';
 
 /** Match participant */
 export interface MatchPlayer {
@@ -10,7 +11,7 @@ export interface MatchPlayer {
   /** Points needed by the player to win the match */
   pointsNeeded: number;
   /** Player skill rating */
-  playerSkill?: number;
+  playerSkill?: SkillLevel;
   /** Points that would be scored in an APA league match */
   matchPoints?: number;
 }

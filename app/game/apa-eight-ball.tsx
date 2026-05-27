@@ -54,7 +54,12 @@ function gameStateReducer(prevState: GameState, payload: EightBallGameAction): G
     newState.isAbort = true;
     break;
   case GameStateAction.CONFIRM_MATCH_CONCLUDED:
+    if (prevState.matchResults) {
+      newState.dialogShown = undefined;
+      break;
+    }
     newState.matchResults = buildMatchResults(prevState);
+    newState.dialogShown = undefined;
     break;
   case GameStateAction.END_RACK:
     newState.prev = prevState;
@@ -190,7 +195,7 @@ export default function ApaEightBall() {
       // Game has been aborted, navigate back to home
       router.replace('/');
     }
-  }, [gameState, router]);
+  }, [gameState.isAbort, router]);
 
 
   useEffect(() => {
@@ -202,7 +207,7 @@ export default function ApaEightBall() {
       }
     }
     doGameConclusion();
-  }, [gameState, router]);
+  }, [gameState.matchResults, router]);
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(

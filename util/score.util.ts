@@ -1,4 +1,4 @@
-import { EIGHT_BALL_SCORE_LUT, NINE_BALL_SCORE_LUT, NINE_BALL_LOSER_SCORE_TRESHOLDS } from '@/const/score.const';
+import { EIGHT_BALL_SCORE_LUT, NINE_BALL_SCORE_LUT, NINE_BALL_LOSER_SCORE_THRESHOLDS } from '@/const/score.const';
 import { GamePlayer } from '@/models/game-player.model';
 import { GameState } from '@/models/game-state.model';
 import { Match } from '@/models/match.model';
@@ -58,7 +58,7 @@ export const getEightBallMatchPoints = (playerScore: number, playerScoreTarget: 
 };
 
 /**
- * Calculates the match points for a 9-ball match based on the scores and player sills
+ * Calculates the match points for a 9-ball match based on the scores and player skills
  * @param playerScore points scored by the target player
  * @param playerSkill skill level of the target player
  * @param opponentScore points scored by the opposing player
@@ -79,9 +79,9 @@ export const getNineBallMatchPoints = (playerScore: number, playerSkill: SkillLe
     loserScore = playerScore;
   }
 
-  const scoreThresholds = NINE_BALL_LOSER_SCORE_TRESHOLDS[loserSkillLevel];
+  const scoreThresholds = NINE_BALL_LOSER_SCORE_THRESHOLDS[loserSkillLevel];
 
-  // Find the index of scoreThreshold such that loserScore <= idx and loserScore > idx - 1
+  // Find the index of scoreThreshold such that loserScore <= idx
   let loserMatchPoints = 0;
   for (let i = 0; i < scoreThresholds.length; i++) {
     if (loserScore <= scoreThresholds[i]) {
@@ -89,8 +89,8 @@ export const getNineBallMatchPoints = (playerScore: number, playerSkill: SkillLe
       break;
     }
     // If loserScore is greater than or equal to the last threshold, they earn maximum points
-    // Should not happen, the loser should not be passing the last treshold
-    if (i === scoreThresholds.length - 1) {
+    // Should not happen, the loser should not be passing the last threshold
+    if (i >= scoreThresholds.length - 1) {
       loserMatchPoints = scoreThresholds.length;
     }
   }
@@ -105,7 +105,7 @@ export const buildMatchResults = (state: GameState): Match => {
     matchId: randomUUID(),
     date: new Date().toISOString(),
     players: state.players.map(player => {
-      let matchPoints;
+      let matchPoints = undefined;
       const opponent = state.players.find(p => p.id !== player.id);
       if (state.gameId === 'apa-eight-ball') {
         matchPoints = getEightBallMatchPoints(player.score, player.scoreTarget, opponent?.score || 0);

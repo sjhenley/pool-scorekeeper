@@ -6,7 +6,7 @@ import { Button, ConfirmDialog, Dialog } from '@/components';
 import { Match } from '@/models/match.model';
 import { GAME_CONFIG } from '@/const/game-config';
 
-export default function UserProfile() {
+export default function MatchHistory() {
   const [dialogVisible, setDialogVisible] = useState<'confirm-delete' | ''>('');
   const [matchDetails, setMatchDetails] = useState<Match>();
   const [matchDate, setMatchDate] = useState<string>();
@@ -91,22 +91,22 @@ export default function UserProfile() {
       <View className='flex-grow px-10'>
         {/* Header */}
         <View className='flex flex-row gap-5 justify-center items-center'>
-          <Text className='text-primary text-2xl font-bold mb-8 text-left flex-grow' >{matchDetails?.players[0].playerName}</Text>
-          <Text className='text-primary text-2xl font-bold mb-8 text-right flex-grow' >{matchDetails?.players[1].playerName}</Text>
+          <Text className='text-primary text-2xl font-bold mb-8 text-left flex-grow' >{matchDetails?.players[0]?.playerName}</Text>
+          <Text className='text-primary text-2xl font-bold mb-8 text-right flex-grow' >{matchDetails?.players[1]?.playerName}</Text>
         </View>
 
         {/* Match Points */}
         <View className='flex flex-row gap-5 justify-center items-center'>
-          <Text className='text-primary text-2xl mb-8 text-left flex-grow'>{matchDetails?.players[0].matchPoints}</Text>
+          <Text className='text-primary text-2xl mb-8 text-left flex-grow'>{matchDetails?.players[0]?.matchPoints}</Text>
           <Text className='text-primary text-2xl font-bold mb-8 text-center flex-grow' >Match Points</Text>
-          <Text className='text-primary text-2xl mb-8 text-right flex-grow'>{matchDetails?.players[1].matchPoints}</Text>
+          <Text className='text-primary text-2xl mb-8 text-right flex-grow'>{matchDetails?.players[1]?.matchPoints}</Text>
         </View>
 
         {/* Game Points (9-ball only) */}
         <View className='flex flex-row gap-5 justify-center items-center'>
-          <Text className='text-primary text-2xl mb-8 text-left flex-grow'>{matchDetails?.players[0].points}</Text>
+          <Text className='text-primary text-2xl mb-8 text-left flex-grow'>{matchDetails?.players[0]?.points}</Text>
           <Text className='text-primary text-2xl font-bold mb-8 text-center flex-grow'>{pointsEarnedLabel}</Text>
-          <Text className='text-primary text-2xl mb-8 text-right flex-grow'>{matchDetails?.players[1].points}</Text>
+          <Text className='text-primary text-2xl mb-8 text-right flex-grow'>{matchDetails?.players[1]?.points}</Text>
         </View>
       </View>
 

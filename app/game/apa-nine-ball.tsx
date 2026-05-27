@@ -57,7 +57,12 @@ function gameStateReducer(prevState: GameState, payload: NineBallGameAction): Ga
     newState.isAbort = true;
     break;
   case GameStateAction.CONFIRM_MATCH_CONCLUDED:
+    if (prevState.matchResults) {
+      newState.dialogShown = undefined;
+      break;
+    }
     newState.matchResults = buildMatchResults(prevState);
+    newState.dialogShown = undefined;
     break;
   case GameStateAction.SET_PLAYERS:
     newState.players = payload.players;
@@ -201,7 +206,7 @@ export default function ApaNineBall() {
       // Game has been aborted, navigate back to home
       router.replace('/');
     }
-  }, [gameState, router]);
+  }, [gameState.isAbort, router]);
 
   useEffect(() => {
     async function doGameConclusion() {
@@ -212,7 +217,7 @@ export default function ApaNineBall() {
       }
     }
     doGameConclusion();
-  }, [gameState, router]);
+  }, [gameState.matchResults, router]);
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
