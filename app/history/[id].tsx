@@ -1,5 +1,5 @@
 import { Text, View } from 'react-native';
-import { useLocalSearchParams, useNavigation } from 'expo-router';
+import { useLocalSearchParams, useNavigation, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { deleteMatchById, getMatchById } from '@/dao/history.dao';
 import { Button, ConfirmDialog, Dialog } from '@/components';
@@ -14,7 +14,11 @@ export default function UserProfile() {
 
   const { id } = useLocalSearchParams<{ id: string }>();
   const navigation = useNavigation();
+  const router = useRouter();
 
+  /**
+   * Match initialization
+   */
   useEffect(() => {
     async function fetchMatch(id: string) {
       const match = await getMatchById(id);
@@ -43,6 +47,23 @@ export default function UserProfile() {
     }
     fetchMatch(id);
   }, [navigation, id]);
+
+  /**
+   * Navigation stack adjustment on page load
+   */
+  useEffect(() => {
+    const state = navigation.getState();
+    const routes = state?.routes || [];
+    const lastPage = routes.length > 1 ? routes[routes.length - 2] : null;
+    if (lastPage?.name.includes('game')) {
+      // If the user navigated here from a game,
+      // we want to update the navigation stack such that the home page is the last page in the history stack, instead of the game page they came from. This way, when they click "back" from this match details page, they will go to the history list instead of back to the game they just finished.
+      router.dismissAll();
+      router.push('/');
+      router.replace(`/history/${id}`, {});
+    }
+
+  } , [navigation, router, id]);
 
   async function onDeleteMatchConfirm(confirmed: boolean): Promise<void> {
     setDialogVisible('');
