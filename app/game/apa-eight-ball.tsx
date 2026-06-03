@@ -2,11 +2,12 @@ import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useReducer, useCallback, useEffect } from 'react';
 import { View, BackHandler } from 'react-native';
 import { getPlayers } from '@/dao/player.dao';
-import { findWinner, getScoreGoal } from '@/util/score.util';
+import { buildMatchResults, findWinner, getScoreGoal } from '@/util/score.util';
 import { GamePlayer } from '@/models/game-player.model';
 import { EightBallGameAction, GameState, GameStateAction, ConfirmationDialog } from '@/models/game-state.model';
 import { ScoreBox, TurnActions, Dialog, ConfirmDialog } from '@/components';
 import { SelectionDialog } from '@/components/SelectionDialog';
+import { addMatchToHistory } from '@/dao/history.dao';
 
 function gameStateReducer(prevState: GameState, payload: EightBallGameAction): GameState {
   console.debug('Current game state: ', JSON.stringify({ ...prevState, prev: prevState.prev ? '...' : null }));
@@ -51,6 +52,14 @@ function gameStateReducer(prevState: GameState, payload: EightBallGameAction): G
     break;
   case GameStateAction.CONFIRM_ABORT:
     newState.isAbort = true;
+    break;
+  case GameStateAction.CONFIRM_MATCH_CONCLUDED:
+    if (prevState.matchResults) {
+      newState.dialogShown = undefined;
+      break;
+    }
+    newState.matchResults = buildMatchResults(prevState);
+    newState.dialogShown = undefined;
     break;
   case GameStateAction.END_RACK:
     newState.prev = prevState;
@@ -186,7 +195,20 @@ export default function ApaEightBall() {
       // Game has been aborted, navigate back to home
       router.replace('/');
     }
-  }, [gameState, router]);
+  }, [gameState.isAbort, router]);
+
+
+  useEffect(() => {
+    async function doGameConclusion() {
+      if (!!gameState?.matchResults) {
+        // Game has concluded, save the match and navigate to match summary
+        await addMatchToHistory(gameState.matchResults);
+        router.replace('/');
+        router.push(`/history/${gameState.matchResults.matchId}`);
+      }
+    }
+    doGameConclusion();
+  }, [gameState.matchResults, router]);
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
@@ -246,7 +268,7 @@ export default function ApaEightBall() {
         onClose={() => {}}
       >
         <ConfirmDialog
-          onClose={(confirmed: boolean) => dispatch({ type: confirmed ? GameStateAction.CONFIRM_ABORT : GameStateAction.CONFIRM_UNDO })}
+          onClose={(confirmed: boolean) => dispatch({ type: confirmed ? GameStateAction.CONFIRM_MATCH_CONCLUDED : GameStateAction.CONFIRM_UNDO })}
           header='Game Over'
           message={`${findWinner(gameState)?.name} wins!`}
           confirmLabel='Confirm'

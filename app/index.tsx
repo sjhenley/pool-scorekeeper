@@ -68,6 +68,7 @@ export default function Index() {
           icon='history'
           label='History'
           containerClass='w-full'
+          onPress={() => router.navigate('/history')}
         />
       </View>
       <TouchableOpacity className='absolute top-12 right-6 flex-row items-center gap-2 p-3 rounded-full' onPress={() => router.navigate('/settings')}>
