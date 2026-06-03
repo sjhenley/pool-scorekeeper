@@ -213,7 +213,8 @@ export default function ApaNineBall() {
       if (!!gameState?.matchResults) {
         // Game has concluded, save the match and navigate to match summary
         await addMatchToHistory(gameState.matchResults);
-        router.replace(`/history/${gameState.matchResults.matchId}`);
+        router.replace('/');
+        router.push(`/history/${gameState.matchResults.matchId}`);
       }
     }
     doGameConclusion();

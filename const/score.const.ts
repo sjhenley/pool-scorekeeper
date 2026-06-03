@@ -14,8 +14,8 @@ export const NINE_BALL_SCORE_LUT = new Map<SkillLevel, number>([
 
 /**
  * Upper score thresholds for each losing-player match-point bucket, organized by loser's skill level.
- * Example: If the losing player was a 5, scoring 0-6 ball points earns 1 match point,
- * 7-10 earns 2 match points, 11-14 earns 3 match points, etc.
+ * Example: If the losing player was a 5, scoring 0-6 ball points earns 0 match points,
+ * 7-10 earns 1 match point, 11-14 earns 2 match points, etc.
 */
 export const NINE_BALL_LOSER_SCORE_THRESHOLDS = {
   1: [2, 3, 4, 6, 7, 8, 10, 11, 13],

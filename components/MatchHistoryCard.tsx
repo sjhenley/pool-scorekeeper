@@ -35,7 +35,7 @@ export const MatchHistoryCard = ({ match }: MatchHistoryCardProps) => {
           match?.players.map((player, idx) => (
             <View key={'match-history-player' + match.matchId + player.playerId + idx} className='flex-row gap-2'>
               <Text className='flex-grow font-bold text-2xl font-sans text-text-800 dark:text-text-200'>{player.playerName}</Text>
-              <Text className='text-2xl font-sans text-text-800 dark:text-text-200'>{player.matchPoints}</Text>
+              <Text className='text-2xl font-sans text-text-800 dark:text-text-200'>{player.matchPoints ?? 0}</Text>
             </View>
           ))
         }

@@ -1,5 +1,5 @@
 import { Text, View } from 'react-native';
-import { useLocalSearchParams, useNavigation, useRouter } from 'expo-router';
+import { useLocalSearchParams, useNavigation } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { deleteMatchById, getMatchById } from '@/dao/history.dao';
 import { Button, ConfirmDialog, Dialog } from '@/components';
@@ -14,7 +14,6 @@ export default function MatchHistory() {
 
   const { id } = useLocalSearchParams<{ id: string }>();
   const navigation = useNavigation();
-  const router = useRouter();
 
   /**
    * Match initialization
@@ -51,23 +50,6 @@ export default function MatchHistory() {
     }
   }, [navigation, id]);
 
-  /**
-   * Navigation stack adjustment on page load
-   */
-  useEffect(() => {
-    const state = navigation.getState();
-    const routes = state?.routes || [];
-    const lastPage = routes.length > 1 ? routes[routes.length - 2] : null;
-    if (lastPage?.name.includes('game')) {
-      // If the user navigated here from a game,
-      // we want to update the navigation stack such that the home page is the last page in the history stack, instead of the game page they came from. This way, when they click "back" from this match details page, they will go to the history list instead of back to the game they just finished.
-      router.dismissAll();
-      router.push('/');
-      router.replace(`/history/${id}`, {});
-    }
-
-  } , [navigation, router, id]);
-
   async function onDeleteMatchConfirm(confirmed: boolean): Promise<void> {
     setDialogVisible('');
     if (confirmed && matchDetails) {
@@ -100,9 +82,9 @@ export default function MatchHistory() {
 
         {/* Match Points */}
         <View className='flex flex-row gap-5 justify-center items-center'>
-          <Text className='text-primary text-2xl mb-8 text-left flex-grow'>{matchDetails?.players[0]?.matchPoints}</Text>
+          <Text className='text-primary text-2xl mb-8 text-left flex-grow'>{matchDetails?.players[0]?.matchPoints ?? 0}</Text>
           <Text className='text-primary text-2xl font-bold mb-8 text-center flex-grow' >Match Points</Text>
-          <Text className='text-primary text-2xl mb-8 text-right flex-grow'>{matchDetails?.players[1]?.matchPoints}</Text>
+          <Text className='text-primary text-2xl mb-8 text-right flex-grow'>{matchDetails?.players[1]?.matchPoints ?? 0}</Text>
         </View>
 
         {/* Game Points (9-ball only) */}
