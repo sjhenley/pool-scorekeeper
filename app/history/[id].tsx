@@ -45,7 +45,10 @@ export default function MatchHistory() {
         }
       }
     }
-    fetchMatch(id);
+    if (typeof id === 'string') {
+      // guard against id being undefined or an array, which can happen with useLocalSearchParams
+      fetchMatch(id);
+    }
   }, [navigation, id]);
 
   /**

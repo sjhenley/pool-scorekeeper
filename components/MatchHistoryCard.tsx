@@ -14,7 +14,7 @@ export const MatchHistoryCard = ({ match }: MatchHistoryCardProps) => {
       {/* 8-Ball Icon */}
       {
         match?.gameId === 'apa-eight-ball' && (
-          <View className='flex-col items-center ml-auto flex-shrink'>
+          <View className='flex-col items-center flex-shrink'>
             <Image source={require('../assets/balls/8.png')} className='w-12 h-12 mb-2' />
           </View>
         )
@@ -23,7 +23,7 @@ export const MatchHistoryCard = ({ match }: MatchHistoryCardProps) => {
       {/* 9-Ball Icon */}
       {
         match?.gameId === 'apa-nine-ball' && (
-          <View className='flex-col items-center ml-auto flex-shrink'>
+          <View className='flex-col items-center flex-shrink'>
             <Image source={require('../assets/balls/9.png')} className='w-12 h-12 mb-2' />
           </View>
         )

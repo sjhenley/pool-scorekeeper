@@ -81,7 +81,7 @@ export const getNineBallMatchPoints = (playerScore: number, playerSkill: SkillLe
 
   const scoreThresholds = NINE_BALL_LOSER_SCORE_THRESHOLDS[loserSkillLevel];
 
-  // Find the index of scoreThreshold such that loserScore <= idx
+  // Find the index of scoreThreshold such that loserScore <= scoreThresholds[index]
   let loserMatchPoints = 0;
   for (let i = 0; i < scoreThresholds.length; i++) {
     if (loserScore <= scoreThresholds[i]) {
@@ -105,7 +105,7 @@ export const buildMatchResults = (state: GameState): Match => {
     matchId: randomUUID(),
     date: new Date().toISOString(),
     players: state.players.map(player => {
-      let matchPoints = undefined;
+      let matchPoints = 0;
       const opponent = state.players.find(p => p.id !== player.id);
       if (state.gameId === 'apa-eight-ball') {
         matchPoints = getEightBallMatchPoints(player.score, player.scoreTarget, opponent?.score || 0);
