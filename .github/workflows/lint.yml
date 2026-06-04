@@ -1,15 +1,15 @@
 # This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
 
-name: Prebuild
+name: Lint
 
 on:
   pull_request:
-    branches-ignore:
-      - 'main'
+    branches:
+    - '*'
 
 jobs:
-  prebuild:
+  lint:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Source Code
@@ -21,5 +21,5 @@ jobs:
         cache: 'npm'
     - name: Install Project Dependencies
       run: npm ci
-    - name: Prebuild
-      run: npx expo prebuild --no-install --platform=all
+    - name: Lint
+      run: npm run lint
